@@ -1,0 +1,13 @@
+package com.tc.windie;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class WindieApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(WindieApplication.class, args);
+	}
+
+}

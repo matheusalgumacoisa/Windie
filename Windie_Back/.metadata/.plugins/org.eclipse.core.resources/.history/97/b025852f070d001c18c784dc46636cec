@@ -1,0 +1,24 @@
+package controle;
+
+import java.sql.SQLException;
+
+import modelo.UsuarioDAO;
+import modelo.UsuarioModelo;
+
+public class ManterUsuarios {
+
+	
+	public ManterUsuarios() {
+		
+	}
+	
+	public void CadastrarUsuario(String email,String senha,String apelido) throws SQLException {
+		
+		senha = String.valueOf(senha.hashCode());
+		
+		UsuarioModelo usuario = new UsuarioModelo(null,email,senha,apelido);
+		
+		UsuarioDAO.getInstance().InserirUsuario(usuario);
+		
+	}
+}

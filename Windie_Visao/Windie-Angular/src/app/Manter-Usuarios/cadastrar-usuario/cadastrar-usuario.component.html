@@ -1,4 +1,8 @@
-<head>  
+<head>
+    <style>
+        h1 {text-align: center;}
+        p {text-align: center;}
+    </style>  
 </head>
 <body>
     <div class="container-sm">
@@ -8,31 +12,35 @@
                   <div class="col align-self-start">                   
                   </div>
                   <div class="col align-self-center">
-                    <form>
+                    <br>
+                    <br>
+                    <h1>Cadastre-se</h1>
+                    <br>
+                    <br>
+                    <form  [formGroup]="form_cadastrar" (ngSubmit)="onSubmit()" >
                         <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        <label for="email" class="form-label" >E-mail</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" formControlName="email">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Confirme seu e-mail</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                            <label for="email_confirm" class="form-label" >Confirme seu e-mail</label>
+                            <input type="email" class="form-control" id="email_confirm" aria-describedby="emailHelp" formControlName="email_confirm">
                             </div>
                         <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Senha</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1">
+                        <label for="senha" class="form-label" >Senha</label>
+                        <input type="password" class="form-control" id="senha" formControlName="senha">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Confirme sua senha</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <label for="senha_confirm" class="form-label" >Confirme sua senha</label>
+                            <input type="password" class="form-control" id="senha_confirm" formControlName="senha_confirm">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Apelido</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="apelido" class="form-label" >Apelido</label>
+                            <input type="email" class="form-control" id="apelido" aria-describedby="emailHelp" formControlName="apelido">
                         </div>
                     </form>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <br>
+                    <p><button (click)="onSubmit()" type="submit" class="btn btn-primary">Confirmar</button></p>
                   </div>
                   <div class="col align-self-end">
                     

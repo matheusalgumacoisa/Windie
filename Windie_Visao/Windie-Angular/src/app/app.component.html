@@ -1,7 +1,13 @@
+<!doctype html>
 <head>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+
 </head>
 <body>
+  
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Windie</a>
@@ -14,10 +20,23 @@
           <a class="nav-link active" aria-current="page" href="#">Jogos</a>
         </li>
       </ul>
-        <li><button type="button" class="btn btn-light">Cadastre-se</button></li>
-        <li><button type="button" class="btn btn-outline-light">Entrar</button></li>
+        <li  *ngIf="!seAutenticado()"><button (click)="CadastrarUsuario()" type="button" class="btn btn-light">Cadastre-se</button></li>
+        <li  *ngIf="!seAutenticado()" ><button (click)="TelaLogin()" type="button" class="btn btn-outline-light">Entrar</button></li>  
+        <div *ngIf="seAutenticado()" class="dropdown">
+          <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+            Usuário
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton2">
+            <li><button (click)="EditarInformacoes()" class="dropdown-item" >Editar informações</button ></li>
+            <li><button (click)="PublicarJogo()" class="dropdown-item" >Publicar jogo</button></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><button class="dropdown-item" (click)="Logout()">Sair</button></li>
+          </ul>
+        </div> 
     </div>
   </div>
 </nav>
-<app-cadastrar-usuario></app-cadastrar-usuario>
+
+<router-outlet></router-outlet>
+
 </body>

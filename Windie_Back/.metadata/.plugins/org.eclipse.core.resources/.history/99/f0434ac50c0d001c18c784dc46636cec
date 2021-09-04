@@ -1,0 +1,40 @@
+package apiVisao;
+
+import java.sql.SQLException;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import controle.ManterUsuarios;
+
+
+
+@RequestMapping("/usuario")
+@RestController
+public class VisaoUsuario {
+	
+	private ObjectMapper mapper = new ObjectMapper();
+	
+	
+	@PostMapping(path = "cadastrar")
+	public void cadastrarUsuario(@RequestBody  String json) {
+		
+		JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        String pageName = obj.getJSONObject("pageInfo").getString("pageName");
+		
+		System.out.println("requisição recebida: "+mapper.readValue(json));
+
+		
+		ManterUsuarios.getInstance().CadastrarUsuario(json, json, json);
+		
+	}
+
+}

@@ -1,0 +1,10 @@
+package modelo;
+
+public class UsuarioModelo {
+
+	private int usuario_id;
+	private String email;
+	private String senha;
+	private String apelido;
+	
+}
