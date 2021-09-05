@@ -20,7 +20,7 @@ export class ServicesUsuarioService {
 
     this.currentUserSubject = new BehaviorSubject<Token>(JSON.parse(localStorage.getItem('currentUser')!));
     this.currentUser = this.currentUserSubject.asObservable();
-    this.autenticarToken();
+    //this.autenticarToken();
    }
 
   public cadastrarUsuario(body: any):Observable<Post>{
@@ -29,9 +29,31 @@ export class ServicesUsuarioService {
 
   }
 
+  public cadastrarDesenvolvedor(body: any):Observable<Post>{
+
+    body.token = JSON.parse(localStorage.getItem('currentUser')!).token;
+    return this.http.post<Post>(this.url+"/cadastrarDesenvolvedor",body);
+
+  }
+
   public getNick():Observable<Post>{
 
     return this.http.post<Post>(this.url+"/nickName",localStorage.getItem('currentUser'));
+  }
+
+  public getPapel():Observable<Post>{
+
+    return this.http.post<Post>(this.url+"/papel",localStorage.getItem('currentUser'));
+
+  }
+
+  public getUsuarioForm():Observable<any>{
+    return this.http.post<Post>(this.url+"/usuarioForm",localStorage.getItem('currentUser'))
+  }
+
+  public getAssinatura():Observable<Post>{
+
+    return this.http.post<Post>(this.url+"/assinatura",localStorage.getItem('currentUser'));
   }
 
   public autenticarUsuario(body: any){
@@ -69,6 +91,11 @@ export class ServicesUsuarioService {
       this.currentUserSubject.next(tokenBack);
       return tokenBack ;
     }));
+  }
+
+  public atualizarUsuario(body:any):Observable<Post>{
+    body.token = JSON.parse(localStorage.getItem('currentUser')!).token;
+    return this.http.post<Post>(this.url+"/atualizar",body);
   }
 }
 

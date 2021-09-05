@@ -22,28 +22,28 @@
                     <br>
                     <br>
                     <br>
-                    <form >
+                    <form [formGroup]="form_cadastrar" >
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Apelido" formControlName="nomeDesenvolvedor">
+                            <input *ngIf="(papel == 'U')" type="text" class="form-control" id="apelido" aria-describedby="apelido" placeholder="Apelido" formControlName="apelido"> 
                         </div>
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nome de desenvolvedor" formControlName="nomeDesenvolvedor">
+                            <input *ngIf="(papel == 'D')"  type="text" class="form-control" id="nomeDesenvolvedor" aria-describedby="nomeDesenvolvedor" placeholder="Nome de desenvolvedor" formControlName="nome_desenvolvedor">
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Agência" formControlName="nomeDesenvolvedor">
+                                <input *ngIf="(papel == 'D')" type="text" class="form-control" id="agencia" aria-describedby="agencia" placeholder="Agência" formControlName="agencia">
                             </div>
                             <div class="col-8">
-                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Conta bancaria" formControlName="nomeDesenvolvedor">
+                                <input *ngIf="(papel == 'D')" type="text" class="form-control" id="conta" aria-describedby="conta" placeholder="Conta bancaria" formControlName="conta">
                             </div>
                         </div>
                     </form>
                     <br>
-                    <p><button (click)="onSubmit()" type="submit" class="btn btn-primary">Confirmar</button></p>
+                    <p><button (click)="onSubmit()" type="submit" class="btn btn-dark">Confirmar</button></p>
                     <br>
                     <br>
-                    <span class="badge bg-danger">Sem assinatura válida</span>
-                    <span class="badge bg-success">Assinatura válida</span>
+                    <span *ngIf="(assinatura == 'invalid')" class="badge bg-light text-dark">Conta sem assinatura</span>
+                    <span *ngIf="(assinatura == 'valid')" class="badge bg-dark">Assinante</span>
                     <br>
                   </div>
                   <div class="col align-self-end">

@@ -15,32 +15,27 @@
                     <br>
                     <br>
                     <h1>Cadastre-se</h1>
-                    <br>
+                    <br> 
                     <br>
                     <form  [formGroup]="form_cadastrar" (ngSubmit)="onSubmit()" >
                         <div class="mb-3">
-                        <label for="email" class="form-label" >E-mail</label>
-                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" formControlName="email">
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" formControlName="email" placeholder="E-mail">
                         </div>
                         <div class="mb-3">
-                            <label for="email_confirm" class="form-label" >Confirme seu e-mail</label>
-                            <input type="email" class="form-control" id="email_confirm" aria-describedby="emailHelp" formControlName="email_confirm">
+                            <input type="email" class="form-control" id="email_confirm" aria-describedby="emailHelp" formControlName="email_confirm" placeholder="Confirme seu e-mail" >
                             </div>
                         <div class="mb-3">
-                        <label for="senha" class="form-label" >Senha</label>
-                        <input type="password" class="form-control" id="senha" formControlName="senha">
+                        <input type="password" class="form-control" id="senha" formControlName="senha" placeholder="Senha" >
                         </div>
                         <div class="mb-3">
-                            <label for="senha_confirm" class="form-label" >Confirme sua senha</label>
-                            <input type="password" class="form-control" id="senha_confirm" formControlName="senha_confirm">
+                            <input type="password" class="form-control" id="senha_confirm" formControlName="senha_confirm" placeholder="Confirme sua senha" >
                         </div>
                         <div class="mb-3">
-                            <label for="apelido" class="form-label" >Apelido</label>
-                            <input type="email" class="form-control" id="apelido" aria-describedby="emailHelp" formControlName="apelido">
+                            <input type="email" class="form-control" id="apelido" aria-describedby="emailHelp" formControlName="apelido" placeholder="Apelido" >
                         </div>
                     </form>
                     <br>
-                    <p><button (click)="onSubmit()" type="submit" class="btn btn-primary">Confirmar</button></p>
+                    <p><button (click)="onSubmit()" type="submit" class="btn btn-dark">Confirmar</button></p>
                   </div>
                   <div class="col align-self-end">
                     

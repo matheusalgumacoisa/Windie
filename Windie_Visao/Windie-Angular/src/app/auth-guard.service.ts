@@ -14,7 +14,7 @@ export class AuthGuardService implements CanActivate{
     
     //console.log("sss"+state.url);
     if(this.usuarioService.seUsuarioAutenticado()){
-      this.usuarioService.autenticarToken();
+      //this.usuarioService.autenticarToken();
       //console.log("coisa que retorna"+this.usuarioService.seUsuarioAutenticado().subscribe());
       if(state.url == "/login"||state.url == "/usuario/cadastrar"){
        //console.log("login");

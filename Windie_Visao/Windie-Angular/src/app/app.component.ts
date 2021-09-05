@@ -10,7 +10,7 @@ import { ServicesUsuarioService } from './Manter-Usuarios/services-usuario.servi
 })
 export class AppComponent implements OnInit {
   title = 'Windie-Angular';
-  label_usuario!: string;
+  label_usuario: string = "Usuário";
 
   constructor(private router: Router, private usuario : ServicesUsuarioService) {
 
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
     
-    this.usuario.getNick().subscribe(sucesso => this.label_usuario = sucesso.body);
+    //this.usuario.getNick().subscribe(sucesso =>{ this.label_usuario = sucesso.body; console.log('nick'+sucesso.body);},erro =>{console.log("erro: "+JSON.stringify(erro))});
   }
 
   CadastrarUsuario(){ this.router.navigate(['/usuario/cadastrar']);     }
@@ -28,8 +28,9 @@ export class AppComponent implements OnInit {
   PublicarJogo(){ this.router.navigate(['/jogos/publicar']);     }
 
   seAutenticado(): boolean{
+    
     return this.usuario.seUsuarioAutenticado();
-   //return false;
+
   }
 
   Logout(){

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ServicesUsuarioService } from '../services-usuario.service';
 
 @Component({
   selector: 'app-cadastrar-desenvolvedor',
@@ -7,10 +10,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CadastrarDesenvolvedorComponent implements OnInit {
 
-  constructor() { }
+  form_cadastrar: FormGroup;
 
-  ngOnInit(): void {
+  constructor(private usuarioService: ServicesUsuarioService,private router: Router) { 
+    this.form_cadastrar = new FormGroup({
+
+      nome_de_desenvolvedor: new FormControl(''),
+      agencia_bancaria: new FormControl(''),
+      conta_bancaria: new FormControl(''),
+      token: new FormControl('')
+
+    });  
   }
 
-  onSubmit(){}
+  ngOnInit(): void {
+
+
+
+  }
+
+  onSubmit(){
+
+    this.usuarioService.cadastrarDesenvolvedor(this.form_cadastrar.value).subscribe(success => {this.router.navigate([''])});
+  }
 }

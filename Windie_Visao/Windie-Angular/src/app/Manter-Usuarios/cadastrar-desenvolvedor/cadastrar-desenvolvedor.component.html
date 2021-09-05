@@ -22,21 +22,21 @@
                     <br>
                     <br>
                     <br>
-                    <form >
+                    <form [formGroup]="form_cadastrar" >
                         <div class="mb-3">
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nome de desenvolvedor" formControlName="nomeDesenvolvedor">
+                        <input type="text" class="form-control" id="nomeDesenvolvedor" aria-describedby="nomeDesenvolvedor" placeholder="Nome de desenvolvedor" formControlName="nome_de_desenvolvedor">
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Agência" formControlName="nomeDesenvolvedor">
+                                <input type="text" class="form-control" id="agencia" aria-describedby="agencia" placeholder="Agência" formControlName="agencia_bancaria">
                             </div>
                             <div class="col-8">
-                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Conta bancaria" formControlName="nomeDesenvolvedor">
+                                <input type="text" class="form-control" id="conta" aria-describedby="conta" placeholder="Conta bancaria" formControlName="conta_bancaria">
                             </div>
                         </div>
                     </form>
                     <br>
-                    <p><button (click)="onSubmit()" type="submit" class="btn btn-primary">Confirmar</button></p>
+                    <p><button (click)="onSubmit()" type="submit" class="btn btn-dark">Confirmar</button></p>
                     <br>
                     <p>Cadastre seus dados de desenvolvedor para poder publicar jogos</p>
                   </div>
