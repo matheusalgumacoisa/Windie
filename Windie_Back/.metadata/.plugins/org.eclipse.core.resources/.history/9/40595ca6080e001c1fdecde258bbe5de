@@ -1,0 +1,44 @@
+package modelo;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import util.ConexaoBanco;
+
+public class DesenvolvedorDAO {
+
+	private static DesenvolvedorDAO instance;
+	
+	public void atualizarDesenvolvedor(String nome_desenvolvedor, String conta, String agencia,String usuarioEmail) throws SQLException {
+		
+		
+		String sql = "select usuario_id from usuario where email = ?";
+		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		psql.setString(1, usuarioEmail);
+		ResultSet rst = psql.executeQuery();
+		rst.next();
+		int usuarioId = rst.getInt("usuario_id");
+		
+		sql = "update table desenvolvedor set  nome_de_desenvolvedor = ?, agencia_bancaria = ? conta_bancaria = ? where usuario_id = ?";
+		
+		PreparedStatement psql2 = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		
+		psql2.setString(1, nome_desenvolvedor);
+		psql2.setInt(1, Integer.parseInt(agencia));
+		psql2.setInt(1, Integer.parseInt(conta));
+		psql2.setInt(1, usuarioId);
+	}
+	
+	public static DesenvolvedorDAO getInstance() throws SQLException {
+		
+		if(instance ==null) {
+			
+			instance = new DesenvolvedorDAO();
+			return instance;
+			
+		}else {
+			return instance;
+		}
+	}
+}

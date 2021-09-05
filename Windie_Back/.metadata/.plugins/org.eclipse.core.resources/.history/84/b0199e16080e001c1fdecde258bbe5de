@@ -1,0 +1,25 @@
+package modelo;
+
+import java.sql.SQLException;
+
+public class DesenvolvedorDAO {
+
+	private static DesenvolvedorDAO instance;
+	
+	public void atualizarDesenvolvedor(String nome_desenvolvedor, String conta, String agencia,String usuarioEmail) {
+		
+		
+	}
+	
+	public static DesenvolvedorDAO getInstance() throws SQLException {
+		
+		if(instance ==null) {
+			
+			instance = new DesenvolvedorDAO();
+			return instance;
+			
+		}else {
+			return instance;
+		}
+	}
+}

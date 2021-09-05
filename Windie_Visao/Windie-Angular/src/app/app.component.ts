@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServicesUsuarioService } from './Manter-Usuarios/services-usuario.service';
 
@@ -8,10 +8,18 @@ import { ServicesUsuarioService } from './Manter-Usuarios/services-usuario.servi
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Windie-Angular';
+  label_usuario!: string;
 
   constructor(private router: Router, private usuario : ServicesUsuarioService) {
+
+   
+  }
+
+  ngOnInit(){
+    
+    this.usuario.getNick().subscribe(sucesso => this.label_usuario = sucesso.body);
   }
 
   CadastrarUsuario(){ this.router.navigate(['/usuario/cadastrar']);     }
@@ -21,13 +29,17 @@ export class AppComponent {
 
   seAutenticado(): boolean{
     return this.usuario.seUsuarioAutenticado();
+   //return false;
   }
 
   Logout(){
 
     console.log("logout");
-    this.usuario.sairUsuario();
-    this.router.navigate(['']);
+    this.usuario.sairUsuario().subscribe(sucesso =>{ 
+      this.router.navigate(['']);
+    }, fracasso =>{
+    });
+
   }
 
 }

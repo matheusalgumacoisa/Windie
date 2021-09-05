@@ -24,7 +24,7 @@
         <li  *ngIf="!seAutenticado()" ><button (click)="TelaLogin()" type="button" class="btn btn-outline-light">Entrar</button></li>  
         <div *ngIf="seAutenticado()" class="dropdown">
           <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-            Usuário
+            {{ label_usuario }}
           </button>
           <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton2">
             <li><button (click)="EditarInformacoes()" class="dropdown-item" >Editar informações</button ></li>

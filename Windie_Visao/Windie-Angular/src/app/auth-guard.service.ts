@@ -11,11 +11,13 @@ export class AuthGuardService implements CanActivate{
   constructor(private usuarioService: ServicesUsuarioService, private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-
-    console.log("sss"+state.url);
+    
+    //console.log("sss"+state.url);
     if(this.usuarioService.seUsuarioAutenticado()){
+      this.usuarioService.autenticarToken();
+      //console.log("coisa que retorna"+this.usuarioService.seUsuarioAutenticado().subscribe());
       if(state.url == "/login"||state.url == "/usuario/cadastrar"){
-       console.log("login");
+       //console.log("login");
         this.router.navigate(['']);
         return false;
       }
@@ -34,5 +36,8 @@ export class AuthGuardService implements CanActivate{
       this.router.navigate(['']);
       return false;
     }
+
+    
+
   }
 }

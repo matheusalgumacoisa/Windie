@@ -28,12 +28,12 @@ export class AutenticarUsuarioComponent implements OnInit {
   onSubmit(){
     console.log(this.form_autenticar);
     console.log("logando...");
-    this.back.autenticarUsuario(this.form_autenticar.value).subscribe(sucesso =>{ 
+    this.back.autenticarUsuario(this.form_autenticar.value);/*.subscribe(sucesso =>{ 
       
-      if(sucesso.body = "autenticado"){
+      if(sucesso.token != ""){
 
-        localStorage.setItem('user_logged',JSON.stringify(sucesso));
-
+        console.log(JSON.stringify(sucesso));
+        this.router.navigate(['']);
       }
     
     }, fracasso =>{
@@ -41,7 +41,7 @@ export class AutenticarUsuarioComponent implements OnInit {
       console.log("fracasso:");
       console.log(fracasso.error);
       console.log(fracasso);
-    });
+    });*/
   }
 
 }
