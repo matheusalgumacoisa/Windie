@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,13 +24,22 @@ public class VisaoUsuario {
 	
 	
 	@PostMapping(path = "cadastrar")
-	public void cadastrarUsuario(@RequestBody  String json) throws SQLException {
+	public void cadastrarUsuario(@RequestBody  String json) throws Exception {
 		
 		JSONObject jsonObj = new JSONObject(json);
 		
 		System.out.println("requisição recebida: "+json);
 		System.out.println("E-mail: "+jsonObj.getString("email"));
 
+		if(!jsonObj.getString("email").equals(jsonObj.getString("email_confirm"))) {
+			
+			throw new Exception("E-mails fornecidos não correspondem");
+		}
+		
+		if(!jsonObj.getString("senha").equals(jsonObj.getString("senha_confirm"))) {
+			
+			throw new Exception("Senhas fornecidos não correspondem");
+		}
 		
 		ManterUsuarios.getInstance().CadastrarUsuario(jsonObj.getString("email"), jsonObj.getString("senha"), jsonObj.getString("apelido"));
 		

@@ -2,6 +2,10 @@
     <style>
         h1 {text-align: center;}
         p {text-align: center;}
+        .ng-invalid.ng-touched:not(form){
+
+            border: 1px solid red;
+        }
     </style>  
 </head>
 <body>
@@ -19,23 +23,31 @@
                     <br>
                     <form  [formGroup]="form_cadastrar" (ngSubmit)="onSubmit()" >
                         <div class="mb-3" [ngClass]="aplicaCssErro('email')">
-                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" formControlName="email" placeholder="E-mail" required>
+                        <input type="email" class="form-control" id="email"  aria-describedby="emailHelp" formControlName="email" placeholder="E-mail">
+                        <div style="color:Tomato;" *ngIf=" !verificaValidTouched('email')">Insira um e-mail válido</div>
                         </div>
                         <div class="mb-3">
                             <input type="email" class="form-control" id="email_confirm" aria-describedby="emailHelp" formControlName="email_confirm" placeholder="Confirme seu e-mail" >
+                            <div style="color:Tomato;" *ngIf=" !verificaCampoBate('email','email_confirm')">E-mails não são os mesmos</div>
                             </div>
-                        <div class="mb-3">
-                        <input type="password" class="form-control" id="senha" formControlName="senha" placeholder="Senha" >
+                        <div class="mb-3" >
+                            <input type="password" class="form-control" id="senha" formControlName="senha" placeholder="Senha" >
+                            <div style="color:Tomato;" *ngIf=" !verificaValidTouched('senha')">Por favor insira uma senha</div>
                         </div>
                         <div class="mb-3"  [ngClass]="aplicaCssErro('senha_confirm')">
                             <input type="password" class="form-control" id="senha_confirm" formControlName="senha_confirm" placeholder="Confirme sua senha" >
+                            <div style="color:Tomato;" *ngIf=" !verificaCampoBate('senha','senha_confirm')">Senhas não são as mesmas</div>
                         </div>
                         <div class="mb-3">
                             <input type="email" class="form-control" id="apelido" aria-describedby="emailHelp" formControlName="apelido" placeholder="Apelido" >
+                            <div style="color:Tomato;" *ngIf=" !verificaValidTouched('apelido')">Por favor insira uma apelido</div>
                         </div>
+                        <br>
+                        <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_cadastrar.valid">Confirmar</button></p>
                     </form>
-                    <br>
-                    <p><button (click)="onSubmit()" type="submit" class="btn btn-dark">Confirmar</button></p>
+                    <div class="alert alert-danger" role="alert" *ngIf="erro!=''">
+                        E-mails ou senhas fornecidas não correspondem
+                      </div>
                   </div>
                   <div class="col align-self-end">
                     

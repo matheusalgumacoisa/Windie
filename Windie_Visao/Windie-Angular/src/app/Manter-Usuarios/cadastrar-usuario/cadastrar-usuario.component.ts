@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class CadastrarUsuarioComponent implements OnInit {
 
   form_cadastrar: FormGroup;
+  erro: string = '';
 
   constructor(private back:ServicesUsuarioService,private router: Router) { 
 
@@ -32,9 +33,11 @@ export class CadastrarUsuarioComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.form_cadastrar);
-   console.log("aaa"+localStorage.getItem('currentUser')!);
-    this.back.cadastrarUsuario(this.form_cadastrar.value).subscribe(sucesso =>{ this.router.navigate(['/login'])}, fracasso =>{});
+    if(this.form_cadastrar.valid){
+      console.log(this.form_cadastrar);
+      console.log("aaa"+localStorage.getItem('currentUser')!);
+      this.back.cadastrarUsuario(this.form_cadastrar.value).subscribe(sucesso =>{ this.router.navigate(['/login'])}, fracasso =>{this.erro = fracasso.message; console.log("erro: "+JSON.stringify(fracasso));});
+    }
   }
 
   aplicaCssErro(campo: any){
@@ -48,7 +51,12 @@ export class CadastrarUsuarioComponent implements OnInit {
 
   verificaValidTouched(campo: any){
 
-    return  this.form_cadastrar.get(campo)!.valid &&  this.form_cadastrar.get(campo)!.touched;
+    return  !(!this.form_cadastrar.get(campo)!.valid &&  this.form_cadastrar.get(campo)!.touched);
+  }
+
+  verificaCampoBate(value: any, value_confirma: any){
+
+    return !(this.form_cadastrar.get(value)!.value != this.form_cadastrar.get(value_confirma)!.value &&  this.form_cadastrar.get(value_confirma)!.touched);
   }
 
 }
