@@ -15,7 +15,7 @@ public class DesenvolvedorDAO {
 		
 
 		
-		String sql = "update table desenvolvedor set  nome_de_desenvolvedor = ?, agencia_bancaria = ? conta_bancaria = ? where usuario_id = ?";
+		String sql = "update desenvolvedor set  nome_de_desenvolvedor = ?, agencia_bancaria = ? conta_bancaria = ? where usuario_id = ?";
 		
 		PreparedStatement psql2 = ConexaoBanco.getInstance().getPreparedStatement(sql);
 		

@@ -43,7 +43,7 @@
                             <div style="color:Tomato;" *ngIf=" !verificaValidTouched('apelido')">Por favor insira uma apelido</div>
                         </div>
                         <br>
-                        <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_cadastrar.valid">Confirmar</button></p>
+                        <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_cadastrar.valid||!verificaCampoBate('senha','senha_confirm')||!verificaCampoBate('email','email_confirm')">Confirmar</button></p>
                     </form>
                     <div class="alert alert-danger" role="alert" *ngIf="erro!=''">
                         E-mails ou senhas fornecidas não correspondem

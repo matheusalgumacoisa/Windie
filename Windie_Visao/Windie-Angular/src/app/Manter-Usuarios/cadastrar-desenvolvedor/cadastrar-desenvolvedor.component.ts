@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ServicesUsuarioService } from '../services-usuario.service';
 
@@ -15,9 +15,9 @@ export class CadastrarDesenvolvedorComponent implements OnInit {
   constructor(private usuarioService: ServicesUsuarioService,private router: Router) { 
     this.form_cadastrar = new FormGroup({
 
-      nome_de_desenvolvedor: new FormControl(''),
-      agencia_bancaria: new FormControl(''),
-      conta_bancaria: new FormControl(''),
+      nome_de_desenvolvedor: new FormControl('',Validators.required),
+      agencia_bancaria: new FormControl('',Validators.required),
+      conta_bancaria: new FormControl('',Validators.required),
       token: new FormControl('')
 
     });  

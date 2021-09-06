@@ -3,9 +3,7 @@
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="util.ConexaoBanco"/>
     <fullyQualifiedTypeName name="modelo.UsuarioModelo"/>
-    <fullyQualifiedTypeName name="modelo.UsuarioDAO"/>
     <fullyQualifiedTypeName name="controle.ManterUsuarios"/>
-    <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.ObjectMapper"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.core.JsonParser"/>
     <fullyQualifiedTypeName name="org.json.JSONObject"/>
     <fullyQualifiedTypeName name="org.springframework.context.annotation.ComponentScan"/>
@@ -17,4 +15,13 @@
     <fullyQualifiedTypeName name="java.io.Serializable"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.CrossOrigin"/>
     <fullyQualifiedTypeName name="util.JwtTokenUtil"/>
+    <fullyQualifiedTypeName name="modelo.UsuarioDesenvolvedorModelo"/>
+    <fullyQualifiedTypeName name="modelo.DesenvolvedorDAO"/>
+    <fullyQualifiedTypeName name="modelo.DesenvolvedorModelo"/>
+    <fullyQualifiedTypeName name="modelo.UsuarioDAO"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.ObjectWriter"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.ObjectMapper"/>
+    <fullyQualifiedTypeName name="org.springframework.aop.ThrowsAdvice"/>
+    <fullyQualifiedTypeName name="java.lang.Exception"/>
+    <fullyQualifiedTypeName name="util.CustomException"/>
 </qualifiedTypeNameHistroy>

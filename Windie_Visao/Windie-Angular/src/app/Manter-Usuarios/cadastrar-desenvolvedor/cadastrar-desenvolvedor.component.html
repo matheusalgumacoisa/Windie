@@ -1,7 +1,16 @@
 <head>
     <style>
         h2 {text-align: center;}
-        
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        input:invalid {
+            border: 1px solid red;
+        }
     </style>  
 </head>
 <body>
@@ -28,15 +37,15 @@
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <input type="text" class="form-control" id="agencia" aria-describedby="agencia" placeholder="Agência" formControlName="agencia_bancaria">
+                                <input type="text" class="form-control" id="agencia" aria-describedby="agencia" placeholder="Agência" formControlName="agencia_bancaria" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                             </div>
                             <div class="col-8">
-                                <input type="text" class="form-control" id="conta" aria-describedby="conta" placeholder="Conta bancaria" formControlName="conta_bancaria">
+                                <input type="text" class="form-control" id="conta" aria-describedby="conta" placeholder="Conta bancaria" formControlName="conta_bancaria" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                             </div>
                         </div>
+                        <br>
+                        <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_cadastrar.valid">Confirmar</button></p>
                     </form>
-                    <br>
-                    <p><button (click)="onSubmit()" type="submit" class="btn btn-dark">Confirmar</button></p>
                     <br>
                     <p>Cadastre seus dados de desenvolvedor para poder publicar jogos</p>
                   </div>

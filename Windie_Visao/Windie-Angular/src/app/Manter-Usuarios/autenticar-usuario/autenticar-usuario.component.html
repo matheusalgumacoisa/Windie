@@ -6,7 +6,7 @@
 </head>
 <body>
     <div class="container-sm">
-        
+         
             <div class="container">
                 <div class="row">
                   <div class="col align-self-start">                   
@@ -26,7 +26,7 @@
                         </div>
                     </form>
                     <br>
-                    <p><button (click)="onSubmit()" type="submit" class="btn btn-dark">Entrar</button></p>
+                    <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_autenticar.valid">Entrar</button></p>
                   </div>
                   <div class="col align-self-end">
                     
