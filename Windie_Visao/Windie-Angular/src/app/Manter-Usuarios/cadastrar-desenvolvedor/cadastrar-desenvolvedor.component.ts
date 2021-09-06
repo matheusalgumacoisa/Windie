@@ -33,4 +33,6 @@ export class CadastrarDesenvolvedorComponent implements OnInit {
 
     this.usuarioService.cadastrarDesenvolvedor(this.form_cadastrar.value).subscribe(success => {this.router.navigate([''])});
   }
+
+
 }

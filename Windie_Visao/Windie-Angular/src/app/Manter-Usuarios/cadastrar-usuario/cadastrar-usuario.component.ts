@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup} from '@angular/forms';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { ServicesUsuarioService } from '../services-usuario.service';
 import { Router } from '@angular/router';
 
@@ -16,11 +16,11 @@ export class CadastrarUsuarioComponent implements OnInit {
 
     this.form_cadastrar = new FormGroup({
 
-      email: new FormControl(null),
-      email_confirm: new FormControl(null),
-      senha: new FormControl(null),
-      senha_confirm: new FormControl(null),
-      apelido: new FormControl(null)
+      email: new FormControl(null,[Validators.required,Validators.email]),
+      email_confirm: new FormControl(null,[Validators.required,Validators.email]),
+      senha: new FormControl(null,Validators.required),
+      senha_confirm: new FormControl(null,Validators.required),
+      apelido: new FormControl(null,Validators.required)
 
     });
 
@@ -32,9 +32,23 @@ export class CadastrarUsuarioComponent implements OnInit {
   }
 
   onSubmit(){
-   // console.log(this.form_cadastrar);
+    console.log(this.form_cadastrar);
    console.log("aaa"+localStorage.getItem('currentUser')!);
     this.back.cadastrarUsuario(this.form_cadastrar.value).subscribe(sucesso =>{ this.router.navigate(['/login'])}, fracasso =>{});
+  }
+
+  aplicaCssErro(campo: any){
+
+    return {
+      'has-error': this.verificaValidTouched(campo),
+      'has-feedback': this.verificaValidTouched(campo)
+
+    }
+  }
+
+  verificaValidTouched(campo: any){
+
+    return  this.form_cadastrar.get(campo)!.valid &&  this.form_cadastrar.get(campo)!.touched;
   }
 
 }

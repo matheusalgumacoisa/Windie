@@ -18,8 +18,8 @@
                     <br> 
                     <br>
                     <form  [formGroup]="form_cadastrar" (ngSubmit)="onSubmit()" >
-                        <div class="mb-3">
-                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" formControlName="email" placeholder="E-mail">
+                        <div class="mb-3" [ngClass]="aplicaCssErro('email')">
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" formControlName="email" placeholder="E-mail" required>
                         </div>
                         <div class="mb-3">
                             <input type="email" class="form-control" id="email_confirm" aria-describedby="emailHelp" formControlName="email_confirm" placeholder="Confirme seu e-mail" >
@@ -27,7 +27,7 @@
                         <div class="mb-3">
                         <input type="password" class="form-control" id="senha" formControlName="senha" placeholder="Senha" >
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3"  [ngClass]="aplicaCssErro('senha_confirm')">
                             <input type="password" class="form-control" id="senha_confirm" formControlName="senha_confirm" placeholder="Confirme sua senha" >
                         </div>
                         <div class="mb-3">
@@ -41,6 +41,7 @@
                     
                   </div>
                 </div>
+                
               </div>
     </div>
 </body>
