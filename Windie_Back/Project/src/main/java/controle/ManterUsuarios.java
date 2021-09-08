@@ -7,6 +7,7 @@ import modelo.DesenvolvedorModelo;
 import modelo.UsuarioDAO;
 import modelo.UsuarioDesenvolvedorModelo;
 import modelo.UsuarioModelo;
+import util.CustomException;
 
 public class ManterUsuarios {
 
@@ -16,8 +17,15 @@ public class ManterUsuarios {
 		
 	}
 	
-	public void CadastrarUsuario(String email,String senha,String apelido) throws SQLException {
+	public void CadastrarUsuario(String email,String senha,String apelido) throws SQLException, CustomException {
 		
+		if(UsuarioDAO.getInstance().seEmailExiste(email)) {
+			throw new CustomException("O e-mail informado ja está cadastrado");
+		}
+		if(UsuarioDAO.getInstance().seApelidoExiste(apelido)) {
+			throw new CustomException("O apelido já existe");
+		}
+			
 		senha = String.valueOf(senha.hashCode());
 		
 		UsuarioModelo usuario = new UsuarioModelo(null,email,senha,apelido);
@@ -26,12 +34,40 @@ public class ManterUsuarios {
 		
 	}
 	
-	public boolean AutenticaUsuario(String email,String senha) throws SQLException {
+	public void CadastrarDesenvolvedor(String nome_desenvolvedor, String agencia, String conta, String userMail) throws SQLException, CustomException {
+		
+		if(DesenvolvedorDAO.getInstance().seNomeExiste(nome_desenvolvedor)) {
+			throw new CustomException("O nome já existe");
+		}
+		
+		DesenvolvedorModelo desenvolvedor = new DesenvolvedorModelo(nome_desenvolvedor,Integer.parseInt(agencia),Integer.parseInt(conta),UsuarioDAO.getInstance().idByEmail(userMail));
+		
+		DesenvolvedorDAO.getInstance().InserirDesenvolvedor(desenvolvedor);
+	}
+	
+	public void AtualizarUsuario(String email, String apelido, String nome_desenvolvedor, String conta, String agencia) throws SQLException, CustomException {
+		if(UsuarioDAO.getInstance().seApelidoExiste(apelido)&&!UsuarioDAO.getInstance().getUsuarioByEmail(email).getApelido().equals(apelido)) {
+			throw new CustomException("O apelido já existe");
+		}
+		if(DesenvolvedorDAO.getInstance().seNomeExiste(nome_desenvolvedor)&&!DesenvolvedorDAO.getInstance().getByUser(UsuarioDAO.getInstance().getUsuarioByEmail(email).getUsuario_id()).getNome_de_desenvolvedor().equals(nome_desenvolvedor)) {
+			throw new CustomException("O nome de desenvolvedor já existe");
+		}	
+		UsuarioDAO.getInstance().AtualizarUsuario(email, apelido);
+		if(getPapel(email).equals("D")) {
+			DesenvolvedorDAO.getInstance().atualizarDesenvolvedor(nome_desenvolvedor, conta,agencia,UsuarioDAO.getInstance().idByEmail(email));
+		}
+	}
+	
+	public boolean AutenticaUsuario(String email,String senha) throws SQLException, CustomException {
+		
+		if(!UsuarioDAO.getInstance().seEmailExiste(email)) {
+			throw new CustomException("Usuário não cadastrado");
+		}
 		UsuarioModelo usuario = UsuarioDAO.getInstance().getUsuarioByEmail(email);
 		if(usuario != null && usuario.getSenha().equals(String.valueOf(senha.hashCode()))) {
 			return true;
 		}else {
-			return false;
+			throw new CustomException("Senha incorreta");
 		}
 	}
 	
@@ -42,17 +78,6 @@ public class ManterUsuarios {
 		return apelido;
 	}
 	
-	public static ManterUsuarios getInstance() {
-		
-		if(instance ==null) {
-			
-			instance = new ManterUsuarios();
-			return instance;
-			
-		}else {
-			return instance;
-		}
-	}
 
 	public String getPapel(String email) throws SQLException {
 		
@@ -65,20 +90,8 @@ public class ManterUsuarios {
 		}
 	}
 	
-	public void AtualizarUsuario(String email, String apelido, String nome_desenvolvedor, String conta, String agencia) throws SQLException {
-		// TODO Auto-generated method stub
-		//suarioModelo usuario = new UsuarioModelo(email);
-		UsuarioDAO.getInstance().AtualizarUsuario(email, apelido);
-		if(getPapel(email).equals("D")) {
-			DesenvolvedorDAO.getInstance().atualizarDesenvolvedor(nome_desenvolvedor, conta,agencia,UsuarioDAO.getInstance().idByEmail(email));
-		}
-	}
 
-	public void CadastrarDesenvolvedor(String nome_desenvolvedor, String agencia, String conta, String userMail) throws SQLException {
-		
-		DesenvolvedorModelo desenvolvedor = new DesenvolvedorModelo(nome_desenvolvedor,Integer.parseInt(agencia),Integer.parseInt(conta),UsuarioDAO.getInstance().idByEmail(userMail));
-		DesenvolvedorDAO.getInstance().InserirDesenvolvedor(desenvolvedor);
-	}
+
 
 	public String getAssinatura(String userMail) throws SQLException {
 		 
@@ -112,5 +125,16 @@ public class ManterUsuarios {
 		return modelo;
 	}
 
+	public static ManterUsuarios getInstance() {
+		
+		if(instance ==null) {
+			
+			instance = new ManterUsuarios();
+			return instance;
+			
+		}else {
+			return instance;
+		}
+	}
 
 }

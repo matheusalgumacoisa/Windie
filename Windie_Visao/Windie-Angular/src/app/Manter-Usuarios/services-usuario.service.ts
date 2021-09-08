@@ -56,12 +56,12 @@ export class ServicesUsuarioService {
     return this.http.post<Post>(this.url+"/assinatura",localStorage.getItem('currentUser'));
   }
 
-  public autenticarUsuario(body: any){
-    this.http.post(this.url+"/login",body).subscribe(res => {
+  public autenticarUsuario(body: any):Observable<Post>{
+    return this.http.post<Post>(this.url+"/login",body);/*.subscribe(res => {
       this.logado = true;
       localStorage.setItem('currentUser', JSON.stringify(res));
       this.router.navigate([''])
-    },err =>{this.logado = false;console.log('erroooo231'+err)});
+    },err =>{this.logado = false;console.log('erroooo231'+err)});*/
   }
 
   public autenticarToken(){

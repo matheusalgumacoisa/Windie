@@ -36,7 +36,17 @@ export class CadastrarUsuarioComponent implements OnInit {
     if(this.form_cadastrar.valid){
       console.log(this.form_cadastrar);
       console.log("aaa"+localStorage.getItem('currentUser')!);
-      this.back.cadastrarUsuario(this.form_cadastrar.value).subscribe(sucesso =>{ this.router.navigate(['/login'])}, fracasso =>{this.erro = fracasso.message; console.log("erro: "+JSON.stringify(fracasso));});
+      this.back.cadastrarUsuario(this.form_cadastrar.value).subscribe(sucesso =>{ 
+        this.router.navigate(['/login']
+      )}, 
+      fracasso =>{
+        if(JSON.stringify(fracasso.error.status=="500")){
+         this.erro = JSON.stringify(fracasso.error.message); 
+        }else{
+          this.erro = "Erro ao cadastrar";
+        }
+        console.log("erro: "+JSON.stringify(fracasso.error.message));
+      });
     }
   }
 

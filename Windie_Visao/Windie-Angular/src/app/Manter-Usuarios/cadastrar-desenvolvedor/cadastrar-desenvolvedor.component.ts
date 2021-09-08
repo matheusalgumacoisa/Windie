@@ -11,6 +11,7 @@ import { ServicesUsuarioService } from '../services-usuario.service';
 export class CadastrarDesenvolvedorComponent implements OnInit {
 
   form_cadastrar: FormGroup;
+  erro:string = '';
 
   constructor(private usuarioService: ServicesUsuarioService,private router: Router) { 
     this.form_cadastrar = new FormGroup({
@@ -31,7 +32,17 @@ export class CadastrarDesenvolvedorComponent implements OnInit {
 
   onSubmit(){
 
-    this.usuarioService.cadastrarDesenvolvedor(this.form_cadastrar.value).subscribe(success => {this.router.navigate([''])});
+    this.usuarioService.cadastrarDesenvolvedor(this.form_cadastrar.value).subscribe(
+      success => {
+        this.router.navigate([''])
+      },err => {
+        if(JSON.stringify(err.error.status=="500")){
+          this.erro = JSON.stringify(err.error.message);
+        }else{
+            this.erro = "Erro ao cadastrar";
+        }
+        console.log("erro: "+JSON.stringify(err.error));
+      });
   }
 
 

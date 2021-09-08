@@ -46,8 +46,8 @@
                         <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_cadastrar.valid||!verificaCampoBate('senha','senha_confirm')||!verificaCampoBate('email','email_confirm')">Confirmar</button></p>
                     </form>
                     <div class="alert alert-danger" role="alert" *ngIf="erro!=''">
-                        E-mails ou senhas fornecidas não correspondem
-                      </div>
+                        {{erro}}
+                    </div>
                   </div>
                   <div class="col align-self-end">
                     

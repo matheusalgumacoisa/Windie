@@ -45,7 +45,10 @@
                         </div>
                         <br>
                         <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!seValid()">Confirmar</button></p>
-                    </form>
+                    </form> 
+                    <div class="alert alert-danger" role="alert" *ngIf="erro!=''">
+                        {{erro}}
+                    </div>
                     <br>
                     <br>
                     <span *ngIf="(assinatura == 'invalid')" class="badge bg-light text-dark">Conta sem assinatura</span>

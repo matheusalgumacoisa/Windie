@@ -25,6 +25,9 @@
                         <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha" formControlName="senha">
                         </div>
                     </form>
+                    <div class="alert alert-danger" role="alert" *ngIf="erro!=''">
+                      {{erro}}
+                    </div>
                     <br>
                     <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_autenticar.valid">Entrar</button></p>
                   </div>

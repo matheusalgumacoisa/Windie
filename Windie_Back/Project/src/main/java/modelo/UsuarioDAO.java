@@ -3,22 +3,22 @@ package modelo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import util.ConexaoBanco;
+import util.CustomException;
 
 public class UsuarioDAO {
 
 	private static UsuarioDAO instance;
 	
-	public void InserirUsuario(UsuarioModelo usuario) throws SQLException{
+	public void InserirUsuario(UsuarioModelo usuario) throws SQLException, CustomException{
 		String sql = "insert into usuario (email,senha,apelido)  values(?,?,?)";
 		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
 
 		 psql.setString(1, usuario.getEmail());
-			psql.setString(2, usuario.getSenha());
-			psql.setString(3, usuario.getApelido());
+		 psql.setString(2, usuario.getSenha());
+		 psql.setString(3, usuario.getApelido());
 				
-			psql.executeUpdate();
+		 psql.executeUpdate();
 		
 	}
 	
@@ -88,6 +88,30 @@ public class UsuarioDAO {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean seEmailExiste(String email) throws SQLException {
+		String sql = "select * from usuario where email = ? ";
+		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		psql.setString(1, email);
+		ResultSet rst = psql.executeQuery();
+		if(rst.next()) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	public boolean seApelidoExiste(String apelido) throws SQLException {
+		String sql = "select * from usuario where apelido = ? ";
+		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		psql.setString(1, apelido);
+		ResultSet rst = psql.executeQuery();
+		if(rst.next()) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 }
 

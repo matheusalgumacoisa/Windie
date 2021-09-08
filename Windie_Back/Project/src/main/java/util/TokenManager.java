@@ -2,7 +2,7 @@ package util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import javax.naming.AuthenticationException;
 
 import org.json.JSONObject;
 
@@ -56,7 +56,7 @@ public class TokenManager {
 			}
 		}	
 		
-		throw new Exception("Token Inválido");
+		throw new AuthenticationException("Token Inválido");//Exception("Token Inválido");
 	}
 	
 	public void DestruirToken(String tokenDrop) {

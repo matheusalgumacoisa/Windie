@@ -15,7 +15,7 @@ public class DesenvolvedorDAO {
 		
 
 		
-		String sql = "update desenvolvedor set  nome_de_desenvolvedor = ?, agencia_bancaria = ? conta_bancaria = ? where usuario_id = ?";
+		String sql = "update desenvolvedor set  nome_de_desenvolvedor = ?, agencia_bancaria = ?, conta_bancaria = ? where usuario_id = ?";
 		
 		PreparedStatement psql2 = ConexaoBanco.getInstance().getPreparedStatement(sql);
 		
@@ -76,5 +76,18 @@ public class DesenvolvedorDAO {
 		}else {
 			return instance;
 		}
+	}
+
+
+	public boolean seNomeExiste(String nome_desenvolvedor) throws SQLException {
+			String sql = "select * from desenvolvedor where nome_de_desenvolvedor = ? ";
+			PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
+			psql.setString(1, nome_desenvolvedor);
+			ResultSet rst = psql.executeQuery();
+			if(rst.next()) {
+				return true;
+			}else {
+				return false;
+			}
 	}
 }

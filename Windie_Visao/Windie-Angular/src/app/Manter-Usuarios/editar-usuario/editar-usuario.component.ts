@@ -15,6 +15,7 @@ export class EditarUsuarioComponent implements OnInit {
   papel! : string;
   assinatura! : string;
  // apelido! : string;
+  erro:string = '';
 
   form_cadastrar: FormGroup;
 
@@ -38,7 +39,16 @@ export class EditarUsuarioComponent implements OnInit {
 
   onSubmit(){
 
-    this.usuarioService.atualizarUsuario(this.form_cadastrar.value).subscribe(success =>{this.router.navigate([''])});
+    this.usuarioService.atualizarUsuario(this.form_cadastrar.value).subscribe(success =>
+      {this.router.navigate([''])},
+      err =>{
+        if(JSON.stringify(err.error.status=="500")){
+          this.erro = JSON.stringify(err.error.message);
+        }else{
+            this.erro = "Erro ao atualizar";
+        }
+        console.log("erro: "+JSON.stringify(err.error));
+      });
   }
 
   seValid():boolean{

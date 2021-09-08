@@ -46,6 +46,9 @@
                         <br>
                         <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_cadastrar.valid">Confirmar</button></p>
                     </form>
+                    <div class="alert alert-danger" role="alert" *ngIf="erro!=''">
+                        {{erro}}
+                    </div>
                     <br>
                     <p>Cadastre seus dados de desenvolvedor para poder publicar jogos</p>
                   </div>
