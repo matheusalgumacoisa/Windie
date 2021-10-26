@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ServicesCatalogoService } from '../services-catalogo.service';
 
 @Component({
   selector: 'app-catalogo-lista',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CatalogoListaComponent implements OnInit {
 
-  constructor() { }
+  jogos! : jogo[];
+
+  constructor(private jogoService: ServicesCatalogoService ) { }
 
   ngOnInit(): void {
+    this.jogoService.getJogos().subscribe(success =>{this.jogos = JSON.parse(JSON.stringify(success.body)) },err =>{console.log("erro get jogos lista: "+JSON.stringify(err))});
   }
 
+}
+
+class jogo {
+  constructor(
+    public jogo_id: number,
+    public titulo: string,
+    public descricao: string,
+    public arquivos: string,
+    public caminho_executavel: string,
+    public detalhes: string,
+    public tags: string,
+    public visibilidade: string,
+    public imagem_capa: string,
+    public genero: number
+  ) { }
 }
