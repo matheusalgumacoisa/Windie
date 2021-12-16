@@ -38,4 +38,8 @@
     <fullyQualifiedTypeName name="java.sql.SQLIntegrityConstraintViolationException"/>
     <fullyQualifiedTypeName name="util.CustomException"/>
     <fullyQualifiedTypeName name="javax.naming.AuthenticationException"/>
+    <fullyQualifiedTypeName name="modelo.JogoModelo"/>
+    <fullyQualifiedTypeName name="modelo.AvaliacaoDAO"/>
+    <fullyQualifiedTypeName name="util.Ordenacoes"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
 </qualifiedTypeNameHistroy>

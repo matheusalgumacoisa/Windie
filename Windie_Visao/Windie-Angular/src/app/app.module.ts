@@ -16,6 +16,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CadastrarComponent } from './Manter-Jogos/cadastrar/cadastrar.component';
+import { JwPaginationModule } from 'jw-angular-pagination';
+import { TimesPipePipe } from './Exibir-Catalogo/times-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { CadastrarComponent } from './Manter-Jogos/cadastrar/cadastrar.component
     AutenticarUsuarioComponent,
     EditarUsuarioComponent,
     CadastrarDesenvolvedorComponent,
-    CadastrarComponent
+    CadastrarComponent,
+    TimesPipePipe
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,8 @@ import { CadastrarComponent } from './Manter-Jogos/cadastrar/cadastrar.component
     HttpClientModule,
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    JwPaginationModule
   ],
   providers: [
     AuthGuardService

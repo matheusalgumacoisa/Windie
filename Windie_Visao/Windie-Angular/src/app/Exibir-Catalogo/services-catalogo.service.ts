@@ -14,8 +14,12 @@ export class ServicesCatalogoService {
   constructor(private http: HttpClient,private router: Router ) { }
 
 
-  public getJogos():Observable<Get>{
-    return this.http.get<Get>(this.url+"/jogos");
+  public getJogos(body:any):Observable<Get>{
+    return this.http.post<Get>(this.url+"/jogos",body);
+  }
+
+  public buscaJogos(body:any):Observable<Get>{
+    return this.http.post<Get>(this.url+"/buscar",body);
   }
 }
 
