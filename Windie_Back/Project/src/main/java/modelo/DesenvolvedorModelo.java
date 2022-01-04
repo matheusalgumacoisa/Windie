@@ -14,6 +14,15 @@ public class DesenvolvedorModelo {
 		this.conta_bancaria = conta;
 		this.usuario_id = id_usuario;
 	}
+	
+	public DesenvolvedorModelo(int desenvolvedor_id,String nome_desenvolvedor, int agencia, int conta, int id_usuario) {
+		this.nome_de_desenvolvedor = nome_desenvolvedor;
+		this.agencia_bancaria = agencia;
+		this.conta_bancaria = conta;
+		this.usuario_id = id_usuario;
+		this.desenvolvedor_id = desenvolvedor_id;
+	}
+	
 	public Integer getDesenvolvedor_id() {
 		return desenvolvedor_id;
 	}

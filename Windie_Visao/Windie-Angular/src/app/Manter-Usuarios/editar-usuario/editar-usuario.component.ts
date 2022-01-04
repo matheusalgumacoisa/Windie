@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class EditarUsuarioComponent implements OnInit {
 
-  papel! : string;
+ // papel! : string;
   assinatura! : string;
  // apelido! : string;
   erro:string = '';
@@ -31,7 +31,7 @@ export class EditarUsuarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usuarioService.getPapel().subscribe(success =>{console.log("get papel"); this.papel = success.body},err => {console.log("err papel")});
+    this.usuarioService.getPapel()/*.subscribe(success =>{console.log("get papel"); this.papel = success.body},err => {console.log("err papel")})*/;
     this.usuarioService.getAssinatura().subscribe(success =>{console.log("get ass "+success.body); this.assinatura = success.body},err => {console.log("err ass")});
     this.usuarioService.getUsuarioForm().subscribe(success =>{this.form_cadastrar.setValue(success);console.log("form"+success);},err => {console.log("err form "+JSON.stringify(err))});
 
@@ -52,7 +52,7 @@ export class EditarUsuarioComponent implements OnInit {
   }
 
   seValid():boolean{
-    if(this.papel=='D'){
+    if(localStorage.getItem('currentUserPapel') =='D'){
       return  this.form_cadastrar.valid;
     }else{
 
@@ -61,6 +61,10 @@ export class EditarUsuarioComponent implements OnInit {
     }
 
 
+  }
+
+  papel():string{
+    return  localStorage.getItem('currentUserPapel')!;
   }
   
 }

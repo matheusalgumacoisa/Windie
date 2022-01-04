@@ -34,6 +34,7 @@ export class CadastrarDesenvolvedorComponent implements OnInit {
 
     this.usuarioService.cadastrarDesenvolvedor(this.form_cadastrar.value).subscribe(
       success => {
+        this.usuarioService.getPapel();
         this.router.navigate([''])
       },err => {
         if(JSON.stringify(err.error.status=="500")){

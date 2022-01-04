@@ -78,6 +78,13 @@ public class ManterUsuarios {
 		return apelido;
 	}
 	
+	public int idByEmail(String email) throws SQLException {
+
+		int id = UsuarioDAO.getInstance().idByEmail(email);
+		System.out.println("id: "+id);
+		return id;
+	}
+	
 
 	public String getPapel(String email) throws SQLException {
 		
@@ -135,6 +142,11 @@ public class ManterUsuarios {
 		}else {
 			return instance;
 		}
+	}
+
+	public DesenvolvedorModelo devByUser(int user_id) throws SQLException {
+
+		return DesenvolvedorDAO.getInstance().getByUser(user_id);
 	}
 
 }

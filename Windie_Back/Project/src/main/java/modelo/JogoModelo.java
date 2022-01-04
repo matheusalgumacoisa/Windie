@@ -15,6 +15,7 @@ public class JogoModelo {
 	 private float nota;
 	 private int avaliacoes_numero;
 	 private int jogos_numero;
+	 private int desenvolvedor_id;
 	 
 
 
@@ -116,5 +117,13 @@ public class JogoModelo {
 
 	public void setJogos_numero(int jogos_numero) {
 		this.jogos_numero = jogos_numero;
+	}
+
+	public int getDesenvolvedor_id() {
+		return desenvolvedor_id;
+	}
+
+	public void setDesenvolvedor_id(int desenvolvedor_id) {
+		this.desenvolvedor_id = desenvolvedor_id;
 	}
 }

@@ -37,7 +37,7 @@ public class JogoDAO {
 					+ "from jogo j \r\n"
 					+ "left join avaliacao av\r\n"
 					+ "on av.jogo_id = j.jogo_id\r\n";
-			if(termo_busca != null) sql = sql	+ "where j.titulo like ? or j.titulo like ?  or j.titulo like ? or j.titulo like ?\r\n";
+			if(termo_busca != null) sql = sql	+ "where  lower(j.titulo) like  lower(?) or  lower(j.titulo) like  lower(?)  or  lower(j.titulo) like  lower(?) or  lower(j.titulo) like  lower(?)\r\n";
 			sql = sql	+ "group by j.jogo_id\r\n"
 					+ "order by count(av.jogo_id ) desc\r\n"
 					+ "limit ? OFFSET ?";
@@ -47,7 +47,7 @@ public class JogoDAO {
 					+ "from jogo j \r\n"
 					+ "left join avaliacao av\r\n"
 					+ "on av.jogo_id = j.jogo_id\r\n";
-					if(termo_busca != null) sql = sql	+ "where j.titulo like ? or j.titulo like ?  or j.titulo like ? or j.titulo like ?\r\n";
+					if(termo_busca != null) sql = sql	+ "where  lower(j.titulo) like  lower(?) or  lower(j.titulo) like  lower(?)  or  lower(j.titulo) like  lower(?) or  lower(j.titulo) like  lower(?)\r\n";
 					sql = sql + "group by j.jogo_id\r\n"
 					+ "order by coalesce(sum(av.nota),0) desc\r\n"
 					+ "limit ? OFFSET ?";
@@ -104,6 +104,24 @@ public class JogoDAO {
 		rst.next();
 		
 		return rst.getInt(1);
+	}
+	
+	public void inserirJogo(JogoModelo modelo) throws SQLException {
+		String sql = "insert into jogo (titulo, descricao, caminho_executavel,detalhes,tags,visibilidade,imagem_capa,genero,desenvolvedor_id)\r\n"
+				+ "VALUES (?, ?, ?,?,?,?,?,?,?)";
+		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		psql.setString(1, modelo.getTitulo());
+		psql.setString(2, modelo.getDescricao());
+		psql.setString(3, modelo.getCaminho_executavel());
+		psql.setString(4, modelo.getDetalhes());
+		psql.setString(5, modelo.getTags());
+		psql.setString(6, modelo.getVisibilidade());
+		psql.setBytes(7, modelo.getImagem_capa());
+		psql.setInt(8, modelo.getGenero());
+		psql.setInt(9, modelo.getDesenvolvedor_id());
+		
+		psql.execute();
+		
 	}
 	
 }

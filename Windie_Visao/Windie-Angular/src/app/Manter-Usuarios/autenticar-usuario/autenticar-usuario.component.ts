@@ -32,6 +32,7 @@ export class AutenticarUsuarioComponent implements OnInit {
     this.back.autenticarUsuario(this.form_autenticar.value).subscribe(res => {
       this.back.logado = true;
       localStorage.setItem('currentUser', JSON.stringify(res));
+      this.back.getPapel();
       this.router.navigate([''])
     },err =>{
       if(JSON.stringify(err.error.status=="500")){

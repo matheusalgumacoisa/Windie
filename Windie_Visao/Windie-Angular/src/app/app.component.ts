@@ -25,7 +25,9 @@ export class AppComponent implements OnInit {
   CadastrarUsuario(){ this.router.navigate(['/usuario/cadastrar']);     }
   TelaLogin(){ this.router.navigate(['/login']);     }
   EditarInformacoes(){ this.router.navigate(['/usuario/editar']);     }
-  PublicarJogo(){ this.router.navigate(['/jogos/publicar']);     }
+  PublicarJogo(){ 
+    this.router.navigate(['/jogos/publicar']
+    );     }
 
   seAutenticado(): boolean{
     

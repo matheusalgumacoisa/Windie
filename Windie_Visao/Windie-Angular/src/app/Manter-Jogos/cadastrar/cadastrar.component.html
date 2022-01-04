@@ -1,1 +1,119 @@
-<p>cadastrar works!</p>
+<br>
+<h1 style="text-align: center;">Cadastrar jogo</h1>
+<br><br><br>
+<form [formGroup]="form_cadastrar">
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <input type="text" class="form-control" id="titulo" aria-describedby="titulo" placeholder="Título"
+                    formControlName="titulo" />
+                <br>
+            </div>
+            <div class="col-1">
+                <label for="genero" style="vertical-align: sub;">Gênero</label>
+            </div>
+            <div class="col-2">
+                <select  class="form-select" aria-label="Default select example" id="genero" formControlName="genero">
+                    <option *ngFor="let genero of generos" [value]="genero.genero_id">{{genero.genero_nome}}</option>
+                </select>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" id="tags" aria-describedby="tags" placeholder="Tags"
+                    formControlName="tags" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5">
+                <input type="text" class="form-control" id="descricao" aria-describedby="descricao"
+                    placeholder="Breve descrição do jogo" formControlName="descricao" />
+                <br>
+                <input type="text" class="form-control" id="executavel" aria-describedby="executavel"
+                    placeholder="Caminho do executável" formControlName="executavel" />
+                <br>
+                <div class="d-grid gap-2 col-6 ">
+                    <button class="btn btn-dark" type="button">Upload de arquivos</button>
+                </div>
+                <br>
+                <textarea class="form-control" id="detalhes" aria-describedby="detalhes" formControlName="detalhes"
+                    placeholder="Detalhes sobre o jogo..." rows="10"></textarea>
+            </div>
+            <div class="col-3">
+                <figure *ngIf="(capaFile==null)" class="figure">
+                    <img src="https://yata-apix-e34b37a1-5656-42a4-8155-a2c431f37f0f.lss.locawebcorp.com.br/753ef8fee13d45aca337f1fd40fe388f.png"
+                        class="figure-img img-fluid rounded" alt="...">
+                    <!--figcaption class="figure-caption">Capa</figcaption-->
+                </figure>
+                <figure *ngIf="(capaFile!=null)" class="figure">
+                    <img [src]="capaFile ? capaFile.link : 'localhost/image.png'"
+                        class="figure-img img-fluid rounded" alt="...">
+                    <!--figcaption class="figure-caption">Capa</figcaption-->
+                </figure>
+                
+                <div class="mb-3" style="visibility: hidden;">
+                    <label for="capa" class="form-label" >Carregar Imagem de capa</label>
+                    <input class="form-control" type="file" id="capa" formControlName="imagem_capa"  (change)="imagesPreview($event)" accept="image/png, image/jpeg">
+                </div>
+                <div class="d-grid gap-2 col-12 " >
+                        <button class="btn btn-dark" type="button" onclick="document.querySelector('#capa').click()">Carregar Imagem de capa</button>
+                </div>
+                <br>
+                <input type="text" class="form-control" id="trailer" aria-describedby="trailer"
+                    placeholder="Link para o trailer" formControlName="trailer" />
+            </div>
+            <div class="col">
+                <div class="overflow-auto" style="max-height: 300px;">
+                    <span *ngFor="let scsht of screenshotFiles">
+                        <!--img src="https://yata-apix-e34b37a1-5656-42a4-8155-a2c431f37f0f.lss.locawebcorp.com.br/753ef8fee13d45aca337f1fd40fe388f.png"
+                            class="figure-img img-fluid rounded" style="max-height: 75px;max-width: 95px;" alt="..."-->
+                        <img *ngIf="( sePossuiScreenshotsCarregadas())" [src]="screenshotFiles[screenshotFiles.indexOf(scsht)] ? screenshotFiles[screenshotFiles.indexOf(scsht)].link : getScreenshotLink(screenshotFiles.indexOf(scsht))"
+                        class="figure-img img-fluid rounded" alt="..."  style="max-width: 16;" width="160" height="160">
+                        <svg (click)="removeScreenshot(screenshotFiles.indexOf(scsht))"  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-x-circle" viewBox="0 0 16 16"
+                            style="vertical-align: top;align-self: flex-start;">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="mb-3" style="visibility: hidden;" >
+                    <label for="screenshot" class="form-label" >Carregar Screenshot</label>
+                    <!--input class="form-control" type="file" id="screenshot" formControlName="screenshot"  (change)=" screenshotPreview($event,0)" accept="image/png, image/jpeg"-->
+                    <input class="form-control" type="file" id="screenshot" formControlName="screenshot"  (change)=" screenshotPreview($event,0)" accept="image/png, image/jpeg">
+                </div>
+                <button class="btn btn-dark" type="button" onclick="document.querySelector('#screenshot').click()">Carregar screenshot</button>
+            </div>
+            <div class="row">
+                <div class="col-7">
+                </div>
+                <div class="col">
+                    <span>Salvar como:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" value="PUBLICO" name="salvarTipo" id="salvarPublicacao" formControlName="salvarTipo">
+                        <label class="form-check-label" for="salvarPublicacao">
+                            Publicação
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" value="RASCUNHO" name="salvarTipo" id="salvarRascunho" formControlName="salvarTipo">
+                        <label class="form-check-label" for="salvarRascunho">
+                            Rascunho
+                        </label>
+                    </div>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <button class="btn btn-dark" type="button" (click)="onSubimt()">Salvar</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

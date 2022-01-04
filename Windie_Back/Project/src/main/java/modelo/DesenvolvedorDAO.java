@@ -62,7 +62,7 @@ public class DesenvolvedorDAO {
 		ResultSet rst = psql.executeQuery();
 		rst.next();
 		
-		return new DesenvolvedorModelo(rst.getString("nome_de_desenvolvedor"), rst.getInt("agencia_bancaria"), rst.getInt("conta_bancaria"), rst.getInt("usuario_id"));
+		return new DesenvolvedorModelo(rst.getInt("desenvolvedor_id"),rst.getString("nome_de_desenvolvedor"), rst.getInt("agencia_bancaria"), rst.getInt("conta_bancaria"), rst.getInt("usuario_id"));
 		
 	}
 	

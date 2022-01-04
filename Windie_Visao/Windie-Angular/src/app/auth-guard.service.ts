@@ -21,7 +21,7 @@ export class AuthGuardService implements CanActivate{
         this.router.navigate(['']);
         return false;
       }
-      if(state.url == "/jogos/publicar"){
+      if(state.url == "/jogos/publicar" && !this.usuarioService.seUsuarioDesenvolvedor()){
         this.router.navigate(['/usuario/cadastrar-desenvolvedor']);
         return false;
       }

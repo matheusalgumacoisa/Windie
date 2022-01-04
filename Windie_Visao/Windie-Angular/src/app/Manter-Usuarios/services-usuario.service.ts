@@ -13,8 +13,10 @@ export class ServicesUsuarioService {
   private currentUserSubject: BehaviorSubject<Token>;
   public currentUser: Observable<Token>;
   public logado : boolean = false;
+ // public se_desenvolvedor : string = 'P';
 
   url : string = 'http://localhost:4200/api/usuario';
+
 
   constructor(private http: HttpClient,private router: Router) {
 
@@ -41,9 +43,9 @@ export class ServicesUsuarioService {
     return this.http.post<Post>(this.url+"/nickName",localStorage.getItem('currentUser'));
   }
 
-  public getPapel():Observable<Post>{
+  public getPapel()/*:Observable<Post>*/{
 
-    return this.http.post<Post>(this.url+"/papel",localStorage.getItem('currentUser'));
+    this.http.post<Post>(this.url+"/papel",localStorage.getItem('currentUser')).subscribe(success =>{console.log("get papel "+success.body); localStorage.setItem('currentUserPapel', success.body)},err => {console.log("err papel")});;
 
   }
 
@@ -57,6 +59,7 @@ export class ServicesUsuarioService {
   }
 
   public autenticarUsuario(body: any):Observable<Post>{
+    
     return this.http.post<Post>(this.url+"/login",body);/*.subscribe(res => {
       this.logado = true;
       localStorage.setItem('currentUser', JSON.stringify(res));
@@ -70,7 +73,13 @@ export class ServicesUsuarioService {
       this.logado = true;
       localStorage.setItem('currentUser', JSON.stringify(res));
       console.log('certo');
+      this.getPapel();
     },err =>{this.logado = false;console.log('erroooo'+err)});
+  }
+
+  public seUsuarioDesenvolvedor(): boolean {
+    this.getPapel();
+    return localStorage.getItem('currentUserPapel') == 'D';
 
   }
 
@@ -88,6 +97,7 @@ export class ServicesUsuarioService {
     return this.currentUser = this.http.post<Token>(this.url+"/logout",JSON.parse(localStorage.getItem('currentUser')!)).pipe(map(tokenBack => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('currentUser', '{"token": ""}');
+      localStorage.setItem('currentUserPapel','');
       this.currentUserSubject.next(tokenBack);
       return tokenBack ;
     }));
