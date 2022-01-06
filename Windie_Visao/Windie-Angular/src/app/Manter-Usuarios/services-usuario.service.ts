@@ -13,6 +13,7 @@ export class ServicesUsuarioService {
   private currentUserSubject: BehaviorSubject<Token>;
   public currentUser: Observable<Token>;
   public logado : boolean = false;
+  assinatura! : string;
  // public se_desenvolvedor : string = 'P';
 
   url : string = 'http://localhost:4200/api/usuario';
@@ -59,7 +60,6 @@ export class ServicesUsuarioService {
   }
 
   public autenticarUsuario(body: any):Observable<Post>{
-    
     return this.http.post<Post>(this.url+"/login",body);/*.subscribe(res => {
       this.logado = true;
       localStorage.setItem('currentUser', JSON.stringify(res));
@@ -74,6 +74,7 @@ export class ServicesUsuarioService {
       localStorage.setItem('currentUser', JSON.stringify(res));
       console.log('certo');
       this.getPapel();
+      this.getAssinatura().subscribe(success =>{console.log("get ass "+success.body); this.assinatura = success.body},err => {console.log("err ass")});
     },err =>{this.logado = false;console.log('erroooo'+err)});
   }
 
@@ -83,6 +84,13 @@ export class ServicesUsuarioService {
 
   }
 
+  public seUsuarioAssinante():boolean{
+    if(this.assinatura=='valid'){
+      return true;
+    }else{
+      return false;
+    }
+  }
   public seUsuarioAutenticado(): boolean {
 
     //return this.logado;

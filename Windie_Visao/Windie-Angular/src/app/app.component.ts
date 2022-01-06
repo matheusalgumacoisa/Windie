@@ -45,4 +45,9 @@ export class AppComponent implements OnInit {
 
   }
 
+  Painel(){
+    this.router.navigate(['/painel']
+    );    
+  }
+
 }

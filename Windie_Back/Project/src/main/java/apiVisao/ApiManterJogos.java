@@ -1,7 +1,8 @@
 package apiVisao;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,6 +39,25 @@ public class ApiManterJogos {
 		int dev_id = ManterUsuarios.getInstance().devByUser(user_id).getDesenvolvedor_id();
 		novoJogoModelo.setDesenvolvedor_id(dev_id);
 		
-		ManterJogos.getInstance().inserirJogo(novoJogoModelo);
+		List<byte[]> screenshots = new ArrayList<>(); //cria uma lista de bytearray para armazenar as screenshots
+    
+		JSONArray jsonArray = jsonObj.getJSONArray("screenshots"); //pega a lista de screenshots do json
+		if (jsonArray != null) { 
+		   for (int i=0;i<jsonArray.length();i++){ //percorre a lista do json e adiciona os elementos a lista do java
+			   byte[] imageByArray = Base64.getDecoder().decode(jsonArray.get(i).toString().substring(jsonArray.get(i).toString().indexOf(",")+1)); //descodifica a imagem base64
+			   screenshots.add(imageByArray);
+		   } 
+		}
+		
+		ManterJogos.getInstance().inserirJogo(novoJogoModelo,screenshots);
 	}
+	
+	@PostMapping(path = "screenshots")
+	public List<byte[]> getScreenshots(@RequestBody String json) throws Exception {
+		System.out.println("Get Screenshots, Json :"+json);
+		JSONObject jsonObj = new JSONObject(json);
+		
+		return ManterJogos.getInstance().getScreenshots(jsonObj.getInt("jogo_id"));
+	}
+	
 }

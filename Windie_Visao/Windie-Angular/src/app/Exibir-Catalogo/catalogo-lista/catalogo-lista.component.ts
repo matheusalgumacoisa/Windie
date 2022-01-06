@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { ServicesCatalogoService } from '../services-catalogo.service';
 
 @Component({
@@ -18,7 +19,7 @@ export class CatalogoListaComponent implements OnInit {
     paginas_numero : number = 0;
     termo_busca: string = ''; 
     
-    constructor(private jogoService: ServicesCatalogoService, private sanitizer: DomSanitizer ) { }
+    constructor(private jogoService: ServicesCatalogoService, private sanitizer: DomSanitizer,private router: Router ) { }
 
     ngOnInit(): void {
       this.getJogos();
@@ -64,6 +65,7 @@ export class CatalogoListaComponent implements OnInit {
   verJogo(jg:jogo){
 
     console.log("vendo: "+jg.titulo);
+    this.router.navigate(['detalhes'],{ queryParams: { jogo: jg.jogo_id } });
   }
 
   calcularNumeroPaginas(){

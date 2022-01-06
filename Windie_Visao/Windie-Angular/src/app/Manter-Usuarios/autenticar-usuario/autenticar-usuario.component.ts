@@ -34,6 +34,7 @@ export class AutenticarUsuarioComponent implements OnInit {
       localStorage.setItem('currentUser', JSON.stringify(res));
       this.back.getPapel();
       this.router.navigate([''])
+      this.back.autenticarToken();
     },err =>{
       if(JSON.stringify(err.error.status=="500")){
         this.erro = JSON.stringify(err.error.message);

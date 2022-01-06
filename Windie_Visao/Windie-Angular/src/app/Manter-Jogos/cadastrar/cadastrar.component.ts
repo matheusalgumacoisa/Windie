@@ -1,6 +1,7 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ServicesCatalogoService } from 'src/app/Exibir-Catalogo/services-catalogo.service';
 import { ServicesAuxService } from 'src/app/services-aux.service';
 import { ServiceJogosService } from '../service-jogos.service';
@@ -18,7 +19,7 @@ export class CadastrarComponent implements OnInit {
   //screenshotFiles!: Array<{ link: string; file: any; name: string; }> = {link: 'string', file: 'any', name: 'string' };
   generos!: Genero[];
 
-   constructor(private serv : ServicesAuxService,private jogoService : ServiceJogosService ) {
+   constructor(private serv : ServicesAuxService,private jogoService : ServiceJogosService,private router: Router ) {
     this.form_cadastrar = new FormGroup({
       titulo: new FormControl(null,Validators.required),
       tags: new FormControl(null,Validators.required),
@@ -40,7 +41,7 @@ export class CadastrarComponent implements OnInit {
 
   onSubimt(){
 
-
+    let screenshotsJson : string[] =  this.screenshotsToJason();
     let JogoRest =  {titulo: this.form_cadastrar.get('titulo')?.value,
       tags: this.form_cadastrar.get('tags')?.value,
       descricao: this.form_cadastrar.get('descricao')?.value,
@@ -50,11 +51,23 @@ export class CadastrarComponent implements OnInit {
       imagem_capa: this.capaFile ? this.capaFile.link : 'localhost/image.png',
       visibilidade: this.form_cadastrar.get('salvarTipo')?.value,
       genero: this.form_cadastrar.get('genero')?.value,
-      token:  JSON.parse(localStorage.getItem('currentUser')!).token}; 
+      token:  JSON.parse(localStorage.getItem('currentUser')!).token,
+      screenshots: screenshotsJson}; 
 
       console.log("formulario enviado: " + JSON.stringify(JogoRest/*JogoRest + this.form_cadastrar.value*/));
-    this.jogoService.novoJogo(JogoRest).subscribe(succses => { console.log("formulario enviado com sucesso");}, err => {console.log("formulario não enviado com sucesso");});
+    this.jogoService.novoJogo(JogoRest).subscribe(succses => { console.log("formulario enviado com sucesso");this.router.navigate(['']);}, err => {console.log("formulario não enviado com sucesso");});
 
+  }
+
+  screenshotsToJason():string[]{
+    let screenshotsJson : string[] = [];
+
+    this.screenshotFiles.forEach(element => {
+      let nome = element.name;
+      screenshotsJson.push(element ? element.link : 'localhost/image'+nome+'.png')
+    });
+
+    return screenshotsJson;
   }
 
   loadGeneros(){

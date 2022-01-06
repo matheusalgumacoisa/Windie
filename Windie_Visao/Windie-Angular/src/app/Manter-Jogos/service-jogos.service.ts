@@ -16,6 +16,10 @@ export class ServiceJogosService {
     return this.http.post(this.url+'/novo',body);
   }
 
+  getScreenshots(jogo_id:number){
+    return this.http.post(this.url+'/screenshots','{jogo_id: '+jogo_id+'}');
+  }
+
 }
 
 class JogoRest {
@@ -29,7 +33,8 @@ class JogoRest {
     public visibilidade: string,
     public genero: number,
     public token: string,
-    public imagem_capa: any
+    public imagem_capa: any,
+    public screenshots: string[]
   ) { }
 }
 

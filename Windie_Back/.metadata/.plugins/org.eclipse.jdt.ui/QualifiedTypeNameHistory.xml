@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="util.ConexaoBanco"/>
     <fullyQualifiedTypeName name="modelo.UsuarioModelo"/>
     <fullyQualifiedTypeName name="controle.ManterUsuarios"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.core.JsonParser"/>
@@ -34,12 +33,18 @@
     <fullyQualifiedTypeName name="util.AppExceptionHandler"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ResponseStatus"/>
     <fullyQualifiedTypeName name="org.springframework.http.HttpStatus"/>
-    <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="java.sql.SQLIntegrityConstraintViolationException"/>
     <fullyQualifiedTypeName name="util.CustomException"/>
     <fullyQualifiedTypeName name="javax.naming.AuthenticationException"/>
-    <fullyQualifiedTypeName name="modelo.JogoModelo"/>
     <fullyQualifiedTypeName name="modelo.AvaliacaoDAO"/>
     <fullyQualifiedTypeName name="util.Ordenacoes"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="modelo.JogoModelo"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
+    <fullyQualifiedTypeName name="util.ConexaoBanco"/>
+    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
+    <fullyQualifiedTypeName name="modelo.JogoDAO"/>
+    <fullyQualifiedTypeName name="controle.ManterJogos"/>
 </qualifiedTypeNameHistroy>

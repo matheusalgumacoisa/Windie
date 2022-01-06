@@ -18,6 +18,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { CadastrarComponent } from './Manter-Jogos/cadastrar/cadastrar.component';
 import { JwPaginationModule } from 'jw-angular-pagination';
 import { TimesPipePipe } from './Exibir-Catalogo/times-pipe.pipe';
+import { DetalhesComponent } from './Exibir-Catalogo/catalogo-detalhes/detalhes/detalhes.component';
+import { PainelComponent } from './Manter-Jogos/painel/painel.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { TimesPipePipe } from './Exibir-Catalogo/times-pipe.pipe';
     EditarUsuarioComponent,
     CadastrarDesenvolvedorComponent,
     CadastrarComponent,
-    TimesPipePipe
+    TimesPipePipe,
+    DetalhesComponent,
+    PainelComponent
   ],
   imports: [
     BrowserModule,

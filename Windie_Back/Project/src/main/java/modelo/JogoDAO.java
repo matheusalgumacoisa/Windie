@@ -27,6 +27,15 @@ public class JogoDAO {
 		}
 	}
 	
+	public JogoModelo getJogo(int jogo_id) throws SQLException {
+		String sql = "select jogo_id,titulo,descricao,caminho_executavel,detalhes,tags,visibilidade,imagem_capa,genero,desenvolvedor_id from jogo where jogo_id = ?";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		pst.setInt(1, jogo_id);
+		ResultSet rst = pst.executeQuery();
+		rst.next();
+		return new JogoModelo(rst.getInt(1), rst.getString(2), rst.getString(3), rst.getString(4), rst.getString(5), rst.getString(6), rst.getString(7), rst.getBytes(8), rst.getInt(9));
+	}
+	
 	public List<JogoModelo> getJogoLista(Ordenacoes ordem,int num_itens, int page, String termo_busca) throws SQLException {
 		
 		int limit = num_itens;
@@ -106,9 +115,9 @@ public class JogoDAO {
 		return rst.getInt(1);
 	}
 	
-	public void inserirJogo(JogoModelo modelo) throws SQLException {
+	public int inserirJogo(JogoModelo modelo) throws SQLException { //retorna o id inserido
 		String sql = "insert into jogo (titulo, descricao, caminho_executavel,detalhes,tags,visibilidade,imagem_capa,genero,desenvolvedor_id)\r\n"
-				+ "VALUES (?, ?, ?,?,?,?,?,?,?)";
+				+ "VALUES (?, ?, ?,?,?,?,?,?,?) RETURNING jogo_id";
 		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
 		psql.setString(1, modelo.getTitulo());
 		psql.setString(2, modelo.getDescricao());
@@ -120,7 +129,33 @@ public class JogoDAO {
 		psql.setInt(8, modelo.getGenero());
 		psql.setInt(9, modelo.getDesenvolvedor_id());
 		
-		psql.execute();
+		ResultSet rst = psql.executeQuery();
+		rst.next();
+		
+		return rst.getInt(1); 
+	}
+	
+	public void inserirScreenshot(byte[] imagem, int jogo_id) throws SQLException {
+		String sql = "insert into screenshot (imagem, jogo_id)\r\n"
+				+ "VALUES (?, ?)";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		pst.setBytes(1, imagem);
+		pst.setInt(2, jogo_id);
+		
+		pst.execute();
+	}
+	
+	public List<byte[]> getScreenshots(int jogo_id) throws SQLException {
+		List<byte[]> screenshots = new ArrayList<>();
+		String sql = "select imagem from screenshot where jogo_id = ?";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		pst.setInt(1, jogo_id);
+		ResultSet rst = pst.executeQuery();
+		while(rst.next()) {
+			screenshots.add(rst.getBytes(1));			
+		}
+		
+		return screenshots;
 		
 	}
 	

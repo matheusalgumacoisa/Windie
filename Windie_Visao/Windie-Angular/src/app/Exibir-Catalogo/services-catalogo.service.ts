@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ServicesCatalogoService {
 
+
   
   url : string = 'http://localhost:4200/api/catalogo';
 
@@ -20,6 +21,22 @@ export class ServicesCatalogoService {
 
   public buscaJogos(body:any):Observable<Get>{
     return this.http.post<Get>(this.url+"/buscar",body);
+  }
+
+  getJogo(body:any):Observable<Get> {
+    return this.http.post<Get>(this.url+"/jogo",body);
+  }
+
+  public seNaBiblioteca(body:any):Observable<Get> {
+    return this.http.post<Get>(this.url+"/seJogoBiblioteca",body);
+  }
+
+  public adicionarBiblioteca(body:any):Observable<Get> {
+    return this.http.post<Get>(this.url+"/adicionarNaBiblioteca",body);
+  }
+
+  public removerBiblioteca(body:any):Observable<Get> {
+    return this.http.post<Get>(this.url+"/removerDaBiblioteca",body);
   }
 }
 
