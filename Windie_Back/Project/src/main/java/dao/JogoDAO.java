@@ -136,6 +136,21 @@ public class JogoDAO {
 		}
 		
 	}
+
+	public boolean seDesenvolvedorDoJogo(int jogo_id, int desenvolvedor_id) throws SQLException {
+		String sql = "select count(*) as ocorrencias from jogo where jogo_id = ? and desenvolvedor_id = ?";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		pst.setInt(1, jogo_id);
+		pst.setInt(2, desenvolvedor_id);
+		ResultSet rst = pst.executeQuery();
+		rst.next();
+		
+		if(rst.getInt("ocorrencias")==0) {
+			return false;
+		}else {
+			return true;
+		}
+	}
 	
 }
 

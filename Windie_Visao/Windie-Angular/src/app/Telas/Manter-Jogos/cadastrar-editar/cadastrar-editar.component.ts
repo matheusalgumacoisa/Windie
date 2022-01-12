@@ -13,7 +13,7 @@ import { ListaIdString } from 'src/app/Modelos/ListaIdString';
 @Component({
   selector: 'app-cadastrar',
   templateUrl: './cadastrar-editar.component.html',
-  styleUrls: ['./cadastrar.component.css']
+  styleUrls: ['./cadastrar-editar.component.css']
 })
 export class CadastrarEditarComponent implements OnInit {
 
@@ -22,7 +22,8 @@ export class CadastrarEditarComponent implements OnInit {
   screenshotFiles: string[] = [];
   generos: ListaIdString[] = [];
   jogoEditar!: Jogo;
-  erro: string = 'erro teste';
+  erro: string = '';
+  enviando: boolean = false;
 
   jogo_id : number = -1;
 
@@ -33,12 +34,13 @@ export class CadastrarEditarComponent implements OnInit {
       descricao: new FormControl(null,Validators.required),
       executavel: new FormControl(null,Validators.required),
       detalhes: new FormControl(null,Validators.required),
-      trailer: new FormControl(null,Validators.required),
+      trailer: new FormControl(null),
       genero: new FormControl(null,Validators.required),
-      imagem_capa: new FormControl(null,Validators.required),
+      imagem_capa: new FormControl(null),
       salvarTipo : new FormControl(null,Validators.required)
     });
     this.loadGeneros();
+    
    }
  
 
@@ -47,10 +49,12 @@ export class CadastrarEditarComponent implements OnInit {
       this.jogo_id = params['jogo'];
       if(this.jogo_id != null && this.jogo_id != -1){
         this.IniciarEdicao(params['jogo']); //caso a url tenha um argumento inicia o modo de edição
+      }else{
+        
       }
 
     });
-
+    
   }
 
   IniciarEdicao(jogo_id:number){
@@ -70,30 +74,33 @@ export class CadastrarEditarComponent implements OnInit {
         });
 
         this.capaFile = 'data:image/jpeg;base64,' +this.jogoEditar.imagem_capa;
-
-        this.form_cadastrar = new FormGroup({
-          titulo: new FormControl(this.jogoEditar.titulo,Validators.required),
-          tags: new FormControl(this.jogoEditar.tags,Validators.required),
-          descricao: new FormControl(this.jogoEditar.descricao ,Validators.required),
-          executavel: new FormControl(this.jogoEditar.caminho_executavel,Validators.required),
-          detalhes: new FormControl(this.jogoEditar.detalhes,Validators.required),
-          trailer: new FormControl(null,Validators.required),
-          genero: new FormControl(this.jogoEditar.genero,Validators.required),
-          imagem_capa: new FormControl(this.jogoEditar.imagem_capa_sanitized,Validators.required), //iVBORw0KGgoAA...
-          salvarTipo : new FormControl(this.jogoEditar.visibilidade,Validators.required)
+        this.form_cadastrar.setValue({
+          titulo: this.jogoEditar.titulo,
+          tags: this.jogoEditar.tags,
+          descricao: this.jogoEditar.descricao,
+          executavel: this.jogoEditar.caminho_executavel,
+          detalhes: this.jogoEditar.detalhes,
+          trailer: null,
+          genero: this.jogoEditar.genero,
+          imagem_capa: '',//this.jogoEditar.imagem_capa_sanitized, //iVBORw0KGgoAA...
+          salvarTipo : this.jogoEditar.visibilidade
         });
-
+        if(this.form_cadastrar.get('salvarTipo')?.value != 'RASCUNHO'){
+          this.form_cadastrar.get('salvarTipo')!.disable();
+        }
       },err =>{
 
       });
-
+      
     },err =>{
 
     });
+    
   }
 
   onSubimt(){
-
+    this.enviando = true;
+    Debug.logRequest('cadastrar jogo'+ JSON.stringify(this.form_cadastrar.value));
     if(this.jogo_id != null && this.jogo_id != -1){
       Debug.logDetalhe('imagem: '+this.jogoEditar.imagem_capa);
       //let screenshotsJson : string[] =  this.screenshotsToJason();
@@ -112,12 +119,24 @@ export class CadastrarEditarComponent implements OnInit {
           screenshots: this.screenshotFiles}; 
           console.log("formulario :"+JSON.stringify(JogoRest));
         this.jogoService.atualizarJogo(JogoRest).subscribe(
-          succses => {
-            this.autenticacao.setToken(succses.token!); 
-            this.router.navigate(['']);
+          retorno => {
+            this.enviando = false;
+            if(retorno.sucesso){
+              this.autenticacao.setToken(retorno.token!); 
+              this.router.navigate(['']);
+            }else{
+              if(retorno.erro!.cod==1){//erro de autenticação
+                this.autenticacao.logOut();
+                this.router.navigate(['']);
+              }else{
+                this.autenticacao.setToken(retorno.token!); 
+                this.erro = retorno.erro!.mensagem;
+              }
+            }
           }, 
           err => {
-            console.log("formulario não enviado com sucesso");
+            this.enviando = false;
+            this.erro = "Erro ao cadastrar";
           });
 
     }else{
@@ -135,12 +154,24 @@ export class CadastrarEditarComponent implements OnInit {
           screenshots: this.screenshotFiles}; 
 
         this.jogoService.novoJogo(JogoRest).subscribe(
-          succses => {
-            this.autenticacao.setToken(succses.token!);  
-            this.router.navigate(['']);
+          retorno => {
+            this.enviando = false;
+            if(retorno.sucesso){
+              this.autenticacao.setToken(retorno.token!);  
+              this.router.navigate(['']);
+            }else{
+              if(retorno.erro!.cod==1){//erro de autenticação
+                this.autenticacao.logOut();
+                this.router.navigate(['']);
+              }else{
+                this.autenticacao.setToken(retorno.token!); 
+                this.erro = retorno.erro!.mensagem;
+              }
+            }
           }, 
           err => {
-            console.log("formulario não enviado com sucesso");
+            this.enviando = false;
+            this.erro = "Erro ao cadastrar";
           });
     }
 
@@ -161,13 +192,18 @@ export class CadastrarEditarComponent implements OnInit {
   }
 
   carregarScreenshotNavegador(event: any){
-    if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (_event: any) => {
-          if(!this.sePossuiScreenshotsCarregadas()) this.screenshotFiles = this.screenshotFiles || [];
-          this.screenshotFiles.push(_event.target.result);
-      };
-      reader.readAsDataURL(event.target.files[0]);
+    if(event.srcElement.files[0].name.split('.')[1]== 'png'||event.srcElement.files[0].name.split('.')[1]== 'jpg'||event.srcElement.files[0].name.split('.')[1]== 'jpeg')
+    {
+      if (event.target.files && event.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (_event: any) => {
+            if(!this.sePossuiScreenshotsCarregadas()) this.screenshotFiles = this.screenshotFiles || [];
+            this.screenshotFiles.push(_event.target.result);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    }else{
+      this.erro = 'Insira somente imagens no formato .png ou .jpg';
     }
   }
 
@@ -185,12 +221,21 @@ export class CadastrarEditarComponent implements OnInit {
   }
 
   carregarImagemNavegador(event: any) {
-    if (event.target.files && event.target.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (_event: any) => {
-            this.capaFile = _event.target.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
+    if(event.srcElement.files[0].name.split('.')[1]== 'png'||event.srcElement.files[0].name.split('.')[1]== 'jpg'||event.srcElement.files[0].name.split('.')[1]== 'jpeg')
+    {
+      if (event.target.files && event.target.files[0]) {
+          const reader = new FileReader();
+          reader.onload = (_event: any) => {
+              this.capaFile = _event.target.result;
+          };
+          reader.readAsDataURL(event.target.files[0]);
+      }
+    }else{
+      this.erro = 'Insira somente imagens no formato .png ou .jpg';
     }
+  }
+
+  seFormValid():boolean{
+    return this.form_cadastrar.valid && !this.enviando;
   }
 }

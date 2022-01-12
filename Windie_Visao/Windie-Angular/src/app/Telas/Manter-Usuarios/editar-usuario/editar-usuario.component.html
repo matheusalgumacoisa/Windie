@@ -30,17 +30,29 @@
                     <br>
                     <form [formGroup]="form_cadastrar" >
                         <div class="mb-3">
-                            <input  type="text" class="form-control" id="apelido" aria-describedby="apelido" placeholder="Apelido" formControlName="apelido"> 
+                            <div class="form-floating">
+                                <input  type="text" class="form-control" id="apelido" aria-describedby="apelido" placeholder="Apelido" formControlName="apelido"> 
+                                <label for="apelido">Apelido</label>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <input *ngIf="(seDesenvolvedor())"  type="text" class="form-control" id="nomeDesenvolvedor" aria-describedby="nomeDesenvolvedor" placeholder="Nome de desenvolvedor" formControlName="nome_desenvolvedor">
+                            <div class="form-floating">
+                                <input *ngIf="(seDesenvolvedor())"  type="text" class="form-control" id="nomeDesenvolvedor" aria-describedby="nomeDesenvolvedor" placeholder="Nome de desenvolvedor" formControlName="nome_desenvolvedor">
+                                <label for="nomeDesenvolvedor">Nome de desenvolvedor</label>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <input *ngIf="(seDesenvolvedor())" type="number" class="form-control" id="agencia" aria-describedby="agencia" placeholder="Agência" formControlName="agencia" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                                <div class="form-floating">
+                                    <input *ngIf="(seDesenvolvedor())" type="number" class="form-control" id="agencia" aria-describedby="agencia" placeholder="Agência" formControlName="agencia" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                                    <label for="agencia">Agência</label>
+                                </div>
                             </div>
                             <div class="col-8">
-                                <input *ngIf="(seDesenvolvedor())" type="number" class="form-control" id="conta" aria-describedby="conta" placeholder="Conta bancaria" formControlName="conta"   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                                <div class="form-floating">
+                                    <input *ngIf="(seDesenvolvedor())" type="number" class="form-control" id="conta" aria-describedby="conta" placeholder="Conta bancaria" formControlName="conta"   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                                    <label for="conta">Nº da conta bancaria</label>
+                                </div>
                             </div>
                         </div>
                         <br>

@@ -118,6 +118,9 @@
     margin: 0px;
     text-align: center;
     font-size: 25px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    border-radius: 25px;
   }
   .card .info p {
     letter-spacing: 1px;

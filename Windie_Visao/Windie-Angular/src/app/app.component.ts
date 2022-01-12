@@ -27,12 +27,10 @@ export class AppComponent implements OnInit {
     
   }
 
-  CadastrarUsuario(){ this.router.navigate(['/usuario/cadastrar']);     }
+  CadastrarUsuario(){ this.router.navigate(['']).then(()=>this.router.navigate(['/usuario/cadastrar']));     }
   TelaLogin(){ this.router.navigate(['/login']);     }
   EditarInformacoes(){ this.router.navigate(['/usuario/editar']);     }
-  PublicarJogo(){ 
-    this.router.navigate(['/jogos/publicar']
-    );     }
+  PublicarJogo(){ this.router.navigate(['']).then(()=>this.router.navigate(['/jogos/publicar']));    }
 
   seAutenticado(): boolean{
     
@@ -47,6 +45,14 @@ export class AppComponent implements OnInit {
   Painel(){
     this.router.navigate(['/painel']
     );    
+  }
+
+  Catalogo(){
+    this.router.navigate(['/detalhes']).then(()=>this.router.navigate(['']));    
+  }
+
+  seDesenvolvedor():boolean{
+    return this.autentica.seUsuarioDesenvolvedor();
   }
 
 }

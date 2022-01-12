@@ -33,14 +33,23 @@
                     <br>
                     <form [formGroup]="form_cadastrar" >
                         <div class="mb-3">
-                        <input type="text" class="form-control" id="nomeDesenvolvedor" aria-describedby="nomeDesenvolvedor" placeholder="Nome de desenvolvedor" formControlName="nome_de_desenvolvedor">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="nomeDesenvolvedor" aria-describedby="nomeDesenvolvedor" placeholder="Nome de desenvolvedor" formControlName="nome_de_desenvolvedor">
+                            <label for="nomeDesenvolvedor">Nome de desenvolvedor</label>
+                        </div> 
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <input type="text" class="form-control" id="agencia" aria-describedby="agencia" placeholder="Agência" formControlName="agencia_bancaria" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="agencia" aria-describedby="agencia" placeholder="Agência" formControlName="agencia_bancaria" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                                    <label for="agencia">Agência</label>
+                                </div> 
                             </div>
                             <div class="col-8">
-                                <input type="text" class="form-control" id="conta" aria-describedby="conta" placeholder="Conta bancaria" formControlName="conta_bancaria" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                                <div class="form-floating"> 
+                                    <input type="text" class="form-control" id="conta" aria-describedby="conta" placeholder="Conta bancaria" formControlName="conta_bancaria" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                                    <label for="conta">Nº da conta bancaria</label>
+                                </div>
                             </div>
                         </div>
                         <br>
@@ -50,7 +59,7 @@
                         {{erro}}
                     </div>
                     <br>
-                    <p>Cadastre seus dados de desenvolvedor para poder publicar jogos</p>
+                    <p>Antes de começar a publicar jogos nos diga o nome do seu estúdio e forneça suas informações bancárias por onde deseja receber os pagamentos</p>
                   </div>
                   <div class="col align-self-end">
                     

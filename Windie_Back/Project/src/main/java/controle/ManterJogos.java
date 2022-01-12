@@ -29,19 +29,30 @@ public class ManterJogos {
 	
 	public void inserirJogo(JogoModelo jogo,List<byte[]> screenshots) throws CustomException, SQLException {
 		
-		if(jogo.getVisibilidade() == null || (!jogo.getVisibilidade().equals("PUBLICO")&&!jogo.getVisibilidade().equals("RASCUNHO"))) {
+		if(jogo.getVisibilidade().isEmpty()  ||jogo.getVisibilidade() == null || (!jogo.getVisibilidade().equals("PUBLICO")&&!jogo.getVisibilidade().equals("RASCUNHO"))) {
 			throw new CustomException("Selecione como deseja salvar o jogo");
 		}
-		if(jogo.getTitulo()==null || jogo.getDescricao()==null ||jogo.getCaminho_executavel() == null || jogo.getDetalhes() == null || jogo.getTags() == null || jogo.getImagem_capa() ==null)
+		if(jogo.getTitulo().isEmpty() || jogo.getDescricao().isEmpty() ||jogo.getCaminho_executavel().isEmpty()  || jogo.getDetalhes().isEmpty()  || jogo.getTags().isEmpty()  || jogo.getImagem_capa() == null )
 		{
-			if(jogo.getImagem_capa() ==null) throw new CustomException("Faça upload de uma imagem no formato .pn ou .jpeg");
+			if(jogo.getImagem_capa() == null) throw new CustomException("Faça upload de uma imagem no formato .pn ou .jpeg");
 			throw new CustomException("Nem todos os campos foram preenchidos");
 		}
 		
 		validarTamanhoDosCampos(jogo);
+		if(jogo.getGenero() == 0) throw new CustomException("Selecione um gênero");
 		
 		if(JogoDAO.getInstance().seTituloExiste(jogo.getTitulo())) {
 			throw new CustomException("O título inserido já existe");
+		}
+		
+		if(jogo.getImagem_capa().length>4194304) {
+			throw new CustomException("A imagem de capa não deve possuir mais que 4MB");
+		}
+		
+		for (byte[] img_bytes : screenshots) {
+			if(img_bytes.length>2097152) {
+				throw new CustomException("As screenshots não devem possuir mais que 2MB cada");
+			}
 		}
 		
 		jogo.setJogo_id(JogoDAO.getInstance().inserir(jogo)); //insere o jogo e pega o id gerado pela sequence do banco
@@ -52,11 +63,34 @@ public class ManterJogos {
 
 	}
 	
-	public void atualizarJogo(JogoModelo jogo, List<byte[]> screenshots) throws Exception {
+	public void atualizarJogo(JogoModelo jogo, List<byte[]> screenshots) throws CustomException, SQLException{
 		
-		if(jogo.getVisibilidade() == null || (!jogo.getVisibilidade().equals("PUBLICO")&&!jogo.getVisibilidade().equals("RASCUNHO"))) {
-			throw new Exception();
+		if(jogo.getVisibilidade().isEmpty()  ||jogo.getVisibilidade() == null || (!jogo.getVisibilidade().equals("PUBLICO")&&!jogo.getVisibilidade().equals("RASCUNHO"))) {
+			throw new CustomException("Selecione como deseja salvar o jogo");
 		}
+		if(jogo.getJogo_id() ==0 || jogo.getTitulo().isEmpty() || jogo.getDescricao().isEmpty() ||jogo.getCaminho_executavel().isEmpty()  || jogo.getDetalhes().isEmpty()  || jogo.getTags().isEmpty()  || jogo.getImagem_capa() == null )
+		{
+			if(jogo.getImagem_capa() == null) throw new CustomException("Faça upload de uma imagem no formato .pn ou .jpeg");
+			throw new CustomException("Nem todos os campos foram preenchidos");
+		}
+		
+		validarTamanhoDosCampos(jogo);
+		if(jogo.getGenero() == 0) throw new CustomException("Selecione um gênero");
+		
+		if(JogoDAO.getInstance().seTituloExisteEmOutroJogo(jogo.getTitulo(),jogo.getJogo_id())) {
+			throw new CustomException("O título inserido já existe");
+		}
+		
+		if(jogo.getImagem_capa().length>4194304) {
+			throw new CustomException("A imagem de capa não deve possuir mais que 4MB");
+		}
+		
+		for (byte[] img_bytes : screenshots) {
+			if(img_bytes.length>2097152) {
+				throw new CustomException("As screenshots não devem possuir mais que 2MB cada");
+			}
+		}
+		
 		JogoDAO.getInstance().atualizar(jogo); //atualiza o jogo e pega o id gerado pela sequence do banco
 		ScreenshotDAO.getInstance().limparJogoScreenshots(jogo.getJogo_id()); // limpa as screenshots desse jogo
 		for (byte[] img_bytes : screenshots) {
@@ -96,6 +130,11 @@ public class ManterJogos {
 		if(jogo.getDescricao().length()>100) throw new CustomException("A descrição não deve possuir mais que 100 caracteres");
 		if(jogo.getDetalhes().length()>5000) throw new CustomException("Os detalhes não devem possuir mais que 5000 caracteres");
 		if(jogo.getTags().length()>200) throw new CustomException("As tags não devem possuir mais que 200 caracteres");
+
+	}
+	
+	public boolean seDesenvolvedorDoJogo(int jogo_id, int desenvolvedor_id) throws SQLException {
+		return JogoDAO.getInstance().seDesenvolvedorDoJogo(jogo_id,desenvolvedor_id);
 	}
 
 }

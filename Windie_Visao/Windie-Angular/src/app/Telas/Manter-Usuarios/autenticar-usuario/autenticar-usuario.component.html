@@ -5,7 +5,7 @@
     </style>  
 </head>
 <body>
-    <div class="container-sm">
+    <div class="container-sm" >
          
             <div class="container">
                 <div class="row">
@@ -19,17 +19,23 @@
                     <br>
                     <form [formGroup]="form_autenticar">
                         <div class="mb-3">
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="E-mail" formControlName="email">
+                        <div class="form-floating">
+                          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="E-mail" formControlName="email">
+                          <label for="exampleInputEmail1">Email</label>
+                        </div>
                         </div>
                         <div class="mb-3">
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha" formControlName="senha">
+                        <div class="form-floating">
+                          <input (keyup.enter)="onSubmit()" type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha" formControlName="senha">
+                          <label for="exampleInputPassword1">Senha</label>
+                        </div>
                         </div>
                     </form>
                     <div class="alert alert-danger" role="alert" *ngIf="getErroAutencicacao()!=''">
                       {{getErroAutencicacao()}}
                     </div>
                     <br>
-                    <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_autenticar.valid">Entrar</button></p>
+                    <p><button (click)="onSubmit()"  type="submit" class="btn btn-dark" [disabled]="!form_autenticar.valid">Entrar</button></p>
                   </div>
                   <div class="col align-self-end">
                     

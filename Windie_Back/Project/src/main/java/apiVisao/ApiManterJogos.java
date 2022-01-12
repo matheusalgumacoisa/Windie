@@ -36,18 +36,23 @@ public class ApiManterJogos {
 		JSONObject jsonObj = new JSONObject(inputBody);
 		
 		String token;
+		
 		try {
+			
 			token = TokenManager.getInstance().autenticarToken(RestObject.Desserialize(restInput).token);
-			byte[] img_bArray= Base64.getDecoder().decode(jsonObj.getString("imagem_capa").substring(jsonObj.getString("imagem_capa").indexOf(",")+1));// a substring aqui esta pegando somente o binario e descartando os metadados
+			if(jsonObj.optString("imagem_capa").isEmpty()) {
+				return new RestObject(token,"",ErrorCodes.validacao,"Insira uma imagem de capa no formado .png ou .jpeg","");
+			}
+			byte[] img_bArray= Base64.getDecoder().decode(jsonObj.optString("imagem_capa").substring(jsonObj.optString("imagem_capa").indexOf(",")+1));// a substring aqui esta pegando somente o binario e descartando os metadados
 			JogoModelo novoJogoModelo = new JogoModelo(0, 
-														jsonObj.getString("titulo"), 
-														jsonObj.getString("descricao"), 
-														jsonObj.getString("caminho_executavel"), 
-														jsonObj.getString("detalhes"), 
-														jsonObj.getString("tags"), 
-														jsonObj.getString("visibilidade"), 
+														jsonObj.optString("titulo"), 
+														jsonObj.optString("descricao"), 
+														jsonObj.optString("caminho_executavel"), 
+														jsonObj.optString("detalhes"), 
+														jsonObj.optString("tags"), 
+														jsonObj.optString("visibilidade"), 
 														 img_bArray, 
-														jsonObj.getInt("genero"));
+														jsonObj.optInt("genero"));
 			
 			novoJogoModelo.setDesenvolvedor_id(ManterJogos.getInstance().getDevIdByToken(token));
 			
@@ -82,6 +87,61 @@ public class ApiManterJogos {
 		
 	}
 	
+	@PostMapping(path = "atualizar")
+	public RestObject atualizar(@RequestBody String restInput)throws SQLException, JsonProcessingException {
+		
+		Debug.logRequest("Novo jogo a ser inserido: "+restInput);
+		String inputBody = RestObject.Desserialize(restInput).body;
+		JSONObject jsonObj = new JSONObject(inputBody);
+		
+		String token;
+		try {
+			token = TokenManager.getInstance().autenticarToken(RestObject.Desserialize(restInput).token);
+			if(jsonObj.optString("imagem_capa").isEmpty()) {
+				return new RestObject(token,"",ErrorCodes.validacao,"Insira uma imagem de capa no formado .png ou .jpeg","");
+			}		
+			byte[] bArray= Base64.getDecoder().decode(jsonObj.getString("imagem_capa").substring(jsonObj.getString("imagem_capa").indexOf(",")+1));// a substring aqui esta pegando somente o binario e descartando os metadados
+			JogoModelo jogoEditadoModelo = new JogoModelo(jsonObj.getInt("jogo_id"), 
+														jsonObj.getString("titulo"), 
+														jsonObj.getString("descricao"), 
+														jsonObj.getString("caminho_executavel"), 
+														jsonObj.getString("detalhes"), 
+														jsonObj.getString("tags"), 
+														jsonObj.getString("visibilidade"), 
+														 bArray, 
+														jsonObj.getInt("genero"));
+	
+			jogoEditadoModelo.setDesenvolvedor_id(ManterJogos.getInstance().getDevIdByToken(token));
+			
+			if(!ManterJogos.getInstance().seDesenvolvedorDoJogo(jogoEditadoModelo.getJogo_id(), jogoEditadoModelo.getDesenvolvedor_id())){
+				throw new AuthenticationException("Não é desenvolvedor desse jogo");
+			}
+			
+			List<byte[]> screenshots = new ArrayList<>(); //cria uma lista de bytearray para armazenar as screenshots
+	    
+			JSONArray jsonArray = jsonObj.getJSONArray("screenshots"); //pega a lista de screenshots do json
+			if (jsonArray != null) { 
+			   for (int i=0;i<jsonArray.length();i++){ //percorre a lista do json e adiciona os elementos a lista do java
+				   byte[] imageByArray = Base64.getDecoder().decode(jsonArray.get(i).toString().substring(jsonArray.get(i).toString().indexOf(",")+1)); //descodifica a imagem base64
+				   screenshots.add(imageByArray);
+			   } 
+			}
+			
+			
+			try {
+				ManterJogos.getInstance().atualizarJogo(jogoEditadoModelo,screenshots);
+				return new RestObject(token,"");
+			} catch (CustomException e) {
+				e.printStackTrace();
+				return new RestObject(token,"",ErrorCodes.validacao,e.getMessage(),e.getStackTraceText());
+			}
+			
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+			return new RestObject(null,"",ErrorCodes.autenticacao,e.getMessage(),"");
+		}
+	}
+	
 	@PostMapping(path = "screenshots")
 	public RestObject getScreenshots(@RequestBody String restInput) throws Exception {
 		
@@ -105,42 +165,6 @@ public class ApiManterJogos {
 	}
 	
 	
-	@PostMapping(path = "atualizar")
-	public RestObject atualizar(@RequestBody String restInput) throws Exception {
-		
-		Debug.logRequest("Novo jogo a ser inserido: "+restInput);
-		String inputBody = RestObject.Desserialize(restInput).body;
-		JSONObject jsonObj = new JSONObject(inputBody);
-		
-		String token = TokenManager.getInstance().autenticarToken(RestObject.Desserialize(restInput).token);
-				
-		byte[] bArray= Base64.getDecoder().decode(jsonObj.getString("imagem_capa").substring(jsonObj.getString("imagem_capa").indexOf(",")+1));// a substring aqui esta pegando somente o binario e descartando os metadados
-		JogoModelo novoJogoModelo = new JogoModelo(jsonObj.getInt("jogo_id"), 
-													jsonObj.getString("titulo"), 
-													jsonObj.getString("descricao"), 
-													jsonObj.getString("caminho_executavel"), 
-													jsonObj.getString("detalhes"), 
-													jsonObj.getString("tags"), 
-													jsonObj.getString("visibilidade"), 
-													 bArray, 
-													jsonObj.getInt("genero"));
-
-		novoJogoModelo.setDesenvolvedor_id(ManterJogos.getInstance().getDevIdByToken(token));
-		
-		List<byte[]> screenshots = new ArrayList<>(); //cria uma lista de bytearray para armazenar as screenshots
-    
-		JSONArray jsonArray = jsonObj.getJSONArray("screenshots"); //pega a lista de screenshots do json
-		if (jsonArray != null) { 
-		   for (int i=0;i<jsonArray.length();i++){ //percorre a lista do json e adiciona os elementos a lista do java
-			   byte[] imageByArray = Base64.getDecoder().decode(jsonArray.get(i).toString().substring(jsonArray.get(i).toString().indexOf(",")+1)); //descodifica a imagem base64
-			   screenshots.add(imageByArray);
-		   } 
-		}
-		
-		ManterJogos.getInstance().atualizarJogo(novoJogoModelo,screenshots);
-		
-		return new RestObject(token,"");
-	}
 	
 	
 	@GetMapping(path = "generos")

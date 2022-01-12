@@ -22,10 +22,15 @@
     border-radius: 15px;
 }
 
+
 .carousel{
-    width: 800px;
-    height: 450px;
-}
+    /* object-fit: contain;
+     width: 800px;
+     height: 450px;*/
+     max-width: 800px;
+     max-height: 450px;
+     aspect-ratio: 16 / 9;
+ }
 
 .carousel-inner{
     width: 100%;
