@@ -1,0 +1,40 @@
+<head>
+    <style>
+        h2 {text-align: center;}
+        p {text-align: center;}
+    </style>  
+</head>
+<body>
+    <div class="container-sm">
+         
+            <div class="container">
+                <div class="row">
+                  <div class="col align-self-start">                   
+                  </div>
+                  <div class="col align-self-center">
+                    <br>
+                    <br>
+                    <h2>Entrar</h2>
+                    <br>
+                    <br>
+                    <form [formGroup]="form_autenticar">
+                        <div class="mb-3">
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="E-mail" formControlName="email">
+                        </div>
+                        <div class="mb-3">
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha" formControlName="senha">
+                        </div>
+                    </form>
+                    <div class="alert alert-danger" role="alert" *ngIf="getErroAutencicacao()!=''">
+                      {{getErroAutencicacao()}}
+                    </div>
+                    <br>
+                    <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!form_autenticar.valid">Entrar</button></p>
+                  </div>
+                  <div class="col align-self-end">
+                    
+                  </div>
+                </div>
+              </div>
+    </div>
+</body>

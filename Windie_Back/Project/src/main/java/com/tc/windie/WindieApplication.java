@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import apiVisao.VisaoUsuario;
+import apiVisao.ApiManterUsuario;
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = VisaoUsuario.class)
+@ComponentScan(basePackageClasses = ApiManterUsuario.class)
 public class WindieApplication {
 
 	public static void main(String[] args) {

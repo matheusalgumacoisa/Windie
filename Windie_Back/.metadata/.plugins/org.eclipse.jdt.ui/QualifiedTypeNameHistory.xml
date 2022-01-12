@@ -37,14 +37,23 @@
     <fullyQualifiedTypeName name="util.CustomException"/>
     <fullyQualifiedTypeName name="javax.naming.AuthenticationException"/>
     <fullyQualifiedTypeName name="modelo.AvaliacaoDAO"/>
-    <fullyQualifiedTypeName name="util.Ordenacoes"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="modelo.JogoModelo"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="modelo.JogoDAO"/>
+    <fullyQualifiedTypeName name="controle.ManterJogos"/>
+    <fullyQualifiedTypeName name="java.lang.String"/>
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="util.ConexaoBanco"/>
     <fullyQualifiedTypeName name="java.sql.ResultSet"/>
-    <fullyQualifiedTypeName name="modelo.JogoDAO"/>
-    <fullyQualifiedTypeName name="controle.ManterJogos"/>
+    <fullyQualifiedTypeName name="java.sql.SQLException"/>
+    <fullyQualifiedTypeName name="dao.VW_usuarioAssinaturaDAO"/>
+    <fullyQualifiedTypeName name="dao.ScreenshotDAO"/>
+    <fullyQualifiedTypeName name="controle.Catalogo"/>
+    <fullyQualifiedTypeName name="dao.UsuarioDAO"/>
+    <fullyQualifiedTypeName name="util.Ordenacoes"/>
+    <fullyQualifiedTypeName name="modelo.VW_JogoClassificModelo"/>
+    <fullyQualifiedTypeName name="dao.VW_JogoClassificDAO"/>
+    <fullyQualifiedTypeName name="dao.JogoDAO"/>
 </qualifiedTypeNameHistroy>

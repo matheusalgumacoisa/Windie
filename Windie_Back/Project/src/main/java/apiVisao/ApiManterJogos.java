@@ -1,31 +1,121 @@
 package apiVisao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import javax.security.sasl.AuthenticationException;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import controle.ManterJogos;
-import controle.ManterUsuarios;
 import modelo.JogoModelo;
+import util.CustomException;
+import util.Debug;
+import util.ErrorCodes;
+import util.RestObject;
 import util.TokenManager;
 
-@RequestMapping("/mjogos")
+@RequestMapping("/jogos")
 @RestController
 public class ApiManterJogos {
 
 	@PostMapping(path = "novo")
-	public void novoJogo(@RequestBody String json) throws Exception {
-		System.out.println("Novo jogo a ser inserido, Json :"+json);
-		JSONObject jsonObj = new JSONObject(json);
+	public RestObject novoJogo(@RequestBody String restInput) throws SQLException, JsonProcessingException{
+		
+		Debug.logRequest("novo jogo: "+restInput);
+		String inputBody = RestObject.Desserialize(restInput).body;
+		JSONObject jsonObj = new JSONObject(inputBody);
+		
+		String token;
+		try {
+			token = TokenManager.getInstance().autenticarToken(RestObject.Desserialize(restInput).token);
+			byte[] img_bArray= Base64.getDecoder().decode(jsonObj.getString("imagem_capa").substring(jsonObj.getString("imagem_capa").indexOf(",")+1));// a substring aqui esta pegando somente o binario e descartando os metadados
+			JogoModelo novoJogoModelo = new JogoModelo(0, 
+														jsonObj.getString("titulo"), 
+														jsonObj.getString("descricao"), 
+														jsonObj.getString("caminho_executavel"), 
+														jsonObj.getString("detalhes"), 
+														jsonObj.getString("tags"), 
+														jsonObj.getString("visibilidade"), 
+														 img_bArray, 
+														jsonObj.getInt("genero"));
+			
+			novoJogoModelo.setDesenvolvedor_id(ManterJogos.getInstance().getDevIdByToken(token));
+			
+			List<byte[]> screenshots = new ArrayList<>(); //cria uma lista de bytearray para armazenar as screenshots
+		    
+			JSONArray jsonArray = jsonObj.getJSONArray("screenshots"); //pega a lista de screenshots do json
+			
+			if (jsonArray != null) { 
+			   for (int i=0;i<jsonArray.length();i++){ //percorre a lista do json e adiciona os elementos a lista do java
+				   byte[] imageByArray = Base64.getDecoder().decode(jsonArray.get(i).toString().substring(jsonArray.get(i).toString().indexOf(",")+1)); //descodifica a imagem base64
+				   screenshots.add(imageByArray);
+			   } 
+			}
+			
+			try {
+				ManterJogos.getInstance().inserirJogo(novoJogoModelo,screenshots);
+				return new RestObject(token,"");
+			} catch (CustomException e) {
+				e.printStackTrace();
+				return new RestObject(token,"",ErrorCodes.validacao,e.getMessage(),e.getStackTraceText());
+			}
+			
+			
+			
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+			return new RestObject(null,"",ErrorCodes.autenticacao,e.getMessage(),"");
+		}
+		
+		
+			
+		
+	}
+	
+	@PostMapping(path = "screenshots")
+	public RestObject getScreenshots(@RequestBody String restInput) throws Exception {
+		
+		Debug.logRequest("get screenshots jogo: "+restInput);
+		String inputBody = RestObject.Desserialize(restInput).body;
+		JSONObject jsonObj = new JSONObject(inputBody);
+		
+		
+		return new RestObject(null,ManterJogos.getInstance().getScreenshots(jsonObj.getInt("jogo_id")));
+	}
+	
+	@PostMapping(path = "jogosByDesenvolvedor")
+	public RestObject getjogosByDesenvolvedor(@RequestBody String restInput) throws Exception{
+		
+		Debug.logRequest("jogos by Desenvolvedor: "+restInput);
+		//String inputBody = RestObject.Desserialize(restInput).body;
+		//JSONObject jsonObj = new JSONObject(inputBody);
+	
+		
+		return new RestObject (null,ManterJogos.getInstance().getJogosByDesenvolvedor(ManterJogos.getInstance().getDevIdByToken(RestObject.Desserialize(restInput).token)));
+	}
+	
+	
+	@PostMapping(path = "atualizar")
+	public RestObject atualizar(@RequestBody String restInput) throws Exception {
+		
+		Debug.logRequest("Novo jogo a ser inserido: "+restInput);
+		String inputBody = RestObject.Desserialize(restInput).body;
+		JSONObject jsonObj = new JSONObject(inputBody);
+		
+		String token = TokenManager.getInstance().autenticarToken(RestObject.Desserialize(restInput).token);
+				
 		byte[] bArray= Base64.getDecoder().decode(jsonObj.getString("imagem_capa").substring(jsonObj.getString("imagem_capa").indexOf(",")+1));// a substring aqui esta pegando somente o binario e descartando os metadados
-		JogoModelo novoJogoModelo = new JogoModelo(0, 
+		JogoModelo novoJogoModelo = new JogoModelo(jsonObj.getInt("jogo_id"), 
 													jsonObj.getString("titulo"), 
 													jsonObj.getString("descricao"), 
 													jsonObj.getString("caminho_executavel"), 
@@ -34,10 +124,8 @@ public class ApiManterJogos {
 													jsonObj.getString("visibilidade"), 
 													 bArray, 
 													jsonObj.getInt("genero"));
-		System.out.println("token : "+jsonObj.getString("token"));
-		int user_id = ManterUsuarios.getInstance().idByEmail( TokenManager.getInstance().getUser(jsonObj.getString("token")));
-		int dev_id = ManterUsuarios.getInstance().devByUser(user_id).getDesenvolvedor_id();
-		novoJogoModelo.setDesenvolvedor_id(dev_id);
+
+		novoJogoModelo.setDesenvolvedor_id(ManterJogos.getInstance().getDevIdByToken(token));
 		
 		List<byte[]> screenshots = new ArrayList<>(); //cria uma lista de bytearray para armazenar as screenshots
     
@@ -49,15 +137,27 @@ public class ApiManterJogos {
 		   } 
 		}
 		
-		ManterJogos.getInstance().inserirJogo(novoJogoModelo,screenshots);
+		ManterJogos.getInstance().atualizarJogo(novoJogoModelo,screenshots);
+		
+		return new RestObject(token,"");
 	}
 	
-	@PostMapping(path = "screenshots")
-	public List<byte[]> getScreenshots(@RequestBody String json) throws Exception {
-		System.out.println("Get Screenshots, Json :"+json);
-		JSONObject jsonObj = new JSONObject(json);
+	
+	@GetMapping(path = "generos")
+	public RestObject getListaGeneros() throws SQLException, JsonProcessingException{
 		
-		return ManterJogos.getInstance().getScreenshots(jsonObj.getInt("jogo_id"));
+		return new RestObject(null,ManterJogos.getInstance().getListaGeneros());
 	}
+	
+	@PostMapping(path = "jogo")
+	public RestObject getJogo (@RequestBody String restInput) throws SQLException, JsonProcessingException {
+		
+		String inputBody = RestObject.Desserialize(restInput).body;
+		JSONObject jsonObj = new JSONObject(inputBody);
+		Debug.logRequest("get Jogo: "+inputBody);
+		
+		return new RestObject(null,ManterJogos.getInstance().getJogo(jsonObj.getInt("jogo_id")));
+	}
+	
 	
 }

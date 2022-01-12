@@ -2,19 +2,13 @@ package util;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.naming.AuthenticationException;
 
-import org.json.JSONObject;
+import javax.security.sasl.AuthenticationException;
 
 public class TokenManager {
 
 	private List<Token> tokens;
 	private static TokenManager instance;
-	
-	public TokenManager() {
-			
-		tokens = new ArrayList<Token>();
-	}
 	
 	public static TokenManager getInstance() {
 		
@@ -26,7 +20,13 @@ public class TokenManager {
 		return instance;
 	}
 	
-	public String GenerateToken(String user) {
+	public TokenManager() {
+			
+		tokens = new ArrayList<Token>();
+	}
+	
+	
+	public String gerarToken(String user) {
 		
 		for (Token token : tokens) {
 			
@@ -39,27 +39,25 @@ public class TokenManager {
 		
 		Token newToken = new Token(GenerateTokenNumber(),user);
 		tokens.add(newToken);
+		Debug.logOutput("token gerado:"+newToken.getToken());
 		return newToken.getToken();
 	}
 	
-	public String AuthToken(String tokenAuth) throws Exception {
-		
-		
-		
-		for (Token tokenJson : tokens) {
+	public String autenticarToken(String tokenAuth) throws AuthenticationException {
 			
-			JSONObject jsonObj = new JSONObject(tokenJson.getToken());
-			String token = jsonObj.getString("token");
+		for (Token tokenObject : tokens) {
+			
+			String token = tokenObject.getToken();
 			if(token.equals(tokenAuth)) {
-				GenerateToken(tokenJson.getUser());
-				return tokenJson.getToken();
+				gerarToken(tokenObject.getUser());
+				return tokenObject.getToken();
 			}
 		}	
 		
-		throw new AuthenticationException("Token Inválido");//Exception("Token Inválido");
+		throw new AuthenticationException("Sessão Inválida");
 	}
 	
-	public void DestruirToken(String tokenDrop) {
+	public void destruirToken(String tokenDrop) {
 		
 		for (Token token : tokens) {
 			
@@ -70,24 +68,24 @@ public class TokenManager {
 		
 	}
 	
-	public String getUser(String tokenAuth) throws Exception {
+	public String getUser(String tokenAuth) throws  AuthenticationException  {
 		
 		for (Token tokenJson : tokens) {
 			
-			JSONObject jsonObj = new JSONObject(tokenJson.getToken());
-			String token = jsonObj.getString("token");
+			//JSONObject jsonObj = new JSONObject(tokenJson.getToken());
+			String token = tokenJson.getToken();// jsonObj.getString("token");
 			if(token.equals(tokenAuth)) {
 				//GenerateToken(tokenJson.getUser());
 				return tokenJson.getUser();
 			}
 		}	
 		
-		throw new Exception("Token Inválido");
+		throw new  AuthenticationException("Sessão Inválida");
 	}
 	
 	private String GenerateTokenNumber() {
-	    String generatedString = Long.toHexString(Double.doubleToLongBits(Math.random()));
-	    System.out.println("token gerado:"+generatedString);
-		return "{\"token\": \""+generatedString+"\"}";
+	    String token = Long.toHexString(Double.doubleToLongBits(Math.random()));
+	    System.out.println("token gerado:"+token);
+		return token;
 	}
 }

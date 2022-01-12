@@ -14,7 +14,7 @@ public class AppExceptionHandler extends  ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleAnyException(Exception e, WebRequest request){
-		System.out.println("caiu no exception handler");
+		Debug.logDetalhe("caiu no exception handler");
 		return new ResponseEntity<>(e,new HttpHeaders(),HttpStatus.CONFLICT);
 	}
 }

@@ -12,9 +12,6 @@ public class JogoModelo {
 	 private String visibilidade ;
 	 private byte[] imagem_capa ;
 	 private int genero ;
-	 private float nota;
-	 private int avaliacoes_numero;
-	 private int jogos_numero;
 	 private int desenvolvedor_id;
 	 
 
@@ -25,13 +22,27 @@ public class JogoModelo {
 		this.jogo_id = jogo_id;
 		this.titulo = titulo;
 		this.descricao = descricao;
-		this.arquivos = arquivos;
 		this.caminho_executavel = caminho_executavel;
 		this.detalhes = detalhes;
 		this.tags = tags;
 		this.visibilidade = visibilidade;
 		this.imagem_capa = imagem_capa;
 		this.genero = genero;
+	}
+	
+	public JogoModelo(int jogo_id, String titulo, String descricao, String caminho_executavel,
+			String detalhes, String tags, String visibilidade, byte[] imagem_capa, int genero, int desenvolvedor_id) {
+		super();
+		this.jogo_id = jogo_id;
+		this.titulo = titulo;
+		this.descricao = descricao;
+		this.caminho_executavel = caminho_executavel;
+		this.detalhes = detalhes;
+		this.tags = tags;
+		this.visibilidade = visibilidade;
+		this.imagem_capa = imagem_capa;
+		this.genero = genero;
+		this.desenvolvedor_id = desenvolvedor_id;
 	}
 	
 	public int getJogo_id() {
@@ -93,30 +104,6 @@ public class JogoModelo {
 	}
 	public void setGenero(int genero) {
 		this.genero = genero;
-	}
-
-	public float getNota() {
-		return nota;
-	}
-
-	public void setNota(float nota) {
-		this.nota = nota;
-	}
-
-	public int getAvaliacoes_numero() {
-		return avaliacoes_numero;
-	}
-
-	public void setAvaliacoes_numero(int avaliacoes_numero) {
-		this.avaliacoes_numero = avaliacoes_numero;
-	}
-	 
-	public int getJogos_numero() {
-		return jogos_numero;
-	}
-
-	public void setJogos_numero(int jogos_numero) {
-		this.jogos_numero = jogos_numero;
 	}
 
 	public int getDesenvolvedor_id() {

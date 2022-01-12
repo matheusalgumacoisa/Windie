@@ -1,0 +1,32 @@
+<div class="card">
+    <br><br>
+    <div class="card-body">
+      Horas jogadas no ultimo mês: 
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      Faturado no ultimo mês: 
+    </div>
+  </div>
+  <br><br><br>
+  <div>
+    <div *ngFor="let jogo of jogos"  class="card text-center">
+        <div class="card-header">    
+        </div>
+        <div class="card-body" >
+          <div class="row">
+            <div class="col">
+                <h5 style="text-align: left;" class="card-title">{{jogo.titulo}}</h5>
+                <p style="text-align: left;"  class="card-text">{{jogo.descricao}}</p>
+            </div>
+            <div  style="vertical-align: middle;padding-top: 10px" class="col"> 
+                <a  (click)="editarJogo(jogo.jogo_id)" class="btn btn-dark"><i class="bi bi-pencil" ></i>  Editar</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-muted">
+          
+        </div>
+      </div>
+  </div>

@@ -18,8 +18,7 @@ public class ConexaoBanco {
 	
 	public static ConexaoBanco getInstance() throws SQLException {
 		
-		if(instance ==null) {
-			
+		if(instance ==null) {		
 			instance = new ConexaoBanco();
 			return instance;
 			
