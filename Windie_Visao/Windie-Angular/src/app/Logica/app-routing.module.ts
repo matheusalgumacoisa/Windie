@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AprovaListaComponent } from '../Telas/Aprovar-Jogos/aprova-lista/aprova-lista.component';
+import { AprovarDetalhesComponent } from '../Telas/Aprovar-Jogos/aprovar-detalhes/aprovar-detalhes.component';
 import { DetalhesComponent } from '../Telas/Exibir-Catalogo/catalogo-detalhes/detalhes.component';
 import { CatalogoListaComponent } from '../Telas/Exibir-Catalogo/catalogo-lista/catalogo-lista.component';
 import { CadastrarEditarComponent } from '../Telas/Manter-Jogos/cadastrar-editar/cadastrar-editar.component';
@@ -19,6 +21,8 @@ const routes: Routes = [
   {path:'jogos/publicar', component: CadastrarEditarComponent, canActivate :[AuthGuardService]},
   {path:'painel', component: PainelComponent, canActivate :[AuthGuardService]},
   {path:'detalhes', component: DetalhesComponent},
+  {path:'greenLight', component: AprovaListaComponent},
+  {path:'greenLight/detalhes', component: AprovarDetalhesComponent},
   {path:'', component: CatalogoListaComponent}
 ];
 

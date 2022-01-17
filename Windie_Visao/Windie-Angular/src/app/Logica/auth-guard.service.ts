@@ -14,7 +14,7 @@ export class AuthGuardService implements CanActivate{
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     
     if(this.autenticacao.seAutenticado()){
-      if(state.url == "/login"||state.url == "/usuario/cadastrar"){
+      if(state.url == "/login"||state.url == "/usuario/cadastrar"||state.url == "/greenLight"||state.url == "/greenLight/detalhes"){
         this.router.navigate(['']);
         return false;
       }

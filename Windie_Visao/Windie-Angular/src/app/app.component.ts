@@ -38,6 +38,10 @@ export class AppComponent implements OnInit {
 
   }
 
+  seAssinante():boolean{
+    return this.autenticacao.seAssinante();
+  }
+
   Logout(){
     this.autentica.logOut();
   }
@@ -53,6 +57,10 @@ export class AppComponent implements OnInit {
 
   seDesenvolvedor():boolean{
     return this.autentica.seUsuarioDesenvolvedor();
+  }
+
+  JogosAprovacao(){
+    this.router.navigate(['/greenLight']); 
   }
 
 }

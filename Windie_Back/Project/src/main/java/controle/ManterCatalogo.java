@@ -32,13 +32,13 @@ public class ManterCatalogo {
 	public List<VW_JogoClassificModelo> getListaJogos(int num_itens, int page, Ordenacoes ordenacao) throws SQLException, CustomException {
 		
 		
-		List<VW_JogoClassificModelo> jogos = VW_JogoClassificDAO.getInstance().getListaPagina(ordenacao,num_itens,page,null);
+		List<VW_JogoClassificModelo> jogos = VW_JogoClassificDAO.getInstance().getListaPaginaCatalogo(ordenacao,num_itens,page,null);
 		return jogos;
 	}
 	
 	public List<VW_JogoClassificModelo> buscarJogos(int num_itens, int page, String termo_busca, Ordenacoes ordenacao) throws SQLException {
 		
-		List<VW_JogoClassificModelo> jogos = VW_JogoClassificDAO.getInstance().getListaPagina(ordenacao,num_itens,page,termo_busca);
+		List<VW_JogoClassificModelo> jogos = VW_JogoClassificDAO.getInstance().getListaPaginaCatalogo(ordenacao,num_itens,page,termo_busca);
 		return jogos;
 		
 	}

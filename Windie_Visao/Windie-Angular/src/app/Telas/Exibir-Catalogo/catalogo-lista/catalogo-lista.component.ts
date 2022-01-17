@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Debug } from 'src/app/Logica/Debug';
+import { ApiAprovarJogosService } from 'src/app/Logica/RestAPIs/api-aprovar-jogos.service';
+import { ApiAutenticacaoService } from 'src/app/Logica/RestAPIs/api-autenticacao.service';
 import { JogoClassificacao } from 'src/app/Modelos/JogoClassificacao';
 import { ApiManterCatalogo } from '../../../Logica/RestAPIs/apiManterCatalogo';
 
@@ -19,18 +21,53 @@ export class CatalogoListaComponent implements OnInit {
     pag: pagina = {num_itens: 25, 
       page: 1};
     paginas_numero : number = 0;
-    termo_busca: string = ''; 
+    termo_busca: string = '';
+    telaCatalogo:boolean = true;
+    telaAprovacao:boolean = false; 
     
-    constructor(private jogoService: ApiManterCatalogo, private sanitizer: DomSanitizer,private router: Router ) { }
+    constructor(private jogoService: ApiManterCatalogo, private sanitizer: DomSanitizer,private router: Router,
+      private apiAprovar : ApiAprovarJogosService,private autenticacao :ApiAutenticacaoService ) { 
+      Debug.logDetalhe('url= '+router.url);
+      if(router.url=='/greenLight'){
+        this.telaCatalogo = false;
+        this.telaAprovacao = true;
+        this.getJogosEmAprovacao();
+      }else{
+        this.telaCatalogo = true;
+        this.telaAprovacao = false;
+        this.getJogosCatalogo();
+      }
+    }
 
     ngOnInit(): void {
-      this.getJogos();
+      
     }
 
     
 
 
-  getJogos(){
+  getJogosEmAprovacao(){
+
+    this.apiAprovar.listarJogos(this.pag).subscribe(
+      retorno =>{
+        if(retorno.sucesso){
+          this.autenticacao.setToken(retorno.token!);
+          this.jogos = JSON.parse(retorno.body);
+          Debug.logInput("jogos: "+this.jogos); 
+          this.setUpImages();
+          this.calcularEstrelas();
+          this.calcularNumeroPaginas();
+        }else{
+          this.autenticacao.logOut();
+        }
+      },
+      err =>{
+        console.log("erro get jogos lista: "+JSON.stringify(err))
+      });
+
+  }
+
+  getJogosCatalogo(){
 
     this.jogoService.listarJogos(this.pag).subscribe(
       success =>{
@@ -71,7 +108,10 @@ export class CatalogoListaComponent implements OnInit {
   verJogo(jg:JogoClassificacao){
 
     console.log("vendo: "+jg.titulo);
+    if(this.telaCatalogo)
     this.router.navigate(['detalhes'],{ queryParams: { jogo: jg.jogo_id } });
+    if(this.telaAprovacao)
+    this.router.navigate(['greenLight/detalhes'],{ queryParams: { jogo: jg.jogo_id } });
   }
 
   calcularNumeroPaginas(){
@@ -80,7 +120,10 @@ export class CatalogoListaComponent implements OnInit {
 
   onChangePage(pagina: number) {
     this.pag.page = pagina;
-    this.getJogos();
+    if(this.telaCatalogo)
+    this.getJogosCatalogo();
+    if(this.telaAprovacao)
+    this.getJogosEmAprovacao();
   }
 
   onPreviousPage() {
@@ -89,7 +132,10 @@ export class CatalogoListaComponent implements OnInit {
     if(this.pag.page<=0){
       this.pag.page = 1;
     }
-    this.getJogos();
+    if(this.telaCatalogo)
+    this.getJogosCatalogo();
+    if(this.telaAprovacao)
+    this.getJogosEmAprovacao();
   }
 
   onNextPage() {
@@ -97,7 +143,10 @@ export class CatalogoListaComponent implements OnInit {
     if(this.pag.page > this.paginas_numero){
       this.pag.page = this.pag.num_itens;
     }
-    this.getJogos();
+    if(this.telaCatalogo)
+    this.getJogosCatalogo();
+    if(this.telaAprovacao)
+    this.getJogosEmAprovacao();
   }
 
   seMostrarPaginatorItem(item_numero:number):boolean {
@@ -111,16 +160,33 @@ export class CatalogoListaComponent implements OnInit {
   }
 
   buscar(){
-    this.jogoService.pesquisaJogos({num_itens: this.pag.num_itens, page: this.pag.page,termo: this.termo_busca}).subscribe(
-      success =>{
-        this.jogos = JSON.parse(success.body); 
-        console.log("jogos: "+this.jogos);
-        this.setUpImages();
-        this.calcularEstrelas();
-        this.calcularNumeroPaginas();
-      },err =>{
-        console.log("erro get jogos lista: "+JSON.stringify(err))
-      });
+    if(this.telaCatalogo){
+      this.jogoService.pesquisaJogos({num_itens: this.pag.num_itens, page: this.pag.page,termo: this.termo_busca}).subscribe(
+        success =>{
+          this.jogos = JSON.parse(success.body); 
+          console.log("jogos: "+this.jogos);
+          this.setUpImages();
+          this.calcularEstrelas();
+          this.calcularNumeroPaginas();
+        },err =>{
+          console.log("erro get jogos lista: "+JSON.stringify(err))
+        });
+    }
+
+    if(this.telaAprovacao){
+      this.apiAprovar.pesquisaJogos({num_itens: this.pag.num_itens, page: this.pag.page,termo: this.termo_busca}).subscribe(
+        retorno =>{
+          if(retorno.sucesso){
+            this.jogos = JSON.parse(retorno.body); 
+            console.log("jogos: "+this.jogos);
+            this.setUpImages();
+            this.calcularEstrelas();
+            this.calcularNumeroPaginas();
+          }
+        },err =>{
+          console.log("erro get jogos lista: "+JSON.stringify(err))
+        });
+    }
   }
 
 }

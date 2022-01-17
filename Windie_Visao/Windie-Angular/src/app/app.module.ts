@@ -19,6 +19,8 @@ import { PainelComponent } from './Telas/Manter-Jogos/painel/painel.component';
 import { DetalhesComponent } from './Telas/Exibir-Catalogo/catalogo-detalhes/detalhes.component';
 import { AuthGuardService } from './Logica/auth-guard.service';
 import { AppRoutingModule } from './Logica/app-routing.module';
+import { AprovaListaComponent } from './Telas/Aprovar-Jogos/aprova-lista/aprova-lista.component';
+import { AprovarDetalhesComponent } from './Telas/Aprovar-Jogos/aprovar-detalhes/aprovar-detalhes.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { AppRoutingModule } from './Logica/app-routing.module';
     CadastrarEditarComponent,
     TimesPipePipe,
     DetalhesComponent,
-    PainelComponent
+    PainelComponent,
+    AprovaListaComponent,
+    AprovarDetalhesComponent
   ],
   imports: [
     BrowserModule,

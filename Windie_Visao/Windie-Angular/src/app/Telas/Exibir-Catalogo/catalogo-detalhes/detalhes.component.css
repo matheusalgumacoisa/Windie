@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+
 .h1{
     text-align: center;
     align-self: center;
@@ -68,4 +70,15 @@
     bottom:1%;
 	right:1%;
     background-color: white;
+}
+
+.modal-body{
+    font-size: 40px;
+    text-align: center;
+}
+
+.modal-body .bi{
+    cursor: pointer;
+    padding: 5px;
+    margin: 0px;
 }

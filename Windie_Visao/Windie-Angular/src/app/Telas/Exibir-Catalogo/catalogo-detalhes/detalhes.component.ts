@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Debug } from 'src/app/Logica/Debug';
+import { ApiAprovarJogosService } from 'src/app/Logica/RestAPIs/api-aprovar-jogos.service';
 import { ApiAutenticacaoService } from 'src/app/Logica/RestAPIs/api-autenticacao.service';
 import { ApiManterCatalogo } from 'src/app/Logica/RestAPIs/apiManterCatalogo';
 import { JogoClassificacao } from 'src/app/Modelos/JogoClassificacao';
@@ -20,9 +21,14 @@ export class DetalhesComponent implements OnInit {
 
    jogo! : JogoClassificacao;
    seJogoBiblioteca: boolean = false;
+   telaCatalogo: boolean = true;
+   telaAprovar: boolean = false;
+   votoAprovar!:boolean; //atribuido caso o usuario ja tenha votado
+   avaliarHoveredStar : number = 0;
 
-  constructor(private catalogoApi: ApiManterCatalogo,private route: ActivatedRoute, 
-    private sanitizer: DomSanitizer, private autenticacao : ApiAutenticacaoService) { 
+  constructor(private catalogoApi: ApiManterCatalogo,private route: ActivatedRoute,private apiAprovar : ApiAprovarJogosService, 
+    private sanitizer: DomSanitizer, private autenticacao : ApiAutenticacaoService,private  router : Router) {
+
     
   }
 
@@ -35,6 +41,40 @@ export class DetalhesComponent implements OnInit {
     });
   }
   
+  setarTipoPagina(){
+    if(this.router.url.split('?')[0]=='/greenLight/detalhes'){
+
+      this.telaCatalogo= false;
+      this.telaAprovar = true;
+      this.apiAprovar.seVotou({jogo_id:this.jogo.jogo_id}).subscribe(
+        retorno =>{
+          Debug.logOutput('se votou: '+JSON.stringify(retorno))
+          let valores : {se_votou:boolean;voto:boolean};
+          valores = JSON.parse(retorno.body);
+          if(retorno.sucesso){
+            if(valores.se_votou){
+              this.votoAprovar = valores.voto;
+            }  
+            this.autenticacao.setToken(retorno.token!);
+          }else{
+            if(retorno.erro!.cod==1){
+              this.autenticacao.logOut();
+              this.router.navigate(['']);
+            }else{
+              this.autenticacao.setToken(retorno.token!);
+            }
+          }
+        },erro => {
+          this.autenticacao.logOut();
+          this.router.navigate(['']);
+        }
+      );
+    }else{
+      this.telaCatalogo = true;
+      this.telaAprovar= false;
+    }
+  }
+
 
 
   //=================================Ação no back end=================================
@@ -58,7 +98,7 @@ export class DetalhesComponent implements OnInit {
                 });
                 
                 JogoClassificacao.Init(this.getGenero(this.jogo.genero),screenshots,this.jogo,this.sanitizer); //coloca generos e screenshots no objeto jogo
-
+                this.setarTipoPagina();
               },
               erro=>{
         
@@ -144,6 +184,50 @@ export class DetalhesComponent implements OnInit {
     });
 
     return genero_nome;
+  }
+
+  votarAprovacao(voto:boolean){
+    this.votoAprovar = voto;
+    this.apiAprovar.votar({voto:voto,jogo_id:this.jogo.jogo_id}).subscribe(retorno=>{
+      if(retorno.sucesso){
+        this.autenticacao.setToken(retorno.token!);
+      }else{
+        if(retorno.erro!.cod==1){
+          this.autenticacao.logOut();
+          this.router.navigate(['']);
+        }else{
+          this.autenticacao.setToken(retorno.token!);
+        }
+      }
+    }, erro =>{
+      this.autenticacao.logOut();
+      this.router.navigate(['']);
+    }); 
+  }
+
+  seVoutouAprovar(){
+    return this.votoAprovar != undefined && this.votoAprovar == true;
+  }
+
+  seVoutouNaoAprovar(){
+    return this.votoAprovar != undefined && this.votoAprovar == false;
+  }
+
+  onHoverStar(str:number){
+    this.avaliarHoveredStar = str;
+    
+  }
+
+  onLeaveHoverStar(str:number){
+    this.avaliarHoveredStar = 0;
+  }
+
+  avaliar(str:number){
+    Debug.logDetalhe('avaliar '+str);
+  }
+
+  sePodeAvaliar():boolean{
+    return this.autenticacao.seAutenticado();
   }
 
 
