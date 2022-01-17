@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Debug } from 'src/app/Logica/Debug';
 import { ApiAprovarJogosService } from 'src/app/Logica/RestAPIs/api-aprovar-jogos.service';
 import { ApiAutenticacaoService } from 'src/app/Logica/RestAPIs/api-autenticacao.service';
+import { ApiAvaliarJogosService } from 'src/app/Logica/RestAPIs/api-avaliar-jogos.service';
 import { ApiManterCatalogo } from 'src/app/Logica/RestAPIs/apiManterCatalogo';
 import { JogoClassificacao } from 'src/app/Modelos/JogoClassificacao';
 import { ListaIdString } from 'src/app/Modelos/ListaIdString';
@@ -25,9 +26,12 @@ export class DetalhesComponent implements OnInit {
    telaAprovar: boolean = false;
    votoAprovar!:boolean; //atribuido caso o usuario ja tenha votado
    avaliarHoveredStar : number = 0;
+   notaUsuario : number = 0;
+   horas_jogadas: number = 0;
+   //avaliacao: number = 0;
 
   constructor(private catalogoApi: ApiManterCatalogo,private route: ActivatedRoute,private apiAprovar : ApiAprovarJogosService, 
-    private sanitizer: DomSanitizer, private autenticacao : ApiAutenticacaoService,private  router : Router) {
+    private sanitizer: DomSanitizer, private autenticacao : ApiAutenticacaoService,private  router : Router, private avaliarApi : ApiAvaliarJogosService) {
 
     
   }
@@ -41,6 +45,49 @@ export class DetalhesComponent implements OnInit {
     });
   }
   
+
+  setarAvaliaacoes(){
+    if(this.seAssinante()){
+      this.avaliarApi.getHorasJogo({jogo_id:this.jogo.jogo_id}).subscribe(
+        retorno =>{
+          if(retorno.sucesso){
+            
+            this.horas_jogadas = retorno.body;
+            this.autenticacao.setToken(retorno.token!);
+            Debug.logDetalhe('get horas: '+retorno.body);
+            if(this.horas_jogadas>0){
+              this.avaliarApi.getAvaliacao({jogo_id:this.jogo.jogo_id}).subscribe(
+                retorno =>{
+                  if(retorno.sucesso){
+                    this.autenticacao.setToken(retorno.token!);
+                    this.notaUsuario = JSON.parse(retorno.body).nota;
+
+                  }else{
+                    if(retorno.erro!.cod ==1){
+                      this.router.navigate(['']);
+                      this.autenticacao.logOut();
+                    }
+                  }
+                },error =>{
+                  this.router.navigate(['']);
+                  this.autenticacao.logOut();
+                }
+              );
+            }
+          }else{
+            if(retorno.erro!.cod ==1){
+              this.router.navigate(['']);
+              this.autenticacao.logOut();
+            }
+          }
+        },erro =>{
+          this.router.navigate(['']);
+          this.autenticacao.logOut();
+        }
+      );
+    }  
+  }
+
   setarTipoPagina(){
     if(this.router.url.split('?')[0]=='/greenLight/detalhes'){
 
@@ -98,11 +145,21 @@ export class DetalhesComponent implements OnInit {
                 });
                 
                 JogoClassificacao.Init(this.getGenero(this.jogo.genero),screenshots,this.jogo,this.sanitizer); //coloca generos e screenshots no objeto jogo
+
                 this.setarTipoPagina();
+                if(this.telaCatalogo){
+                  this.setarAvaliaacoes();
+                }
+                
+                
+
               },
               erro=>{
         
               });
+            
+
+
           },erro=>{
 
           });
@@ -223,11 +280,47 @@ export class DetalhesComponent implements OnInit {
   }
 
   avaliar(str:number){
+    this.avaliarApi.avaliar({jogo_id:this.jogo.jogo_id,nota:str}).subscribe(
+      retorno =>{
+        if(retorno.sucesso){
+          this.autenticacao.setToken(retorno.token!);
+          this.avaliarApi.getAvaliacao({jogo_id:this.jogo.jogo_id}).subscribe(
+            retorno =>{
+              if(retorno.sucesso){
+                this.autenticacao.setToken(retorno.token!);
+                this.notaUsuario = JSON.parse(retorno.body).nota;
+
+              }else{
+                if(retorno.erro!.cod ==1){
+                  this.router.navigate(['']);
+                  this.autenticacao.logOut();
+                }else{
+                  this.autenticacao.setToken(retorno.token!);
+                }
+              }
+            },error =>{
+              this.router.navigate(['']);
+              this.autenticacao.logOut();
+            }
+          );
+        }else{
+          if(retorno.erro!.cod==1){
+            this.autenticacao.logOut();
+            this.router.navigate(['']);
+          }else{
+            this.autenticacao.setToken(retorno.token!);
+          }
+        }
+      },error=>{
+        this.autenticacao.logOut();
+        this.router.navigate(['']);
+      }
+    )
     Debug.logDetalhe('avaliar '+str);
   }
 
   sePodeAvaliar():boolean{
-    return this.autenticacao.seAutenticado();
+    return this.autenticacao.seAutenticado()&&this.horas_jogadas >0&&this.telaCatalogo;
   }
 
 

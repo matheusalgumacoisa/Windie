@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.ConexaoBanco;
+import util.Debug;
 
 public class BibliotecaDAO {
 
@@ -54,7 +55,7 @@ public class BibliotecaDAO {
 	
 	public boolean seJogoNaBiblioteca(int jogo_id, int usuario_id) throws SQLException { // retorna true se dado jogo esta presente na biblioteca de dado usuário
 		List<Integer> jogos = getJogosDaBiblioteca(usuario_id);
-		
+		Debug.logDetalhe("jogo_id: "+jogo_id+"usuario_id: "+usuario_id);
 		for (Integer jogo : jogos) {
 			if(jogo == jogo_id) {
 				return true;
@@ -62,5 +63,17 @@ public class BibliotecaDAO {
 		}
 		
 		return false;
+	}
+	
+	public float getHorasJogadas(int jogo_id, int usuario_id) throws SQLException {
+		if(!seJogoNaBiblioteca(jogo_id, usuario_id)) { return 0;}
+		String sql = "select horas_jogadas from item_biblioteca where jogo_id = ? and usuario_id = ?";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		pst.setInt(1, jogo_id);
+		pst.setInt(2, usuario_id);
+		ResultSet rst = pst.executeQuery();
+		rst.next();
+		
+		return rst.getFloat("horas_jogadas");
 	}
 }

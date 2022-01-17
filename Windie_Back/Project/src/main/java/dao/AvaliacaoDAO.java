@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import modelo.AvaliacaoModelo;
 import util.ConexaoBanco;
+import util.Debug;
 
 public class AvaliacaoDAO {
 	
@@ -48,7 +49,7 @@ public class AvaliacaoDAO {
 		pst.setInt(2, usuario_id);
 		
 		ResultSet rst = pst.executeQuery();
-		
+		rst.next();
 		int ocorrencias = rst.getInt("ocorrencias");
 		
 		if(ocorrencias>0) {
@@ -60,19 +61,20 @@ public class AvaliacaoDAO {
 	
 	public void atualizarAvaliacao(AvaliacaoModelo novaAvaliacao) throws SQLException {
 		
-		String sql = "update avaliacao set nota = ?,jogo_id =?,usuario_id =? where avaliacao_id = ?";
+		Debug.logDetalhe("update av: "+novaAvaliacao.getAvaliacao_id()+"nota: "+novaAvaliacao.getNota());
+		
+		String sql = "update avaliacao set nota = ? where avaliacao_id = ?";
 		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
 		
 		pst.setInt(1, novaAvaliacao.getNota());
-		pst.setInt(2, novaAvaliacao.getJogo_id());
-		pst.setInt(3, novaAvaliacao.getUsuario_id());
-		pst.setInt(4, novaAvaliacao.getAvaliacao_id());
+		pst.setInt(2, novaAvaliacao.getAvaliacao_id());
 		
 		pst.execute();
 		
 	}
 	
 	public void criarAvaliacao(AvaliacaoModelo novaAvaliacao) throws SQLException {
+
 		String sql = "insert into avaliacao (nota,jogo_id,usuario_id) values(?,?,?)";
 		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
 		
@@ -88,7 +90,7 @@ public class AvaliacaoDAO {
 		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
 		
 		pst.setInt(1, jogo_id);
-		pst.setInt(1, usuario_id);
+		pst.setInt(2, usuario_id);
 		
 		ResultSet rst = pst.executeQuery();
 		rst.next();

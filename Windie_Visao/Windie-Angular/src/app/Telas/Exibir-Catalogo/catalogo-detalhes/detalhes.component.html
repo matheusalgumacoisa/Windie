@@ -45,7 +45,7 @@
                   <a> ({{jogo.avaliacoes_numero}})</a>&nbsp;
                   <span>
                     <button *ngIf="(sePodeAvaliar())" type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#avaliarModal">Avaliar</button>
-                    <span>&nbsp;<b>Sua Nota:</b> 5</span>
+                    <span *ngIf="(notaUsuario>0)">&nbsp;&nbsp;&nbsp;<b>Sua Nota:&nbsp;</b>{{notaUsuario}}</span>
                   </span>
             </div>
             <br>

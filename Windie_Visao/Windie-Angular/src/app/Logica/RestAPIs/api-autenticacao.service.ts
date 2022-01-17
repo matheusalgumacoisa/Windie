@@ -104,6 +104,7 @@ export class ApiAutenticacaoService {
         let resposta : RestObject = RestObject.assign(retorno);
         this.usuario = JSON.parse(resposta.body);
         this.dataSharing.usuarioCarregado.next(true);
+        this.setToken(retorno.token!);
         if(this.usuario!.desenvolvedor_id != null && this.usuario!.desenvolvedor_id > 0){
           localStorage.setItem('d','true');
         }else{

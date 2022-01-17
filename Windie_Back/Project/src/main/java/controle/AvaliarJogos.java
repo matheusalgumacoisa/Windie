@@ -3,6 +3,7 @@ package controle;
 import java.sql.SQLException;
 
 import dao.AvaliacaoDAO;
+import dao.BibliotecaDAO;
 import modelo.AvaliacaoModelo;
 import util.CustomException;
 
@@ -24,6 +25,7 @@ public class AvaliarJogos {
 		
 		if(AvaliacaoDAO.getInstance().seAvaliouJogo(jogo_id, usuario_id)) {
 			AvaliacaoModelo novaAvaliacao = AvaliacaoDAO.getInstance().getAvaliacao(jogo_id, usuario_id);
+			novaAvaliacao.setNota(nota);
 			AvaliacaoDAO.getInstance().atualizarAvaliacao(novaAvaliacao);
 		}else {
 			AvaliacaoModelo novaAvaliacao = new AvaliacaoModelo(nota,jogo_id,usuario_id);
@@ -38,6 +40,10 @@ public class AvaliarJogos {
 		}else {
 			return new AvaliacaoModelo(0, jogo_id, usuario_id);
 		}
+	}
+	
+	public float getHorasJogadas(int jogo_id, int usuario_id) throws SQLException {
+		return BibliotecaDAO.getInstance().getHorasJogadas(jogo_id, usuario_id);
 	}
 	
 	

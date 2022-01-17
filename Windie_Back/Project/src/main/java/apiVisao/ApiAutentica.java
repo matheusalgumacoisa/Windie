@@ -95,10 +95,10 @@ public class ApiAutentica {
 								);
 		}
 		
-		String novoToken = TokenManager.getInstance().autenticarToken(token);
+		String novoToken = token ;//TokenManager.getInstance().autenticarToken(token);
 		RestObject output = new RestObject(novoToken, usuario);
 		
-		Debug.logOutput(output.toString());
+		Debug.logOutput("token output: "+novoToken);
 		
 		return output;
 		
