@@ -1,4 +1,4 @@
-package apiVisao;
+package com.tc.windie.apiVisao;
 
 import java.sql.SQLException;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tc.windie.controle.ManterUsuarios;
 
-import controle.ManterUsuarios;
 import modelo.DesenvolvedorModelo;
 import util.CustomException;
 import util.Debug;
@@ -66,7 +66,7 @@ public class ApiManterUsuario {
 	
 		try {
 			ManterUsuarios.getInstance().cadastrarDadosDesenvolvedor(jsonObj.getString("nome_de_desenvolvedor"), 
-					jsonObj.getString("agencia_bancaria"), jsonObj.getString("conta_bancaria"),
+					jsonObj.getString("email_paypal"),
 					TokenManager.getInstance().getUser(token));
 			return new RestObject(TokenManager.getInstance().autenticarToken(token), "");
 		} catch (AuthenticationException e) {
@@ -98,7 +98,7 @@ public class ApiManterUsuario {
 		try {
 			ManterUsuarios.getInstance().atualizarUsuario(TokenManager.getInstance().getUser(token),
 					jsonObj.getString("apelido"), jsonObj.getString("nome_desenvolvedor"),
-					jsonObj.getInt("conta"),jsonObj.getInt("agencia"));
+					jsonObj.getString("email_paypal"));
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 			return new RestObject(null,"",ErrorCodes.autenticacao,e.getMessage(),e.getStackTrace().toString());

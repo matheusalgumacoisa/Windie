@@ -1,4 +1,4 @@
-package controle;
+package com.tc.windie.controle;
 
 import java.sql.SQLException;
 import java.util.List;

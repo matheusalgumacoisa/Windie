@@ -19,8 +19,9 @@ export class CadastrarDesenvolvedorComponent implements OnInit {
     this.form_cadastrar = new FormGroup({
 
       nome_de_desenvolvedor: new FormControl('',Validators.required),
-      agencia_bancaria: new FormControl('',Validators.required),
-      conta_bancaria: new FormControl('',Validators.required),
+      //agencia_bancaria: new FormControl('',Validators.required),
+      //conta_bancaria: new FormControl('',Validators.required),
+      email_paypal: new FormControl('',[Validators.required,Validators.email]),
       token: new FormControl('')
 
     });  

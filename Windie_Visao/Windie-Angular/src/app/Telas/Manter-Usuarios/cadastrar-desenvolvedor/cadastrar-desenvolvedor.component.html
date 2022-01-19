@@ -38,7 +38,7 @@
                             <label for="nomeDesenvolvedor">Nome de desenvolvedor</label>
                         </div> 
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-4">
                                 <div class="form-floating">
                                     <input type="text" class="form-control" id="agencia" aria-describedby="agencia" placeholder="Agência" formControlName="agencia_bancaria" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
@@ -49,6 +49,14 @@
                                 <div class="form-floating"> 
                                     <input type="text" class="form-control" id="conta" aria-describedby="conta" placeholder="Conta bancaria" formControlName="conta_bancaria" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                                     <label for="conta">Nº da conta bancaria</label>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control" id="email_paypal" aria-describedby="email_paypal" placeholder="Paypal" formControlName="email_paypal" />
+                                    <label for="agencia" style="font-size: 13px;">E-mail do paypal para receber fundos</label>
                                 </div>
                             </div>
                         </div>

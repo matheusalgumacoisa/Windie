@@ -58,6 +58,7 @@ export class ApiAutenticacaoService {
     erro =>{
       this.usuario = null;
       Debug.logErro(JSON.stringify(erro.error.message));
+      this.router.navigate([''])
     });
   }
 

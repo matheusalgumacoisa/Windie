@@ -1,4 +1,4 @@
-package controle;
+package com.tc.windie.controle;
 
 import java.sql.SQLException;
 
@@ -39,7 +39,7 @@ public class ManterUsuarios {
 		
 	}
 	
-	public void atualizarUsuario(String email, String apelido, String nome_desenvolvedor, int conta, int agencia) throws SQLException, CustomException {
+	public void atualizarUsuario(String email, String apelido, String nome_desenvolvedor, String email_paypal) throws SQLException, CustomException {
 		
 		int usuario_id = GetIdByEmail(email);
 		int desenvolvedor_id = devByUser(usuario_id).getDesenvolvedor_id();
@@ -51,15 +51,15 @@ public class ManterUsuarios {
 		}
 		UsuarioDAO.getInstance().atualizarUsuario(email, apelido);
 		if(seEmailDesenvolvedor(email)) {
-			DesenvolvedorDAO.getInstance().atualizarDesenvolvedor(nome_desenvolvedor, conta,agencia,UsuarioDAO.getInstance().idByEmail(email));
+			DesenvolvedorDAO.getInstance().atualizarDesenvolvedor(nome_desenvolvedor, email_paypal,UsuarioDAO.getInstance().idByEmail(email));
 		}
 	}
 	
-	public void cadastrarDadosDesenvolvedor(String nome_desenvolvedor, String agencia, String conta, String userMail) throws SQLException, CustomException {
+	public void cadastrarDadosDesenvolvedor(String nome_desenvolvedor, String email_paypal, String userMail) throws SQLException, CustomException {
 		
 		validarDadosDesenvolvedor(nome_desenvolvedor);
 		
-		DesenvolvedorModelo desenvolvedor = new DesenvolvedorModelo(nome_desenvolvedor,Integer.parseInt(agencia),Integer.parseInt(conta),UsuarioDAO.getInstance().idByEmail(userMail));
+		DesenvolvedorModelo desenvolvedor = new DesenvolvedorModelo(nome_desenvolvedor,email_paypal,UsuarioDAO.getInstance().idByEmail(userMail));
 		
 		DesenvolvedorDAO.getInstance().inserirDesenvolvedor(desenvolvedor);
 	}
@@ -102,13 +102,15 @@ public class ManterUsuarios {
 		if(seEmailDesenvolvedor(userMail)) {
 			DesenvolvedorModelo desenvolvedor = DesenvolvedorDAO.getInstance().getByUser(UsuarioDAO.getInstance().idByEmail(userMail));
 			
-			modelo.setAgencia(desenvolvedor.getAgencia_bancaria().toString());
-			modelo.setConta(desenvolvedor.getConta_bancaria().toString());
+			//modelo.setAgencia(desenvolvedor.getAgencia_bancaria().toString());
+			//modelo.setConta(desenvolvedor.getConta_bancaria().toString());
+			modelo.setEmail_paypal(desenvolvedor.getEmail_paypal());
 			modelo.setNome_desenvolvedor(desenvolvedor.getNome_de_desenvolvedor());
 		}else {
 			
-			modelo.setAgencia("");
-			modelo.setConta("");
+			//modelo.setAgencia("");
+			//modelo.setConta("");
+			modelo.setEmail_paypal("");
 			modelo.setNome_desenvolvedor("");
 			
 		}

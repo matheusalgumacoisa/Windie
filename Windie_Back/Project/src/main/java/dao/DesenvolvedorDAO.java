@@ -3,6 +3,8 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import modelo.DesenvolvedorModelo;
 import util.ConexaoBanco;
@@ -24,28 +26,26 @@ public class DesenvolvedorDAO {
 	}
 	
 	public void inserirDesenvolvedor(DesenvolvedorModelo desenvolvedor) throws SQLException{
-		String sql = "insert into desenvolvedor (nome_de_desenvolvedor,agencia_bancaria,conta_bancaria,usuario_id)  values(?,?,?,?)";
+		String sql = "insert into desenvolvedor (nome_de_desenvolvedor,email_paypal,usuario_id)  values(?,?,?,?)";
 		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
 
 		 psql.setString(1, desenvolvedor.getNome_de_desenvolvedor());
-		 psql.setInt(2, desenvolvedor.getAgencia_bancaria());
-		 psql.setInt(3, desenvolvedor.getConta_bancaria());
-		 psql.setInt(4, desenvolvedor.getUsuario_id());
+		 psql.setString(2, desenvolvedor.getEmail_paypal());
+		 psql.setInt(3, desenvolvedor.getUsuario_id());
 				
 			psql.executeUpdate();
 		
 	}
 	
-	public void atualizarDesenvolvedor(String nome_desenvolvedor, int conta, int agencia,int usuarioId) throws SQLException {
+	public void atualizarDesenvolvedor(String nome_desenvolvedor, String email_paypal,int usuarioId) throws SQLException {
 		
-		String sql = "update desenvolvedor set  nome_de_desenvolvedor = ?, agencia_bancaria = ?, conta_bancaria = ? where usuario_id = ?";
+		String sql = "update desenvolvedor set  nome_de_desenvolvedor = ?, email_paypal = ? where usuario_id = ?";
 		
 		PreparedStatement psql2 = ConexaoBanco.getInstance().getPreparedStatement(sql);
 		
 		psql2.setString(1, nome_desenvolvedor);
-		psql2.setInt(2, agencia);
-		psql2.setInt(3, conta);
-		psql2.setInt(4, usuarioId);
+		psql2.setString(2, email_paypal);
+		psql2.setInt(3, usuarioId);
 		
 		psql2.executeUpdate();
 	}
@@ -58,7 +58,7 @@ public class DesenvolvedorDAO {
 		ResultSet rst = psql.executeQuery();
 		rst.next();
 		
-		return new DesenvolvedorModelo(rst.getInt("desenvolvedor_id"),rst.getString("nome_de_desenvolvedor"), rst.getInt("agencia_bancaria"), rst.getInt("conta_bancaria"), rst.getInt("usuario_id"));
+		return new DesenvolvedorModelo(rst.getInt("desenvolvedor_id"),rst.getString("nome_de_desenvolvedor"), rst.getString("email_paypal"), rst.getInt("usuario_id"));
 		
 	}
 
@@ -88,5 +88,29 @@ public class DesenvolvedorDAO {
 			}else {
 				return false;
 			}
+	}
+	
+	
+	public List<Integer> getListIds() throws SQLException{
+		String sql = "select desenvolvedor_id from desenvolvedor";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		ResultSet rst = pst.executeQuery();
+		
+		List<Integer> ids = new ArrayList<>();
+		
+		while(rst.next()) {
+			ids.add(rst.getInt("desenvolvedor_id"));
+		}
+		
+		return ids;
+	}
+
+	public String getPaypal(int desenvolvedor_id) throws SQLException {
+		String sql = "select email_paypal from desenvolvedor where desenvolvedor_id = ? ";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		ResultSet rst = pst.executeQuery();
+		rst.next();
+		
+		return rst.getString("email_paypal");
 	}
 }

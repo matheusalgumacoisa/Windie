@@ -7,7 +7,7 @@ import { ApiAutenticacaoService } from 'src/app/Logica/RestAPIs/api-autenticacao
 import { ApiManterUsuario } from 'src/app/Logica/RestAPIs/apiManterUsuario';
 import { Desenvolvedor } from 'src/app/Modelos/Desenvolvedor';
 import { UsuarioSessao } from 'src/app/Modelos/UsuarioSessao';
-
+ 
 @Component({
   selector: 'app-editar-usuario',
   templateUrl: './editar-usuario.component.html',
@@ -27,8 +27,9 @@ export class EditarUsuarioComponent implements OnInit {
 
       apelido: new FormControl(null,Validators.required),
       nome_desenvolvedor: new FormControl(null,Validators.required),
-      agencia: new FormControl(null,Validators.required),
-      conta: new FormControl(null,Validators.required)
+      //agencia: new FormControl(null,Validators.required),
+      //conta: new FormControl(null,Validators.required)
+      email_paypal:  new FormControl(null,[Validators.required,Validators.email])
 
     });   
     dataSharing.usuarioCarregado.subscribe(retorno =>{ //quando usuario carregado carrega-lo para essa pagina
@@ -43,8 +44,9 @@ export class EditarUsuarioComponent implements OnInit {
 
               apelido: new FormControl(this.autenticacao.usuario?.apelido,Validators.required),
               nome_desenvolvedor: new FormControl(this.autenticacao.usuario?.nome_desenvolvedor,Validators.required),
-              agencia: new FormControl(desenvolvedor.agencia_bancaria,Validators.required),
-              conta: new FormControl(desenvolvedor.conta_bancaria,Validators.required)
+              //agencia: new FormControl(desenvolvedor.agencia_bancaria,Validators.required),
+              //conta: new FormControl(desenvolvedor.conta_bancaria,Validators.required)
+              email_paypal:  new FormControl(desenvolvedor.email_paypal,[Validators.required,Validators.email])
     
             });  
           },erro =>{
@@ -56,8 +58,9 @@ export class EditarUsuarioComponent implements OnInit {
 
           apelido: new FormControl(this.autenticacao.usuario?.apelido,Validators.required),
           nome_desenvolvedor: new FormControl(this.autenticacao.usuario?.nome_desenvolvedor,Validators.required),
-          agencia: new FormControl(null,Validators.required),
-          conta: new FormControl(null,Validators.required)
+          //agencia: new FormControl(null,Validators.required),
+          //conta: new FormControl(null,Validators.required)
+          email_paypal:  new FormControl(null,[Validators.required,Validators.email])
 
         });
       }

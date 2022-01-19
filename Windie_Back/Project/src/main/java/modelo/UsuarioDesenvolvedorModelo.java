@@ -3,8 +3,9 @@ package modelo;
 public class UsuarioDesenvolvedorModelo {
 	private String apelido;
 	private String nome_desenvolvedor;
-	private String agencia;
-	private String conta;
+	//private String agencia;
+	///private String conta;
+	String email_paypal;
 	
 	public String getApelido() {
 		return apelido;
@@ -18,17 +19,12 @@ public class UsuarioDesenvolvedorModelo {
 	public void setNome_desenvolvedor(String nome_desenvolvedor) {
 		this.nome_desenvolvedor = nome_desenvolvedor;
 	}
-	public String getAgencia() {
-		return agencia;
+	public String getEmail_paypal() {
+		return email_paypal;
 	}
-	public void setAgencia(String agencia) {
-		this.agencia = agencia;
+	public void setEmail_paypal(String email_paypal) {
+		this.email_paypal = email_paypal;
 	}
-	public String getConta() {
-		return conta;
-	}
-	public void setConta(String conta) {
-		this.conta = conta;
-	}
+
 	
 }

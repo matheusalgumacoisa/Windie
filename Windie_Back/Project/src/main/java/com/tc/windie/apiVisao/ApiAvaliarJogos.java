@@ -1,4 +1,4 @@
-package apiVisao;
+package com.tc.windie.apiVisao;
 
 import java.sql.SQLException;
 
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tc.windie.controle.AvaliarJogos;
 
-import controle.AvaliarJogos;
 import dao.UsuarioDAO;
 import modelo.AvaliacaoModelo;
 import util.CustomException;

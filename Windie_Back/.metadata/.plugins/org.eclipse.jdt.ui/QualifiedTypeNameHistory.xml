@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="util.JwtUserDetailsService"/>
-    <fullyQualifiedTypeName name="java.io.Serializable"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.CrossOrigin"/>
-    <fullyQualifiedTypeName name="util.JwtTokenUtil"/>
-    <fullyQualifiedTypeName name="modelo.UsuarioDesenvolvedorModelo"/>
-    <fullyQualifiedTypeName name="modelo.DesenvolvedorDAO"/>
     <fullyQualifiedTypeName name="modelo.DesenvolvedorModelo"/>
     <fullyQualifiedTypeName name="modelo.UsuarioDAO"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.ObjectWriter"/>
@@ -28,7 +22,6 @@
     <fullyQualifiedTypeName name="javax.naming.AuthenticationException"/>
     <fullyQualifiedTypeName name="modelo.AvaliacaoDAO"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="modelo.JogoDAO"/>
     <fullyQualifiedTypeName name="java.lang.String"/>
     <fullyQualifiedTypeName name="java.sql.SQLException"/>
@@ -60,4 +53,11 @@
     <fullyQualifiedTypeName name="java.sql.ResultSet"/>
     <fullyQualifiedTypeName name="modelo.JogoModelo"/>
     <fullyQualifiedTypeName name="modelo.AvaliacaoModelo"/>
+    <fullyQualifiedTypeName name="org.springframework.http.HttpMethod"/>
+    <fullyQualifiedTypeName name="util.Config"/>
+    <fullyQualifiedTypeName name="util.SoftwareEstado"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="com.tc.windie.apiPaypalPayouts.ApiPayouts"/>
+    <fullyQualifiedTypeName name="com.tc.windie.apiPaypalPayouts.PayoutItem"/>
+    <fullyQualifiedTypeName name="dao.DesenvolvedorDAO"/>
 </qualifiedTypeNameHistroy>

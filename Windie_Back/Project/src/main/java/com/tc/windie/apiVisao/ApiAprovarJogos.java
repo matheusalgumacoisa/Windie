@@ -1,4 +1,4 @@
-package apiVisao;
+package com.tc.windie.apiVisao;
 
 import java.sql.SQLException;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tc.windie.controle.AprovarJogos;
 
-import controle.AprovarJogos;
 import dao.UsuarioDAO;
 import modelo.Voto;
 import util.CustomException;
@@ -26,8 +26,6 @@ import util.TokenManager;
 @RequestMapping("/aprovar")
 @RestController
 public class ApiAprovarJogos {
-	
-	
 	@PostMapping(path = "jogos")
 	public RestObject JogoModelo (@RequestBody String restInput) throws SQLException, JsonProcessingException, JSONException, CustomException {
 		Debug.logRequest("jogos em aprovação: "+restInput);

@@ -1,4 +1,4 @@
-package apiVisao;
+package com.tc.windie.apiVisao;
 
 import java.sql.SQLException;
 import org.json.JSONException;
@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import controle.ManterCatalogo;
-import controle.ManterJogos;
+import com.tc.windie.controle.ManterCatalogo;
+import com.tc.windie.controle.ManterJogos;
+
 import util.CustomException;
 import util.Debug;
 import util.Ordenacoes;
