@@ -24,7 +24,9 @@
         </li>
       </ul>
         <li  *ngIf="!seAutenticado()"><button (click)="CadastrarUsuario()" type="button" class="btn btn-light">Cadastre-se</button></li>
-        <li  *ngIf="!seAutenticado()" ><button (click)="TelaLogin()" type="button" class="btn btn-outline-light">Entrar</button></li>  
+        <li  *ngIf="!seAutenticado()" ><button (click)="TelaLogin()" type="button" class="btn btn-outline-light">Entrar</button></li>
+        <li  *ngIf="seAutenticado()&&!seAssinante()" ><button (click)="Assinar()" type="button" class="btn btn-light">Assine já</button></li>
+        &nbsp;&nbsp;&nbsp;    
         <div *ngIf="seAutenticado()" class="dropdown">
           <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
             {{ label_usuario }}
@@ -44,3 +46,4 @@
 <router-outlet></router-outlet>
 
 </body>
+<footer class="ft">&nbsp;&nbsp;Qualquer dúvida, sugestão ou reclamação deve ser enviada para nosso suporte em <i>WindieSoftware@hotmail.com</i> </footer>

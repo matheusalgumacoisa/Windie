@@ -1,0 +1,9 @@
+.ft{
+    vertical-align: bottom;
+    position: fixed;
+    bottom:0;
+    height:20px;
+    width: 100%;
+    background:rgb(218, 218, 218);
+    font-size: 11px;
+}
