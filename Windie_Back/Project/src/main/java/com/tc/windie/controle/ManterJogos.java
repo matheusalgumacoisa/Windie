@@ -1,10 +1,12 @@
 package com.tc.windie.controle;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.security.sasl.AuthenticationException;
 
+import dao.ArquivoDAO;
 import dao.DesenvolvedorDAO;
 import dao.GeneroDAO;
 import dao.JogoDAO;
@@ -27,7 +29,7 @@ public class ManterJogos {
 		return instance;
 	}
 	
-	public void inserirJogo(JogoModelo jogo,List<byte[]> screenshots) throws CustomException, SQLException {
+	public int inserirJogo(JogoModelo jogo,List<byte[]> screenshots) throws CustomException, SQLException {
 		
 		if(jogo.getVisibilidade().isEmpty()  ||jogo.getVisibilidade() == null || (!jogo.getVisibilidade().equals("PUBLICO")&&!jogo.getVisibilidade().equals("RASCUNHO"))) {
 			throw new CustomException("Selecione como deseja salvar o jogo");
@@ -55,11 +57,14 @@ public class ManterJogos {
 			}
 		}
 		
-		jogo.setJogo_id(JogoDAO.getInstance().inserir(jogo)); //insere o jogo e pega o id gerado pela sequence do banco
+		int jogo_id = JogoDAO.getInstance().inserir(jogo);
+		jogo.setJogo_id(jogo_id); //insere o jogo e pega o id gerado pela sequence do banco
 		
 		for (byte[] img_bytes : screenshots) {
 			ScreenshotDAO.getInstance().inserirScreenshot(img_bytes, jogo.getJogo_id()); //insere uma screenshot
 		}
+		
+		return jogo_id;
 
 	}
 	
@@ -135,6 +140,15 @@ public class ManterJogos {
 	
 	public boolean seDesenvolvedorDoJogo(int jogo_id, int desenvolvedor_id) throws SQLException {
 		return JogoDAO.getInstance().seDesenvolvedorDoJogo(jogo_id,desenvolvedor_id);
+	}
+
+	public void salvarArquivos(int jogo_id, byte[] arquivo) throws SQLException, IOException {
+		
+		String arquivo_nome = "/arquivos_jogo_"+jogo_id;
+		
+		ArquivoDAO.getInstance().criarArquivo(arquivo_nome, arquivo);
+		JogoDAO.getInstance().salvarCaminhoArquivo(jogo_id,ArquivoDAO.dbPath+arquivo_nome);
+
 	}
 
 }

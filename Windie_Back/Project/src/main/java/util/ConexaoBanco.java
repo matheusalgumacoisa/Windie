@@ -29,6 +29,7 @@ public class ConexaoBanco {
 	
 	public PreparedStatement getPreparedStatement(String sql) 
 			throws SQLException {
+
 		return this.connection.prepareStatement(sql);
 	}
 }

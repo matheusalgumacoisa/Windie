@@ -92,7 +92,7 @@ public class ApiManterCatalogo {
 		Debug.logRequest("remover jogo da biblioteca: "+inputBody);
 		
 		String token = TokenManager.getInstance().autenticarToken( RestObject.Desserialize(restInput).token);
-		String user_email = TokenManager.getInstance().getUser(jsonObj.getString("token"));
+		String user_email = TokenManager.getInstance().getUser(token);
 		
 		int usuario_id = ManterCatalogo.getInstance().idUsuarioByEmail(user_email);
 		

@@ -49,3 +49,9 @@
       </nav>
     </div>
   </div>
+  <div *ngIf="(telaBiblioteca&&(jogos == null || jogos!.length == 0))" style="font-size: 30px; vertical-align: middle;text-align: center;color: rgb(126, 126, 126);">
+    <br><br><br><br>
+    <span >Você ainda não possui nenhum jogo na biblioteca, você pode adicionar jogos novos a partir do catálogo</span>
+    <br>
+    <i class="bi bi-controller" style="font-size: 128px;"></i>
+  </div>

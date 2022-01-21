@@ -58,7 +58,7 @@
   <div class="footBar" *ngIf="(telaCatalogo)">
     <button *ngIf="(seLogado()&&seJogoBiblioteca)" type="button" class="btn btn-outline-dark" (click)="removerBiblioteca()">Remover da biblioteca</button>&nbsp;&nbsp;
     <button *ngIf="(seLogado()&&!seJogoBiblioteca)" type="button" class="btn btn-dark" (click)="adicionarBiblioteca()">Adicionar a biblioteca</button>&nbsp;&nbsp;
-    <button *ngIf="(seAssinante())" type="button" class="btn btn-success">Baixar</button>
+    <button *ngIf="(seAssinante()&&seDesktop())" type="button" class="btn btn-success">Baixar</button>
   </div>
   <div class="footBar" *ngIf="(telaAprovar)">
     <button type="button" class="btn btn-danger" (click)=" votarAprovacao(false)" [disabled]="seVoutouNaoAprovar()">Votar contra&nbsp;<i class="bi bi-hand-thumbs-down"></i></button>&nbsp;&nbsp;

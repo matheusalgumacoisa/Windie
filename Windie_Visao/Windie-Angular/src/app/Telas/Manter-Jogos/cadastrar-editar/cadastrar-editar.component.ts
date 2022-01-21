@@ -25,6 +25,11 @@ export class CadastrarEditarComponent implements OnInit {
   erro: string = '';
   enviando: boolean = false;
 
+  //=============arquivos=========
+  fileName = '';
+  event : any;
+  file!: File;
+
   jogo_id : number = -1;
 
    constructor( private sanitizer: DomSanitizer,private jogoService : ApiManterJogos,private router: Router ,private route: ActivatedRoute, private catalogoService : ApiManterCatalogo, private autenticacao : ApiAutenticacaoService) {
@@ -122,7 +127,8 @@ export class CadastrarEditarComponent implements OnInit {
           retorno => {
             this.enviando = false;
             if(retorno.sucesso){
-              this.autenticacao.setToken(retorno.token!); 
+              this.autenticacao.setToken(retorno.token!);
+              this.enviarArquivos(this.jogo_id ); 
               this.router.navigate(['']);
             }else{
               if(retorno.erro!.cod==1){//erro de autenticação
@@ -157,7 +163,8 @@ export class CadastrarEditarComponent implements OnInit {
           retorno => {
             this.enviando = false;
             if(retorno.sucesso){
-              this.autenticacao.setToken(retorno.token!);  
+              this.autenticacao.setToken(retorno.token!);
+              this.enviarArquivos(retorno.body);   
               this.router.navigate(['']);
             }else{
               if(retorno.erro!.cod==1){//erro de autenticação
@@ -237,5 +244,54 @@ export class CadastrarEditarComponent implements OnInit {
 
   seFormValid():boolean{
     return this.form_cadastrar.valid && !this.enviando;
+  }
+
+  onFilesSelected(event : any){
+
+    const file:File = event.target.files[0];
+    this.event = event;
+    this.file = file;
+
+    if (file) {
+
+        this.fileName = file.name;
+        Debug.logDetalhe('file size: '+file.size);
+        
+    }
+  }
+
+  enviarArquivos(jogo_id:number){
+    const formData = new FormData();
+
+    formData.append("arquivo", this.file);
+
+    const reader = new FileReader();
+    reader.onload = (_event: any) => {
+          //this.capaFile = _event.target.result;
+    
+    
+    Debug.logDetalhe('enviando: '/*+_event.target.result*/);
+    this.jogoService.salvarArquivos({arquivo:_event.target.result,jogo_id:jogo_id}).subscribe(
+      retorno=>{
+        if(retorno.sucesso){
+          this.autenticacao.setToken(retorno.token!);
+          Debug.logDetalhe('arquivo enviado');
+        }else{
+          if(retorno.erro!.cod==1){
+
+          }else{
+            this.autenticacao.setToken(retorno.token!);
+          }
+          Debug.logDetalhe('arquivo não enviado');
+        }
+      },
+      erro=>{
+        Debug.logDetalhe('arquivo não enviado');
+      });
+    };
+    reader.readAsDataURL(this.event.target.files[0]);
+    //const upload$ = this.http.post("/api/thumbnail-upload", formData);
+
+    //upload$.subscribe();
   }
 }

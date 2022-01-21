@@ -151,6 +151,15 @@ public class JogoDAO {
 			return true;
 		}
 	}
+
+	public void salvarCaminhoArquivo(int jogo_id, String path) throws SQLException {
+		String sql = "update jogo  set arquivo_caminho = ? where jogo_id = ?";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		pst.setString(1, path);
+		pst.setInt(2, jogo_id);
+		
+		pst.execute();
+	}
 	
 }
 

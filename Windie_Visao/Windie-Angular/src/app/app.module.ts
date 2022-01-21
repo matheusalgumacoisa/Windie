@@ -21,6 +21,7 @@ import { AuthGuardService } from './Logica/auth-guard.service';
 import { AppRoutingModule } from './Logica/app-routing.module';
 import { AprovaListaComponent } from './Telas/Aprovar-Jogos/aprova-lista/aprova-lista.component';
 import { AprovarDetalhesComponent } from './Telas/Aprovar-Jogos/aprovar-detalhes/aprovar-detalhes.component';
+import { ListarBibliotecaComponent } from './Telas/Biblioteca/listar-biblioteca/listar-biblioteca.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { AprovarDetalhesComponent } from './Telas/Aprovar-Jogos/aprovar-detalhes
     DetalhesComponent,
     PainelComponent,
     AprovaListaComponent,
-    AprovarDetalhesComponent
+    AprovarDetalhesComponent,
+    ListarBibliotecaComponent
   ],
   imports: [
     BrowserModule,

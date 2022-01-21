@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   title = 'Windie-Angular';
   label_usuario: string = "Usuário";
   checkout_url:string = 'https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=';
+  //navegador : string = 'desconhecido';
 
   constructor(private router: Router, private usuario : ApiManterUsuario, private autentica:ApiAutenticacaoService, private autenticacao : ApiAutenticacaoService,private dataSharing: DataSharingService,private apiAssinatura : ApiManterAssinaturaService) {
     
@@ -23,6 +24,10 @@ export class AppComponent implements OnInit {
       this.label_usuario = autenticacao.usuario?.apelido!;
     });
    
+    if(localStorage.getItem('plataforma')!='desktop'){
+      localStorage.setItem('plataforma','navegador');
+    }
+    
   }
 
   ngOnInit(){
@@ -66,6 +71,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/greenLight']); 
   }
 
+  Biblioteca(){
+    this.router.navigate(['/biblioteca']);    
+  }
+
   Assinar(){
     this.apiAssinatura.getCheckoutToken().subscribe(
       retorno =>{
@@ -79,6 +88,15 @@ export class AppComponent implements OnInit {
       }
 
     )
+  }
+
+  seDesktop():boolean{ //retorna true se estiver no app desktop
+    if(localStorage.getItem('plataforma')=='desktop'){
+      return true;
+    }else{
+      return false;
+    }
+
   }
 
 }

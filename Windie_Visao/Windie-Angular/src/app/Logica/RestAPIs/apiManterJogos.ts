@@ -43,6 +43,11 @@ export class ApiManterJogos {
     let rest : RestObject  = new RestObject(this.autentica.getToken(),JSON.stringify(body));
     return this.http.post<RestObject>(this.url+"/jogo",rest);
   }
+
+  public salvarArquivos(body:any):Observable<RestObject>{
+    let rest : RestObject  = new RestObject(this.autentica.getToken(),JSON.stringify(body));
+    return this.http.post<RestObject>(this.url+"/salvarArquivos",rest);
+  }
  
 }
 

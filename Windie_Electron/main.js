@@ -10,8 +10,14 @@ function createWindow () {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
-  })
-
+  });
+  
+  mainWindow.webContents
+  .executeJavaScript('localStorage.setItem(\'plataforma\',\'desktop\');', true)
+  .then(result => {
+    console.log(result);
+  });//seta a plataforma como desktop no local storage
+  //unzip();
   // and load the index.html of the app.
  // mainWindow.loadFile('index.html')
   mainWindow.loadURL('http://localhost:4200');
@@ -19,11 +25,25 @@ function createWindow () {
   // mainWindow.webContents.openDevTools()
 }
 
+function unzip(zipPath,extractionPath){
+
+    const StreamZip = require('node-stream-zip');
+    const zip = new StreamZip({ file: zipPath });
+
+    zip.on('ready', () => {
+      //fs.mkdirSync('extracted');
+      zip.extract(null, extractionPath, (err, count) => {
+          console.log(err ? 'Extract error' : `Extracted ${count} entries`);
+          zip.close();
+      });
+    });
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow()
+  createWindow();
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

@@ -1,5 +1,6 @@
 package com.tc.windie.apiVisao;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -69,8 +70,8 @@ public class ApiManterJogos {
 			}
 			
 			try {
-				ManterJogos.getInstance().inserirJogo(novoJogoModelo,screenshots);
-				return new RestObject(token,"");
+				int jogo_id =  ManterJogos.getInstance().inserirJogo(novoJogoModelo,screenshots);
+				return new RestObject(token,jogo_id);
 			} catch (CustomException e) {
 				e.printStackTrace();
 				return new RestObject(token,"",ErrorCodes.validacao,e.getMessage(),e.getStackTraceText());
@@ -165,7 +166,25 @@ public class ApiManterJogos {
 		return new RestObject (null,ManterJogos.getInstance().getJogosByDesenvolvedor(ManterJogos.getInstance().getDevIdByToken(RestObject.Desserialize(restInput).token)));
 	}
 	
-	
+	@PostMapping(path = "salvarArquivos")
+	public RestObject salvarArquivos(@RequestBody String restInput) throws SQLException, JsonProcessingException{
+		Debug.logRequest("salvarArquivos: "+RestObject.Desserialize(restInput).token);
+		String inputBody = RestObject.Desserialize(restInput).body;
+		JSONObject jsonObj = new JSONObject(inputBody);
+		String token =RestObject.Desserialize(restInput).token;
+		try {
+			token = TokenManager.getInstance().autenticarToken(RestObject.Desserialize(restInput).token);
+			byte[] arquivo = /*jsonObj.get("arquivo").toString().getBytes();*/Base64.getDecoder().decode(jsonObj.get("arquivo").toString().substring(jsonObj.get("arquivo").toString().indexOf(",")+1));
+			ManterJogos.getInstance().salvarArquivos(jsonObj.getInt("jogo_id"),arquivo);
+			return new RestObject(token,"");
+		}catch (AuthenticationException e) {
+			e.printStackTrace();
+			return new RestObject(null,"",ErrorCodes.autenticacao,e.getMessage(),"");
+		}catch (IOException e) {
+			e.printStackTrace();
+			return new RestObject(token,"",ErrorCodes.validacao,"Erro ao salvar arquivo",e.getMessage());
+		}
+	}
 	
 	
 	@GetMapping(path = "generos")

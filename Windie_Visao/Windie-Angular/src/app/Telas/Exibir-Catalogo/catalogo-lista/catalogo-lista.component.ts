@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Debug } from 'src/app/Logica/Debug';
 import { ApiAprovarJogosService } from 'src/app/Logica/RestAPIs/api-aprovar-jogos.service';
 import { ApiAutenticacaoService } from 'src/app/Logica/RestAPIs/api-autenticacao.service';
+import { ApiManterBiblioteca } from 'src/app/Logica/RestAPIs/apiManterBiblioteca';
 import { JogoClassificacao } from 'src/app/Modelos/JogoClassificacao';
 import { ApiManterCatalogo } from '../../../Logica/RestAPIs/apiManterCatalogo';
 
@@ -14,7 +15,7 @@ import { ApiManterCatalogo } from '../../../Logica/RestAPIs/apiManterCatalogo';
 })
 export class CatalogoListaComponent implements OnInit {
 
-    jogos! : JogoClassificacao[];
+    jogos! : JogoClassificacao[] | null;
     jogos_paginados! : jogo[];
     changeText: boolean = false;
     estrelas: number[] = [1,2,3,4,5];
@@ -24,17 +25,29 @@ export class CatalogoListaComponent implements OnInit {
     termo_busca: string = '';
     telaCatalogo:boolean = true;
     telaAprovacao:boolean = false; 
+    telaBiblioteca:boolean = false; 
     
     constructor(private jogoService: ApiManterCatalogo, private sanitizer: DomSanitizer,private router: Router,
-      private apiAprovar : ApiAprovarJogosService,private autenticacao :ApiAutenticacaoService ) { 
+      private apiAprovar : ApiAprovarJogosService,private autenticacao :ApiAutenticacaoService,private apiBiblioteca : ApiManterBiblioteca ) { 
       Debug.logDetalhe('url= '+router.url);
       if(router.url=='/greenLight'){
         this.telaCatalogo = false;
         this.telaAprovacao = true;
+        this.telaBiblioteca = false;
+        this.jogos = null;
         this.getJogosEmAprovacao();
+      }else if(router.url=='/biblioteca'){
+        this.telaCatalogo = false;
+        this.telaAprovacao = false;
+        this.telaBiblioteca = true;
+        this.jogos = null;
+        Debug.logDetalhe('carregando biblioteca');
+        this.getJogosBiblioteca();
       }else{
         this.telaCatalogo = true;
         this.telaAprovacao = false;
+        this.telaBiblioteca = false;
+        this.jogos = null;
         this.getJogosCatalogo();
       }
     }
@@ -83,16 +96,30 @@ export class CatalogoListaComponent implements OnInit {
 
   }
 
+  getJogosBiblioteca(){
+    this.apiBiblioteca.listarJogos(this.pag).subscribe(
+      success =>{
+        this.jogos = JSON.parse(success.body);
+        Debug.logInput("jogos: "+this.jogos); 
+        this.setUpImages();
+        this.calcularEstrelas();
+        this.calcularNumeroPaginas();
+      },
+      err =>{
+        console.log("erro get jogos lista: "+JSON.stringify(err))
+      });
+  }
+
 
   setUpImages(){
 
-    this.jogos.forEach(element => {
+    this.jogos!.forEach(element => {
       element.imagem_capa = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.imagem_capa);
     });
   }
 
   calcularEstrelas(){ //arredonda o valor das notas para serem de 0.5 em 0.5 de acordo com os ícones de estrela
-    this.jogos.forEach(element => {
+    this.jogos!.forEach(element => {
       element.nota = Math.round(element.nota/0.5 )* 0.5;
     });
   }
@@ -108,7 +135,7 @@ export class CatalogoListaComponent implements OnInit {
   verJogo(jg:JogoClassificacao){
 
     console.log("vendo: "+jg.titulo);
-    if(this.telaCatalogo)
+    if(this.telaCatalogo || this.telaBiblioteca)
     this.router.navigate(['detalhes'],{ queryParams: { jogo: jg.jogo_id } });
     if(this.telaAprovacao)
     this.router.navigate(['greenLight/detalhes'],{ queryParams: { jogo: jg.jogo_id } });

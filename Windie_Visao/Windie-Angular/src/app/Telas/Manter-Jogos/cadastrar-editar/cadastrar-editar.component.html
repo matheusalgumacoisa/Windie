@@ -42,8 +42,10 @@
                         <label for="executavel">Caminho do executável</label>
                     </div>
                     <br>
-                    <div class="d-grid gap-2 col-6 ">
-                        <button class="btn btn-dark" type="button">Upload de arquivos</button>
+                    <div class="d-grid gap-2 col-7 ">
+                        <input style="visibility: hidden;" (change)="onFilesSelected($event)" class="form-control" type="file" id="arquivos">
+                        <div *ngIf="(fileName != '')" class="alert alert-secondary" role="alert"> {{fileName}}</div>
+                        <button class="btn btn-dark" type="button" onclick="document.querySelector('#arquivos').click()">Carregar arquivos do jogo em .zip</button>
                     </div>
                     <br>
                     <div  class="form-floating">

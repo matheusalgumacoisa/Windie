@@ -323,6 +323,15 @@ export class DetalhesComponent implements OnInit {
     return this.autenticacao.seAutenticado()&&this.horas_jogadas >0&&this.telaCatalogo;
   }
 
+  seDesktop():boolean{ //retorna true se estiver no app desktop
+    if(localStorage.getItem('plataforma')=='desktop'){
+      return true;
+    }else{
+      return false;
+    }
+
+  }
+
 
 }
 
