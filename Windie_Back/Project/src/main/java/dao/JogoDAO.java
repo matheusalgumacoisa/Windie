@@ -67,7 +67,7 @@ public class JogoDAO {
 	
 	
 	public List<JogoModelo> getListaByDesenvolvedor(int desenvolvedor_id) throws SQLException{ //pega todos os jogos de um determinado desenvolvedor
-		String sql = "select jogo_id,titulo,descricao,caminho_executavel,detalhes,tags,visibilidade,imagem_capa,genero,desenvolvedor_id from jogo where desenvolvedor_id = ?";
+		String sql = "select jogo_id,titulo,descricao,caminho_executavel,detalhes,tags,visibilidade,imagem_capa,genero,desenvolvedor_id,arquivo_caminho from jogo where desenvolvedor_id = ?";
 		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
 		pst.setInt(1, desenvolvedor_id);
 		
@@ -77,7 +77,7 @@ public class JogoDAO {
 		while(rst.next()) {
 			lista.add(new JogoModelo(rst.getInt("jogo_id"),rst.getString("titulo") , rst.getString("descricao"), 
 					rst.getString("caminho_executavel"), rst.getString("detalhes"), rst.getString("tags"), 
-					rst.getString("visibilidade"), rst.getBytes("imagem_capa"), rst.getInt("genero"),rst.getInt("desenvolvedor_id")));
+					rst.getString("visibilidade"), rst.getBytes("imagem_capa"), rst.getInt("genero"),rst.getInt("desenvolvedor_id"),rst.getString("arquivo_caminho")));
 		}
 		
 		return lista;
@@ -95,7 +95,7 @@ public class JogoDAO {
 	}
 	
 	public JogoModelo getJogo(int jogo_id) throws SQLException {
-		String sql = "select jogo_id,titulo,descricao,caminho_executavel,detalhes,tags,visibilidade,imagem_capa,genero,desenvolvedor_id from jogo where jogo_id = ?";
+		String sql = "select jogo_id,titulo,descricao,caminho_executavel,detalhes,tags,visibilidade,imagem_capa,genero,desenvolvedor_id,arquivo_caminho from jogo where jogo_id = ?";
 		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
 		pst.setInt(1, jogo_id);
 		ResultSet rst = pst.executeQuery();
@@ -103,7 +103,7 @@ public class JogoDAO {
 		
 		return new JogoModelo(rst.getInt("jogo_id"),rst.getString("titulo") , rst.getString("descricao"), 
 				rst.getString("caminho_executavel"), rst.getString("detalhes"), rst.getString("tags"), 
-				rst.getString("visibilidade"), rst.getBytes("imagem_capa"), rst.getInt("genero"),rst.getInt("desenvolvedor_id"));
+				rst.getString("visibilidade"), rst.getBytes("imagem_capa"), rst.getInt("genero"),rst.getInt("desenvolvedor_id"),rst.getString("arquivo_caminho"));
 	}
 	
 	public boolean seTituloExiste(String titulo) throws SQLException {

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tc.windie.controle.ManterJogos;
 
+import dao.DesenvolvedorDAO;
+import dao.UsuarioDAO;
 import modelo.JogoModelo;
 import util.CustomException;
 import util.Debug;
@@ -54,7 +56,8 @@ public class ApiManterJogos {
 														jsonObj.optString("tags"), 
 														jsonObj.optString("visibilidade"), 
 														 img_bArray, 
-														jsonObj.optInt("genero"));
+														jsonObj.optInt("genero"),
+														"");
 			
 			novoJogoModelo.setDesenvolvedor_id(ManterJogos.getInstance().getDevIdByToken(token));
 			
@@ -111,7 +114,8 @@ public class ApiManterJogos {
 														jsonObj.getString("tags"), 
 														jsonObj.getString("visibilidade"), 
 														 bArray, 
-														jsonObj.getInt("genero"));
+														jsonObj.getInt("genero"),
+														"");
 	
 			jogoEditadoModelo.setDesenvolvedor_id(ManterJogos.getInstance().getDevIdByToken(token));
 			
@@ -167,12 +171,21 @@ public class ApiManterJogos {
 	}
 	
 	@PostMapping(path = "salvarArquivos")
-	public RestObject salvarArquivos(@RequestBody String restInput) throws SQLException, JsonProcessingException{
+	public RestObject salvarArquivos(@RequestBody String restInput) throws SQLException, JsonProcessingException, AuthenticationException{
 		Debug.logRequest("salvarArquivos: "+RestObject.Desserialize(restInput).token);
 		String inputBody = RestObject.Desserialize(restInput).body;
 		JSONObject jsonObj = new JSONObject(inputBody);
 		String token =RestObject.Desserialize(restInput).token;
+		
+
 		try {
+			
+			int desenvolvedorUserId = UsuarioDAO.getInstance().idByEmail(TokenManager.getInstance().getUser(token));
+			
+			if(!ManterJogos.getInstance().seDesenvolvedorDoJogo(jsonObj.getInt("jogo_id"), DesenvolvedorDAO.getInstance().getByUser(desenvolvedorUserId).getDesenvolvedor_id())){
+				throw new AuthenticationException("Não é desenvolvedor desse jogo");
+			}
+			
 			token = TokenManager.getInstance().autenticarToken(RestObject.Desserialize(restInput).token);
 			byte[] arquivo = /*jsonObj.get("arquivo").toString().getBytes();*/Base64.getDecoder().decode(jsonObj.get("arquivo").toString().substring(jsonObj.get("arquivo").toString().indexOf(",")+1));
 			ManterJogos.getInstance().salvarArquivos(jsonObj.getInt("jogo_id"),arquivo);
@@ -199,6 +212,8 @@ public class ApiManterJogos {
 		String inputBody = RestObject.Desserialize(restInput).body;
 		JSONObject jsonObj = new JSONObject(inputBody);
 		Debug.logRequest("get Jogo: "+inputBody);
+		
+
 		
 		return new RestObject(null,ManterJogos.getInstance().getJogo(jsonObj.getInt("jogo_id")));
 	}

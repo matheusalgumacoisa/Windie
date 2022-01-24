@@ -150,5 +150,7 @@ public class ManterJogos {
 		JogoDAO.getInstance().salvarCaminhoArquivo(jogo_id,ArquivoDAO.dbPath+arquivo_nome);
 
 	}
+	
+
 
 }

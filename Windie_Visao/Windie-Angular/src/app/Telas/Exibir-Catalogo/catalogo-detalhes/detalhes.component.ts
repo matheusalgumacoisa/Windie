@@ -1,13 +1,19 @@
+import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Debug } from 'src/app/Logica/Debug';
 import { ApiAprovarJogosService } from 'src/app/Logica/RestAPIs/api-aprovar-jogos.service';
 import { ApiAutenticacaoService } from 'src/app/Logica/RestAPIs/api-autenticacao.service';
 import { ApiAvaliarJogosService } from 'src/app/Logica/RestAPIs/api-avaliar-jogos.service';
+import { ApiManterBiblioteca } from 'src/app/Logica/RestAPIs/apiManterBiblioteca';
 import { ApiManterCatalogo } from 'src/app/Logica/RestAPIs/apiManterCatalogo';
+import { Eventos } from 'src/app/Modelos/Eventos';
 import { JogoClassificacao } from 'src/app/Modelos/JogoClassificacao';
 import { ListaIdString } from 'src/app/Modelos/ListaIdString';
+import { RestObject } from 'src/app/Modelos/RestObject';
+
 
 
 @Component({
@@ -28,9 +34,12 @@ export class DetalhesComponent implements OnInit {
    avaliarHoveredStar : number = 0;
    notaUsuario : number = 0;
    horas_jogadas: number = 0;
+
+
+   downloadProgress :number = -1;
    //avaliacao: number = 0;
 
-  constructor(private catalogoApi: ApiManterCatalogo,private route: ActivatedRoute,private apiAprovar : ApiAprovarJogosService, 
+  constructor(private catalogoApi: ApiManterCatalogo,private route: ActivatedRoute,private apiAprovar : ApiAprovarJogosService, private apiBiblioteca : ApiManterBiblioteca,
     private sanitizer: DomSanitizer, private autenticacao : ApiAutenticacaoService,private  router : Router, private avaliarApi : ApiAvaliarJogosService) {
 
     
@@ -130,6 +139,7 @@ export class DetalhesComponent implements OnInit {
     this.catalogoApi.getJogo({jogo_id : jogo_id}).subscribe(//carrega os jogos
       retorno => { 
         this.jogo = JSON.parse(retorno.body);
+        this.apiBiblioteca.initInstalacaoMetadados(this.jogo.caminho_executavel,this.jogo.jogo_id);
         this.catalogoApi.getGeneros().subscribe(// carrega os generos
           retorno =>{
             let gen = JSON.parse(retorno.body);
@@ -331,7 +341,56 @@ export class DetalhesComponent implements OnInit {
     }
 
   }
+ 
+  baixar(){
+    this.apiBiblioteca.baixarArquivos({jogo_id:this.jogo.jogo_id},this.jogo.jogo_id,this.jogo.caminho_executavel);
+  }
 
+  downloadProgresso(){
+    if(!this.seDesktop()||this.downloadProgress==null||this.apiBiblioteca.getDownload(this.jogo.jogo_id)==null){
+      return -1;
+    }
+    this.downloadProgress =this.apiBiblioteca.getDownload(this.jogo.jogo_id)!.progresso;
+    return this.downloadProgress ;
+  }
+
+  downloadConcluido(){
+
+    if(!this.seDesktop()){
+      return false;
+    }
+    return this.apiBiblioteca.getDownload(this.jogo.jogo_id)!.seConcluido;
+
+  }
+
+  seInstalando(){
+    if(!this.seDesktop()){
+      return false;
+    }
+
+    return this.apiBiblioteca.getDownload(this.jogo.jogo_id)!.state == 'installing';
+  }
+
+  jogar(){
+    Debug.logDetalhe('abrindo jogo em: '+sessionStorage.getItem('caminhoInst_jogo_'+this.jogo.jogo_id));
+    let eventos :Eventos[] =[];
+    if(sessionStorage.getItem('eventos')!=undefined){
+      eventos = JSON.parse(sessionStorage.getItem('eventos')!);
+    }
+
+    eventos.push({evento_tipo: 'jogar' ,evento_corpo:{jogo_id:this.jogo.jogo_id}});
+    sessionStorage.setItem('eventos',JSON.stringify(eventos));
+
+  }
+
+  seInstalado(){
+    if(sessionStorage.getItem('caminhoInst_jogo_'+this.jogo.jogo_id)==undefined || sessionStorage.getItem('caminhoInst_jogo_'+this.jogo.jogo_id) == null) return false;
+    return true;
+  }
+
+  seAberto(){
+    return false;
+  }
 
 }
 

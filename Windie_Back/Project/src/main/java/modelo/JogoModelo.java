@@ -9,15 +9,16 @@ public class JogoModelo {
 	 private String caminho_executavel ;
 	 private String detalhes ;
 	 private String tags ;
-	 private String visibilidade ;
+	 private String visibilidade;
 	 private byte[] imagem_capa ;
 	 private int genero ;
 	 private int desenvolvedor_id;
+	 private String arquivo_caminho;
 	 
 
 
 	public JogoModelo(int jogo_id, String titulo, String descricao, String caminho_executavel,
-			String detalhes, String tags, String visibilidade, byte[] imagem_capa, int genero) {
+			String detalhes, String tags, String visibilidade, byte[] imagem_capa, int genero, String arquivo_caminho) {
 		super();
 		this.jogo_id = jogo_id;
 		this.titulo = titulo;
@@ -28,10 +29,11 @@ public class JogoModelo {
 		this.visibilidade = visibilidade;
 		this.imagem_capa = imagem_capa;
 		this.genero = genero;
+		this.arquivo_caminho = arquivo_caminho;
 	}
 	
 	public JogoModelo(int jogo_id, String titulo, String descricao, String caminho_executavel,
-			String detalhes, String tags, String visibilidade, byte[] imagem_capa, int genero, int desenvolvedor_id) {
+			String detalhes, String tags, String visibilidade, byte[] imagem_capa, int genero, int desenvolvedor_id, String arquivo_caminho) {
 		super();
 		this.jogo_id = jogo_id;
 		this.titulo = titulo;
@@ -43,6 +45,7 @@ public class JogoModelo {
 		this.imagem_capa = imagem_capa;
 		this.genero = genero;
 		this.desenvolvedor_id = desenvolvedor_id;
+		this.arquivo_caminho = arquivo_caminho;
 	}
 	
 	public int getJogo_id() {
@@ -112,5 +115,13 @@ public class JogoModelo {
 
 	public void setDesenvolvedor_id(int desenvolvedor_id) {
 		this.desenvolvedor_id = desenvolvedor_id;
+	}
+
+	public String getArquivo_caminho() {
+		return arquivo_caminho;
+	}
+
+	public void setArquivo_caminho(String arquivo_caminho) {
+		this.arquivo_caminho = arquivo_caminho;
 	}
 }

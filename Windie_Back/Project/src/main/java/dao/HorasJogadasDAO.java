@@ -43,6 +43,38 @@ public class HorasJogadasDAO {
 		return rst.getFloat("horas");
 	}
 	
+	public void addHorasJOgadasMes(Date mes,float horas,int jogo_id) throws SQLException {
+		String sql = "select * from horas_jogadas_mes where jogo_id = ? and mes_referente = ?";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		pst.setInt(1, jogo_id);
+		pst.setDate(2, mes);
+		
+		ResultSet rst = pst.executeQuery();
+		
+		if(rst.next()) {
+			pst.close();
+			sql = "update horas_jogadas_mes set horas = ? where jogo_id = ? and mes_referente = ?";
+			pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+			pst.setFloat(1, horas);
+			pst.setInt(2, jogo_id);
+			pst.setDate(3, mes);
+			
+			pst.execute();
+			
+		}else {
+			pst.close();
+			sql = "insert into  horas_jogadas_mes (horas,mes_referente,jogo_id)  values(?,?,?)";
+			pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+			pst.setFloat(1, horas);
+			pst.setDate(2, mes);
+			pst.setInt(3, jogo_id);
+			
+			pst.execute();
+			
+		}
+		
+	}
+	
 	
 	
 	

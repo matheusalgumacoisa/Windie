@@ -76,4 +76,17 @@ public class BibliotecaDAO {
 		
 		return rst.getFloat("horas_jogadas");
 	}
+	
+	public void addHorasJogadas(int jogo_id, int usuario_id,float horas) throws SQLException{
+		if(!seJogoNaBiblioteca(jogo_id, usuario_id)) { inserirJogoNaBiblioteca(jogo_id, usuario_id); }
+		if(horas>100) { horas = 100;}
+		horas = getHorasJogadas(jogo_id, usuario_id) + horas;
+		String sql = "update item_biblioteca set horas_jogadas = ? where jogo_id = ? and usuario_id = ?";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		pst.setFloat(1,horas);
+		pst.setInt(2, jogo_id);
+		pst.setInt(3, usuario_id);
+		
+		pst.execute();
+	}
 }

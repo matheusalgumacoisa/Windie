@@ -5,7 +5,7 @@ import { CatalogoListaComponent } from './Telas/Exibir-Catalogo/catalogo-lista/c
 import { CadastrarUsuarioComponent } from './Telas/Manter-Usuarios/cadastrar-usuario/cadastrar-usuario.component';
 import { AutenticarUsuarioComponent } from './Telas/Manter-Usuarios/autenticar-usuario/autenticar-usuario.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { EditarUsuarioComponent } from './Telas/Manter-Usuarios/editar-usuario/editar-usuario.component';
 import { CadastrarDesenvolvedorComponent } from './Telas/Manter-Usuarios/cadastrar-desenvolvedor/cadastrar-desenvolvedor.component';
@@ -54,7 +54,8 @@ import { ListarBibliotecaComponent } from './Telas/Biblioteca/listar-biblioteca/
     JwPaginationModule
   ],
   providers: [
-    AuthGuardService
+    AuthGuardService,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
