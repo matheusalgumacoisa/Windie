@@ -49,10 +49,15 @@ public class AprovarJogos {
 	
 	
 	public boolean seVotou(int jogo_id, int usuario_id) throws SQLException {
-		return VotoDAO.getInstance().seJaVotou(jogo_id, usuario_id);
+		try {
+			return VotoDAO.getInstance().seJaVotou(jogo_id, usuario_id);
+		} catch (CustomException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
-	public boolean getVoto(int jogo_id, int usuario_id) throws SQLException {
+	public boolean getVoto(int jogo_id, int usuario_id) throws SQLException, CustomException {
 		return VotoDAO.getInstance().getVoto(jogo_id, usuario_id);
 	}
 	

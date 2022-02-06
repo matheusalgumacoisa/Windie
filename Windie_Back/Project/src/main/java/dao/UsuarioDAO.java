@@ -49,6 +49,17 @@ public class UsuarioDAO {
 		
 	}
 	
+	public void atualizarSenha(String email, String senha) throws SQLException {
+		String sql = "update usuario set  senha = ? where email = ?";
+		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
+
+		 psql.setString(1, senha);
+		 psql.setString(2, email);
+				
+		 psql.executeUpdate();
+		
+	}
+	
 	public UsuarioModelo getByEmail(String email) throws SQLException {
 		String sql = "select * from usuario where email = ?";
 		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);

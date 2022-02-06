@@ -8,6 +8,7 @@ import javax.security.sasl.AuthenticationException;
 
 import dao.ArquivoDAO;
 import dao.DesenvolvedorDAO;
+import dao.FichaAprovacaoDAO;
 import dao.GeneroDAO;
 import dao.JogoDAO;
 import dao.ScreenshotDAO;
@@ -64,6 +65,9 @@ public class ManterJogos {
 			ScreenshotDAO.getInstance().inserirScreenshot(img_bytes, jogo.getJogo_id()); //insere uma screenshot
 		}
 		
+		if(jogo.getVisibilidade().equals("PUBLICO")) {
+			FichaAprovacaoDAO.getInstance().inserir(jogo_id);
+		}
 		return jogo_id;
 
 	}
@@ -98,6 +102,9 @@ public class ManterJogos {
 		
 		JogoDAO.getInstance().atualizar(jogo); //atualiza o jogo e pega o id gerado pela sequence do banco
 		ScreenshotDAO.getInstance().limparJogoScreenshots(jogo.getJogo_id()); // limpa as screenshots desse jogo
+		if(!FichaAprovacaoDAO.getInstance().sePossuiFichaAprovacao(jogo.getJogo_id())) {
+			FichaAprovacaoDAO.getInstance().inserir(jogo.getJogo_id());
+		}
 		for (byte[] img_bytes : screenshots) {
 			ScreenshotDAO.getInstance().inserirScreenshot(img_bytes, jogo.getJogo_id()); //insere uma screenshot
 		}	

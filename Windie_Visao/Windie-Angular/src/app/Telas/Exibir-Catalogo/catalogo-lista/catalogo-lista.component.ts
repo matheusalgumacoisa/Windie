@@ -69,7 +69,7 @@ export class CatalogoListaComponent implements OnInit {
           Debug.logInput("jogos: "+this.jogos); 
           this.setUpImages();
           this.calcularEstrelas();
-          this.calcularNumeroPaginas();
+          this.calcularNumeroPaginasAprovacao();
         }else{
           this.autenticacao.logOut();
         }
@@ -88,7 +88,7 @@ export class CatalogoListaComponent implements OnInit {
         Debug.logInput("jogos: "+this.jogos); 
         this.setUpImages();
         this.calcularEstrelas();
-        this.calcularNumeroPaginas();
+        this.calcularNumeroPaginasCatalogo();
       },
       err =>{
         console.log("erro get jogos lista: "+JSON.stringify(err))
@@ -103,7 +103,7 @@ export class CatalogoListaComponent implements OnInit {
         Debug.logInput("jogos: "+this.jogos); 
         this.setUpImages();
         this.calcularEstrelas();
-        this.calcularNumeroPaginas();
+        this.calcularNumeroPaginasBiblioteca();
       },
       err =>{
         console.log("erro get jogos lista: "+JSON.stringify(err))
@@ -141,8 +141,38 @@ export class CatalogoListaComponent implements OnInit {
     this.router.navigate(['greenLight/detalhes'],{ queryParams: { jogo: jg.jogo_id } });
   }
 
-  calcularNumeroPaginas(){
-   // this.paginas_numero = Math.round((this.jogos[0].jogos_numero/this.pag.num_itens)); 
+  calcularNumeroPaginasCatalogo(){
+    
+    this.jogoService.getJogosCatalogoNumero().subscribe(retorno =>{
+      let jogos_numero = JSON.parse(retorno.body);
+      this.paginas_numero = Math.ceil((jogos_numero/this.pag.num_itens));
+    }, erro =>{
+
+    });
+     //this.paginas_numero = Math.ceil((this.jogos!.length/this.pag.num_itens)); 
+    Debug.logDetalhe('calculando numero de paginas Math.ceil -> '+this.jogos!.length+'/'+this.pag.num_itens+' = '+this.paginas_numero);
+  }
+
+  calcularNumeroPaginasAprovacao(){
+    
+    this.jogoService.getJogosAprovNumero().subscribe(retorno =>{
+      let jogos_numero = JSON.parse(retorno.body);
+      this.paginas_numero = Math.ceil((jogos_numero/this.pag.num_itens));
+    }, erro =>{
+
+    });
+    Debug.logDetalhe('calculando numero de paginas Math.ceil -> '+this.jogos!.length+'/'+this.pag.num_itens+' = '+this.paginas_numero);
+  }
+
+  calcularNumeroPaginasBiblioteca(){
+    
+    this.jogoService.getJogosBibliotecaNumero().subscribe(retorno =>{
+      let jogos_numero = JSON.parse(retorno.body);
+      this.paginas_numero = Math.ceil((jogos_numero/this.pag.num_itens));
+    }, erro =>{
+
+    });
+    Debug.logDetalhe('calculando numero de paginas Math.ceil -> '+this.jogos!.length+'/'+this.pag.num_itens+' = '+this.paginas_numero);
   }
 
   onChangePage(pagina: number) {
@@ -194,7 +224,7 @@ export class CatalogoListaComponent implements OnInit {
           console.log("jogos: "+this.jogos);
           this.setUpImages();
           this.calcularEstrelas();
-          this.calcularNumeroPaginas();
+          this.calcularNumeroPaginasCatalogo();
         },err =>{
           console.log("erro get jogos lista: "+JSON.stringify(err))
         });
@@ -208,7 +238,7 @@ export class CatalogoListaComponent implements OnInit {
             console.log("jogos: "+this.jogos);
             this.setUpImages();
             this.calcularEstrelas();
-            this.calcularNumeroPaginas();
+            this.calcularNumeroPaginasAprovacao();
           }
         },err =>{
           console.log("erro get jogos lista: "+JSON.stringify(err))

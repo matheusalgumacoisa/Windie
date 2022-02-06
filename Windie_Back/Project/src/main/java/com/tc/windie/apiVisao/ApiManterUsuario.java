@@ -96,9 +96,15 @@ public class ApiManterUsuario {
 		String token = RestObject.Desserialize(restInput).token;
 		
 		try {
-			ManterUsuarios.getInstance().atualizarUsuario(TokenManager.getInstance().getUser(token),
-					jsonObj.getString("apelido"), jsonObj.getString("nome_desenvolvedor"),
-					jsonObj.getString("email_paypal"));
+			if(ManterUsuarios.getInstance().seEmailDesenvolvedor(TokenManager.getInstance().getUser(token))){
+				ManterUsuarios.getInstance().atualizarUsuario(TokenManager.getInstance().getUser(token),
+						jsonObj.getString("apelido"), jsonObj.getString("nome_desenvolvedor"),
+						jsonObj.getString("email_paypal"));
+			}else {
+				ManterUsuarios.getInstance().atualizarUsuario(TokenManager.getInstance().getUser(token),
+						jsonObj.getString("apelido"), "",
+						"");
+			}
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 			return new RestObject(null,"",ErrorCodes.autenticacao,e.getMessage(),e.getStackTrace().toString());
@@ -133,6 +139,28 @@ public class ApiManterUsuario {
 		return new RestObject(null, dev);
 
 
+	}
+	
+	@PostMapping(path = "mudarSenha")
+	public RestObject mudarSenha(@RequestBody String restInput) throws JSONException, SQLException, JsonProcessingException {
+		Debug.logInput("mudar senha : "+restInput);
+		String token = RestObject.Desserialize(restInput).token;
+		JSONObject jsonObj = new JSONObject(RestObject.Desserialize(restInput).body);
+		try {
+			token = TokenManager.getInstance().autenticarToken(token);
+			String email = TokenManager.getInstance().getUser(token);
+			if(!jsonObj.getString("nova").equals(jsonObj.getString("confirmar"))) {
+				return new RestObject(token,"",ErrorCodes.validacao,"As senhas informadas não são as mesmas","ApiManterUsuario.mudarSenha()");
+			}
+			ManterUsuarios.getInstance().mudarSenha(jsonObj.getString("antiga"), jsonObj.getString("nova"), email);
+			return new RestObject(token,"");
+		}catch (AuthenticationException e) {
+			e.printStackTrace();
+			return new RestObject(null,"",ErrorCodes.autenticacao,e.getMessage(),"ApiManterUsuario.mudarSenha()");
+		}catch (CustomException e) {
+			e.printStackTrace();
+			return new RestObject(token,"",ErrorCodes.validacao,e.getMessage(),e.getStackTraceText());
+		}
 	}
 	
 	

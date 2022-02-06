@@ -26,6 +26,15 @@ public class ManterUsuarios {
 		}
 	}
 	
+	public void mudarSenha(String senha_antiga,String senha,String email) throws SQLException, CustomException {
+		if(autenticaUsuario(email, senha_antiga)) {
+			String nova_senha = String.valueOf(senha.hashCode());
+			UsuarioDAO.getInstance().atualizarSenha(email, nova_senha);
+		}else {
+			throw new CustomException("Senha antiga incorreta");
+		}
+	}
+	
 	
 	public void cadastrarUsuario(String email,String senha,String apelido) throws SQLException, CustomException {
 		
@@ -42,17 +51,17 @@ public class ManterUsuarios {
 	public void atualizarUsuario(String email, String apelido, String nome_desenvolvedor, String email_paypal) throws SQLException, CustomException {
 		
 		int usuario_id = GetIdByEmail(email);
-		int desenvolvedor_id = devByUser(usuario_id).getDesenvolvedor_id();
+		if(seEmailDesenvolvedor(email)) {
+			int desenvolvedor_id = devByUser(usuario_id).getDesenvolvedor_id();
+			if(UsuarioDAO.getInstance().seNomeDesenvolvedorExisteParaOutroDesenvolvedor(nome_desenvolvedor, desenvolvedor_id)) {
+				throw new CustomException("O nome de desenvolvedor informado já existe");
+			}
+			DesenvolvedorDAO.getInstance().atualizarDesenvolvedor(nome_desenvolvedor, email_paypal,UsuarioDAO.getInstance().idByEmail(email));
+		}
 		if(UsuarioDAO.getInstance().seApelidoExisteParaOutroUsuario(apelido, usuario_id)) {
 			throw new CustomException("O apelido informado já existe");
 		}
-		if(UsuarioDAO.getInstance().seNomeDesenvolvedorExisteParaOutroDesenvolvedor(nome_desenvolvedor, desenvolvedor_id)) {
-			throw new CustomException("O nome de desenvolvedor informado já existe");
-		}
 		UsuarioDAO.getInstance().atualizarUsuario(email, apelido);
-		if(seEmailDesenvolvedor(email)) {
-			DesenvolvedorDAO.getInstance().atualizarDesenvolvedor(nome_desenvolvedor, email_paypal,UsuarioDAO.getInstance().idByEmail(email));
-		}
 	}
 	
 	public void cadastrarDadosDesenvolvedor(String nome_desenvolvedor, String email_paypal, String userMail) throws SQLException, CustomException {

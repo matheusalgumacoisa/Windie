@@ -11,6 +11,7 @@ import { ApiAutenticacaoService } from './api-autenticacao.service';
 export class ApiManterCatalogo {
 
 
+
   
   url : string = 'http://localhost:4200/api/catalogo';
 
@@ -55,5 +56,20 @@ export class ApiManterCatalogo {
   public getScreenshots(body:any):Observable<RestObject>{
     let rest : RestObject  = new RestObject(this.autentica.getToken(),JSON.stringify(body));
     return this.http.post<RestObject>(this.url+'/screenshots',rest);
+  }
+
+  getJogosCatalogoNumero():Observable<RestObject> {
+    let rest : RestObject  = new RestObject(this.autentica.getToken(),'CATALOGO');
+    return this.http.post<RestObject>(this.url+'/numero',rest);
+  }
+
+  getJogosAprovNumero():Observable<RestObject> {
+    let rest : RestObject  = new RestObject(this.autentica.getToken(),'APROVACAO');
+    return this.http.post<RestObject>(this.url+'/numero',rest);
+  }
+
+  getJogosBibliotecaNumero():Observable<RestObject> {
+    let rest : RestObject  = new RestObject(this.autentica.getToken(),'BIBLIOTECA');
+    return this.http.post<RestObject>(this.url+'/numero',rest);
   }
 }

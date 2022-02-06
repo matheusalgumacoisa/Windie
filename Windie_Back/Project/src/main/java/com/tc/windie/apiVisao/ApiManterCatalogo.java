@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tc.windie.controle.ManterCatalogo;
 import com.tc.windie.controle.ManterJogos;
+import com.tc.windie.controle.ManterUsuarios;
 
+import dao.JogoDAO;
 import util.CustomException;
 import util.Debug;
 import util.Ordenacoes;
@@ -116,6 +118,29 @@ public class ApiManterCatalogo {
 		
 		
 		return new RestObject(null,ManterJogos.getInstance().getScreenshots(jsonObj.getInt("jogo_id")));
+	}
+	
+	@PostMapping(path = "numero")
+	public RestObject getJogosNumero(@RequestBody String restInput) throws Exception {
+		
+		Debug.logRequest("get jogos numero: "+restInput);
+		//String inputBody = RestObject.Desserialize(restInput).body;
+		//JSONObject jsonObj = new JSONObject(inputBody);
+		int numero = 0;
+		
+		if(RestObject.Desserialize(restInput).body.equals("CATALOGO")) {
+			numero = JogoDAO.getInstance().getJogosCatalogoNumero();
+		}
+		if(RestObject.Desserialize(restInput).body.equals("APROVACAO")) {
+			numero = JogoDAO.getInstance().getJogosAprovNumero();		
+		}
+		if(RestObject.Desserialize(restInput).body.equals("BIBLIOTECA")) {
+			int usuario_id = ManterUsuarios.getInstance().GetIdByEmail(TokenManager.getInstance().getUser(RestObject.Desserialize(restInput).token));
+			numero = JogoDAO.getInstance().getJogosBibliotecaNumero(usuario_id);
+		}
+		
+		
+		return new RestObject(null,numero);
 	}
 	
 	

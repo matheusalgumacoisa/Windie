@@ -39,12 +39,14 @@
     <div style="vertical-align: bottom; margin: 10px;">
       <nav aria-label="Page navigation example">
         <ul class="pagination">
-          <li  class="page-item" *ngIf="pag.page > 1"><a class="page-link" (click)="onPreviousPage()" href="#">Anterior</a></li>
+          <li  class="page-item" *ngIf="pag.page > 1"><a class="page-link" (click)="onPreviousPage()" >Anterior</a></li>
+
           <p *ngFor="let i of paginas_numero|times" >
-            <li class="page-item"  *ngIf="i != pag.page"><a *ngIf="seMostrarPaginatorItem(i)" class="page-link" (click)="onChangePage(i)" href="#">{{i}}</a></li> 
-            <li class="page-item active"  *ngIf="i == pag.page"><a *ngIf="seMostrarPaginatorItem(i)" class="page-link" (click)="onChangePage(i)" href="#">{{i}}</a></li> 
+            <li class="page-item"  *ngIf="i != pag.page"><a *ngIf="seMostrarPaginatorItem(i)" class="page-link" (click)="onChangePage(i)" >{{i}}</a></li> 
+            <li class="page-item active"  *ngIf="i == pag.page"><a *ngIf="seMostrarPaginatorItem(i)" class="page-link" (click)="onChangePage(i)" >{{i}}</a></li> 
           </p>
-          <li class="page-item" *ngIf="pag.page < paginas_numero" ><a class="page-link" (click)="onNextPage()" href="#">Próxima</a></li>
+          
+          <li class="page-item" *ngIf="pag.page < paginas_numero" ><a class="page-link" (click)="onNextPage()" >Próxima</a></li>
         </ul>
       </nav>
     </div>

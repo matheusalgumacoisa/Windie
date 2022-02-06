@@ -102,6 +102,34 @@ public class JogoDAO {
 		return rst.getInt(1);
 	}
 	
+	public int getJogosCatalogoNumero() throws SQLException { 
+		String sql = "select count(*) from view_jogo_catalogo";
+		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		ResultSet rst = psql.executeQuery();
+		rst.next();
+		
+		return rst.getInt(1);
+	}
+	
+	public int getJogosAprovNumero() throws SQLException { 
+		String sql = "select count(*) from view_jogo_aprovacao";
+		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		ResultSet rst = psql.executeQuery();
+		rst.next();
+		
+		return rst.getInt(1);
+	}
+	
+	public int getJogosBibliotecaNumero(int usuario_id) throws SQLException { 
+		String sql = "select count(*) from view_jogo_biblioteca where usuario_id = ?";
+		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		psql.setInt(1, usuario_id);
+		ResultSet rst = psql.executeQuery();
+		rst.next();
+		
+		return rst.getInt(1);
+	}
+	
 	public JogoModelo getJogo(int jogo_id) throws SQLException {
 		String sql = "select jogo_id,titulo,descricao,caminho_executavel,detalhes,tags,visibilidade,imagem_capa,genero,desenvolvedor_id,arquivo_caminho from jogo where jogo_id = ?";
 		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);

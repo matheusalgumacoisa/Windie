@@ -16,8 +16,6 @@ public class ApiCheckout {
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	private static ApiCheckout instance;
-	//private static final String emailPagSeguro = "matheusantoniors@hotmail.com";//email do pag seguro
-	//private static final String token = "28379D1E9032482596725EAA8BA87B3B"; //token gerado na conta de desenvolvedor do pag seguro
 	private static final String stripe_secret_key_test = "sk_test_51KPb0aHO9lbngdjOi1V6pmqWef84NFABMHsBwVwC6Ynx4BGuCT3h0BxcHybIx17PA2fJBxCxepHyosTPBLCyt9hN00BuHm1fmD"; //token gerado na conta de desenvolvedor do pag seguro
 	
 	public static ApiCheckout getInstance() {
@@ -84,77 +82,5 @@ public class ApiCheckout {
 		  
 		  return response.getBody();
 	}
-	
-	
-	/*public String getCheckoutCod(int pagamento_cod) throws SAXException, IOException, ParserConfigurationException {
-		  String url = "https://ws.sandbox.pagseguro.uol.com.br/v2/checkout?email="+emailPagSeguro+"&token="+token;
-		  String xml = PsCobrancaXML.getBodyXML(pagamento_cod);
-		  
-		  HttpHeaders headers = new HttpHeaders();
-		  headers.setContentType(MediaType.APPLICATION_XML);
-		  Debug.logDetalhe("xml request: "+xml );
-		  //headers.setBearerAuth(getToken());
-		
-		  HttpEntity<String> entity = new HttpEntity<String>(xml,headers);	  
-		  ResponseEntity<String> response = this.restTemplate.exchange(url ,HttpMethod.POST,entity,String.class);
-		  
-		  Debug.logDetalhe("checkout resposta: "+response.getBody());
-		  String xml_response = response.getBody();
-		  
-		  
-		  DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		  factory.setNamespaceAware(true);
-		  DocumentBuilder builder = factory.newDocumentBuilder();
-		  Document document =  builder.parse(new ByteArrayInputStream(xml_response.getBytes()));
-		  
-		  document.getDocumentElement().normalize();
-		  Element rootElement = document.getDocumentElement();
-
-		  String cod = rootElement.getElementsByTagName("code").item(0).getTextContent();
-		  Debug.logDetalhe("checkout cod: "+cod);
-		  
-		  return cod;
-	}
-	*/
-	
-	/*public boolean seTransacaoPaga(int reference, Date initialDate) throws ParserConfigurationException, SAXException, IOException {
-		
-		String url = "https://ws.sandbox.pagseguro.uol.com.br/v2/transactions?email="+emailPagSeguro+"&token="+token+"&refrence="+reference+"&initialDate="+initialDate+"T00:00";
-		/*String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-					+ "<transactions>"
-					+ "<reference>"+reference+"</reference>"
-					+ "</transactions>";*/
-		
-		/*HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_XML);
-		Debug.logDetalhe("url request: "+url );
-		
-		//HttpEntity<String> entity = new HttpEntity<String>(""/*xml*///,headers);	  
-		/*ResponseEntity<String> response = this.restTemplate.exchange(url ,HttpMethod.GET,entity,String.class);
-		
-		Debug.logDetalhe("consulta resposta: "+response.getBody());
-		String xml_response = response.getBody();
-		
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true);
-		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document document =  builder.parse(new ByteArrayInputStream(xml_response.getBytes()));
-		  
-		document.getDocumentElement().normalize();
-		Element rootElement = document.getDocumentElement();
-
-		
-		
-		String status = rootElement.getElementsByTagName("status").item(0).getTextContent();
-		
-		Debug.logDetalhe("status = "+status);
-		
-		if(status.equals("3")) {
-			return true;
-		}else {
-			return false;
-		}
-		
-	}*/
 
 }

@@ -72,9 +72,9 @@ public class ApiAprovarJogos {
 			return new RestObject(null,"",ErrorCodes.autenticacao,e.getMessage(),"");
 		}
 	}
-	
+	 
 	@PostMapping(path = "seVotou")
-	public RestObject seVotou(@RequestBody String restInput) throws SQLException, JsonProcessingException {
+	public RestObject seVotou(@RequestBody String restInput) throws SQLException, JsonProcessingException, JSONException, CustomException {
 		
 		String inputBody = RestObject.Desserialize(restInput).body;
 		JSONObject jsonObj = new JSONObject(inputBody);

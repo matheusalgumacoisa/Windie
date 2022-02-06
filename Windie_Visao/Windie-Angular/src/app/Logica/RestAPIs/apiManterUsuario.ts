@@ -38,6 +38,11 @@ export class ApiManterUsuario {
     let rest : RestObject  = new RestObject(this.autentica.getToken(),'');
     return this.http.post<RestObject>(this.url+"/desenvolvedor",rest);
   }
+
+  public trocarSenha(body:any):Observable<RestObject>{
+    let rest : RestObject  = new RestObject(this.autentica.getToken(),JSON.stringify(body));
+    return this.http.post<RestObject>(this.url+"/mudarSenha",rest);
+  }
 }
 
 

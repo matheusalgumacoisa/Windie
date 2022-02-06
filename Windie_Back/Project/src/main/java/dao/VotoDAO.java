@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import util.ConexaoBanco;
+import util.CustomException;
 import util.Debug;
 
 public class VotoDAO {
@@ -17,7 +18,7 @@ public class VotoDAO {
 	}
 	
 	
-	public void atualizarVoto(boolean se_aFavor, int jogo_id, int usuario_id) throws SQLException {
+	public void atualizarVoto(boolean se_aFavor, int jogo_id, int usuario_id) throws SQLException, CustomException {
 		int ficha_aprovacao_id = FichaAprovacaoDAO.getInstance().fichaAprovacaoIdByJogo(jogo_id);
 		String se_favoravel;
 		
@@ -36,7 +37,7 @@ public class VotoDAO {
 		
 	}
 	
-	public void votar(boolean se_aFavor, int jogo_id, int usuario_id) throws SQLException {
+	public void votar(boolean se_aFavor, int jogo_id, int usuario_id) throws SQLException, CustomException {
 		int ficha_aprovacao_id = FichaAprovacaoDAO.getInstance().fichaAprovacaoIdByJogo(jogo_id);
 		String se_favoravel;
 		
@@ -56,7 +57,7 @@ public class VotoDAO {
 	}
 	
 	
-	public boolean seJaVotou(int jogo_id, int usuario_id) throws SQLException {
+	public boolean seJaVotou(int jogo_id, int usuario_id) throws SQLException, CustomException {
 		int ficha_aprovacao_id = FichaAprovacaoDAO.getInstance().fichaAprovacaoIdByJogo(jogo_id);
 		
 		String sql = "select count(*) votos from voto where ficha_aprovacao_id = ? and usuario_id = ?";
@@ -76,7 +77,7 @@ public class VotoDAO {
 		
 	}
 	
-	public boolean getVoto(int jogo_id, int usuario_id) throws SQLException {
+	public boolean getVoto(int jogo_id, int usuario_id) throws SQLException, CustomException {
 		int ficha_aprovacao_id = FichaAprovacaoDAO.getInstance().fichaAprovacaoIdByJogo(jogo_id);
 		
 		String sql = "select se_favoravel from  voto where ficha_aprovacao_id = ? and usuario_id = ?";

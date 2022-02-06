@@ -62,7 +62,7 @@ export class EditarUsuarioComponent implements OnInit {
           nome_desenvolvedor: new FormControl(this.autenticacao.usuario?.nome_desenvolvedor,Validators.required),
           //agencia: new FormControl(null,Validators.required),
           //conta: new FormControl(null,Validators.required)
-          email_paypal:  new FormControl(null,[Validators.required,Validators.email])
+          email_paypal:  new FormControl('',[Validators.required,Validators.email])
 
         });
       }
