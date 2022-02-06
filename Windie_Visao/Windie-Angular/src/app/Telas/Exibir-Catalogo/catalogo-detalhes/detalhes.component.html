@@ -56,6 +56,7 @@
     </div>
   </div>
   <div class="footBar" *ngIf="(telaCatalogo)">
+    <button *ngIf="(seAssinante()&&seDesktop()&&seInstalado())" type="button" class="btn btn-danger btn-sm" style="vertical-align: bottom;font-size: 10px;" (click)="desinstalar()" [disabled]="(seAberto())">Desinstalar</button>&nbsp;&nbsp;
     <button *ngIf="(seLogado()&&seJogoBiblioteca)" type="button" class="btn btn-outline-dark" (click)="removerBiblioteca()">Remover da biblioteca</button>&nbsp;&nbsp;
     <button *ngIf="(seLogado()&&!seJogoBiblioteca)" type="button" class="btn btn-dark" (click)="adicionarBiblioteca()">Adicionar a biblioteca</button>&nbsp;&nbsp;
     <button *ngIf="(seAssinante()&&seDesktop()&&!seInstalado())" type="button" class="btn btn-success" (click)="baixar()" [disabled]="(downloadProgresso()>=0)">Baixar</button>
@@ -103,6 +104,8 @@
     </div>
   </div>
 </div>
+
+
 
 </body>
 <footer>

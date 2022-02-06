@@ -20,7 +20,7 @@ export class PainelComponent implements OnInit {
   public mes_passado :string = '';
   public horas_jogadas:string = '';
   public faturado:string = '';
-
+ 
   constructor(private jogosService:ApiManterJogos,private router: Router,private apiPainel : ApiDevPainelService,private autentica : ApiAutenticacaoService ) { }
 
   ngOnInit(): void {

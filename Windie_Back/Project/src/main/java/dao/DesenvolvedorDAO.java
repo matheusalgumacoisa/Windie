@@ -26,7 +26,7 @@ public class DesenvolvedorDAO {
 	}
 	
 	public void inserirDesenvolvedor(DesenvolvedorModelo desenvolvedor) throws SQLException{
-		String sql = "insert into desenvolvedor (nome_de_desenvolvedor,email_paypal,usuario_id)  values(?,?,?,?)";
+		String sql = "insert into desenvolvedor (nome_de_desenvolvedor,email_paypal,usuario_id)  values(?,?,?)";
 		PreparedStatement psql = ConexaoBanco.getInstance().getPreparedStatement(sql);
 
 		 psql.setString(1, desenvolvedor.getNome_de_desenvolvedor());

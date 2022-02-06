@@ -63,5 +63,7 @@ public class ManterBiblioteca {
 		HorasJogadasDAO.getInstance().addHorasJOgadasMes(mes, horas, jogo_id);
 		BibliotecaDAO.getInstance().addHorasJogadas(jogo_id, usuario_id, horas);
 	}
+	
+
 
 }

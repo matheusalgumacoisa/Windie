@@ -15,7 +15,8 @@ import { ApiManterUsuario } from './Logica/RestAPIs/apiManterUsuario';
 export class AppComponent implements OnInit {
   title = 'Windie-Angular';
   label_usuario: string = "Usuário";
-  checkout_url:string = 'https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=';
+  recuperandoURL_assinatura : boolean = false;
+  //checkout_url:string = 'https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=';
   //navegador : string = 'desconhecido';
 
   constructor(private router: Router, private usuario : ApiManterUsuario, private autentica:ApiAutenticacaoService, private autenticacao : ApiAutenticacaoService,private dataSharing: DataSharingService,private apiAssinatura : ApiManterAssinaturaService) {
@@ -50,6 +51,11 @@ export class AppComponent implements OnInit {
     return this.autenticacao.seAssinante();
   }
 
+  seProcessandoAssinatura():boolean{
+    let retorno :boolean  = this.apiAssinatura.seProcessandoAssinatura();
+    return retorno;
+  }
+
   Logout(){
     this.autentica.logOut();
   }
@@ -76,18 +82,27 @@ export class AppComponent implements OnInit {
   }
 
   Assinar(){
-    this.apiAssinatura.getCheckoutToken().subscribe(
+    this.recuperandoURL_assinatura = true;
+    this.apiAssinatura.getCheckoutURL().subscribe(
       retorno =>{
+        this.recuperandoURL_assinatura = false;
         if(retorno.sucesso){
           //this.router.navigate([this.checkout_url+retorno.body]);
-          Debug.logDetalhe('encaminhando para: '+this.checkout_url+retorno.body);
-          window.location.href = this.checkout_url+retorno.body;
+          Debug.logDetalhe('encaminhando para: '+retorno.body);
+          this.AbirTelaDePagamento(retorno.body).then((data) => { console.log('abrindo tela de pagamento..')}); 
+        }else{
+          
         }
       }, erro =>{
-
+        this.recuperandoURL_assinatura = false;
       }
 
     )
+  }
+
+  async AbirTelaDePagamento(checkout_url:string){
+    //await new Promise(f => setTimeout(f, 1000));//delay evita que janela seja aberta antes de estar
+    window.location.href = checkout_url;
   }
 
   seDesktop():boolean{ //retorna true se estiver no app desktop

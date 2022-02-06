@@ -34,9 +34,11 @@ export class CadastrarEditarComponent implements OnInit {
   file!: File;
   envioProgresso:number = -1;
 
+  editando_arquivo:string = '';
+
   jogo_id : number = -1;
 
-   constructor( private sanitizer: DomSanitizer,private jogoService : ApiManterJogos,private router: Router ,private route: ActivatedRoute, private catalogoService : ApiManterCatalogo, private autenticacao : ApiAutenticacaoService) {
+   constructor( private sanitizer: DomSanitizer,private apiManterJogos : ApiManterJogos,private router: Router ,private route: ActivatedRoute, private catalogoService : ApiManterCatalogo, private autenticacao : ApiAutenticacaoService) {
     this.form_cadastrar = new FormGroup({
       titulo: new FormControl(null,Validators.required),
       tags: new FormControl(null,Validators.required),
@@ -71,7 +73,7 @@ export class CadastrarEditarComponent implements OnInit {
       //this.autenticacao.setToken(success.token);
       this.jogoEditar = JSON.parse(jogoRetorno.body);
 
-      this.jogoService.getScreenshots({jogo_id :jogo_id}).subscribe(screenshotsRetorno =>{
+      this.apiManterJogos.getScreenshots({jogo_id :jogo_id}).subscribe(screenshotsRetorno =>{
         let screenshots: string[] = JSON.parse(screenshotsRetorno.body);
         screenshots.forEach(element => {
           screenshots[screenshots.indexOf(element)] = 'data:image/jpeg;base64,' + element;//this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element);
@@ -100,6 +102,14 @@ export class CadastrarEditarComponent implements OnInit {
       },err =>{
 
       });
+
+      this.apiManterJogos.getFilesInfo({jogo_id:jogo_id}).subscribe(retorno =>{
+        if(retorno.sucesso){
+          this.editando_arquivo = retorno.body;
+        }
+      },erro =>{
+
+      })
       
     },err =>{
 
@@ -127,12 +137,15 @@ export class CadastrarEditarComponent implements OnInit {
           token:  JSON.parse(localStorage.getItem('currentUser')!).token,
           screenshots: this.screenshotFiles}; 
           console.log("formulario :"+JSON.stringify(JogoRest));
-        this.jogoService.atualizarJogo(JogoRest).subscribe(
+        this.apiManterJogos.atualizarJogo(JogoRest).subscribe(
           retorno => {
             if(retorno.sucesso){
               this.autenticacao.setToken(retorno.token!);
-              this.enviarArquivos(this.jogo_id ); 
-              //this.router.navigate(['']);
+              if(this.file!=null){
+                this.enviarArquivos(this.jogo_id );
+              }else{
+                this.router.navigate(['']);
+              }
             }else{
               this.enviando = false;
               if(retorno.erro!.cod==1){//erro de autenticação
@@ -163,12 +176,16 @@ export class CadastrarEditarComponent implements OnInit {
           token:  JSON.parse(localStorage.getItem('currentUser')!).token,
           screenshots: this.screenshotFiles}; 
 
-        this.jogoService.novoJogo(JogoRest).subscribe(
+        this.apiManterJogos.novoJogo(JogoRest).subscribe(
           retorno => {
             if(retorno.sucesso){
               this.autenticacao.setToken(retorno.token!);
-              this.enviarArquivos(retorno.body);   
-              //this.router.navigate(['']);
+              if(this.file!=null){
+                this.enviarArquivos(retorno.body);   
+              }else{
+                this.router.navigate(['']);
+              }
+
             }else{
               this.enviando = false;
               if(retorno.erro!.cod==1){//erro de autenticação
@@ -188,8 +205,28 @@ export class CadastrarEditarComponent implements OnInit {
 
   }
 
+  onExcluir(){
+    this.apiManterJogos.excluirRascunho({jogo_id:this.jogoEditar.jogo_id}).subscribe(
+      retorno => {
+        if(retorno.sucesso){
+          this.autenticacao.setToken(retorno.token!);
+          this.router.navigate(['/painel']);
+        }else{
+          if(retorno.erro!.cod == 1){
+            this.autenticacao.logOut();
+          }else{
+            this.autenticacao.setToken(retorno.token!);
+            this.erro = 'Erro ao excluir rascunho';
+          }
+        }
+      },erro =>{
+        this.erro = 'Erro ao excluir rascunho';
+      }
+    );
+  }
+
   loadGeneros(){
-    this.jogoService.getGeneros().subscribe( 
+    this.apiManterJogos.getGeneros().subscribe( 
       retorno =>{ 
         Debug.logRequest("genero json:" +JSON.stringify( retorno.body));
         let gen = JSON.parse(retorno.body);
@@ -249,7 +286,7 @@ export class CadastrarEditarComponent implements OnInit {
 
   seFormValid():boolean{
     return (this.form_cadastrar.valid && !this.enviando && this.form_cadastrar.get('salvarTipo')?.value == 'RASCUNHO')  
-            || (this.form_cadastrar.valid && !this.enviando && this.file != null && this.capaFile != '')  ;
+            || (this.form_cadastrar.valid && !this.enviando && (this.file != null || this.editando_arquivo != '')&& this.capaFile != '')  ;
   }
 
   onFilesSelected(event : any){
@@ -300,7 +337,7 @@ export class CadastrarEditarComponent implements OnInit {
     //     Debug.logDetalhe('arquivo não enviado');
     //   }).;
       Debug.logDetalhe('enviando: '/*+_event.target.result*/);
-      const upload$ = this.jogoService.salvarArquivos({arquivo:_event.target.result,jogo_id:jogo_id});
+      const upload$ = this.apiManterJogos.salvarArquivos({arquivo:_event.target.result,jogo_id:jogo_id});
       //Debug.logDetalhe('file: '+JSON.stringify(_event.target.result)); 
       let uploadSub: Subscription;
 

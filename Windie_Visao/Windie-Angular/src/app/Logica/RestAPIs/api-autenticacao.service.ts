@@ -11,9 +11,11 @@ import { Debug } from '../Debug';
 })
 export class ApiAutenticacaoService {
 
+
   url : string = 'http://localhost:4200/api/autentica';
   usuario! : UsuarioSessao | null;
   erro : string = '';
+
 
   constructor(private http: HttpClient,private router: Router,private dataSharing: DataSharingService) {
     if(this.getToken!=null && this.getToken()!=''){ 
@@ -94,6 +96,8 @@ export class ApiAutenticacaoService {
     return false;
   }
 
+
+
   public seAutenticado(): boolean{
     return this.getToken!=null && this.getToken()!='' && this.getToken!= undefined;
   }
@@ -102,20 +106,25 @@ export class ApiAutenticacaoService {
     Debug.logDetalhe('carregando usuario');
     this.http.post<RestObject>(this.url+"/dados",new RestObject(this.getToken(),'')).subscribe(
       retorno =>{
-        let resposta : RestObject = RestObject.assign(retorno);
-        this.usuario = JSON.parse(resposta.body);
-        this.dataSharing.usuarioCarregado.next(true);
-        this.setToken(retorno.token!);
-        if(this.usuario!.desenvolvedor_id != null && this.usuario!.desenvolvedor_id > 0){
-          localStorage.setItem('d','true');
+        if(retorno.sucesso){
+          let resposta : RestObject = RestObject.assign(retorno);
+          this.usuario = JSON.parse(resposta.body);
+          this.dataSharing.usuarioCarregado.next(true);
+          this.setToken(retorno.token!);
+          if(this.usuario!.desenvolvedor_id != null && this.usuario!.desenvolvedor_id > 0){
+            localStorage.setItem('d','true');
+          }else{
+            localStorage.setItem('d','false');
+          }
         }else{
-          localStorage.setItem('d','false');
+          this.logOut();
         }
         
         Debug.logOutput('usuario carregado: '+ JSON.stringify(this.usuario));
       },
       erro =>
       {
+        this.logOut();
         Debug.logErro('falha ao carregar usuario');
       }
     )

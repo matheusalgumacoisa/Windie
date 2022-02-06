@@ -17,7 +17,7 @@
         <div class="card-body" >
           <div class="row">
             <div class="col">
-                <h5 style="text-align: left;" class="card-title">{{jogo.titulo}}</h5>
+                <h5 style="text-align: left;" class="card-title">{{jogo.titulo}}  <span  *ngIf="jogo.visibilidade == 'RASCUNHO'" style="font-size: 10px;" class="badge bg-secondary">Rascunho</span><span *ngIf="jogo.visibilidade == 'PUBLICO'" style="font-size: 10px;" class="badge bg-dark">Publico</span></h5>
                 <p style="text-align: left;"  class="card-text">{{jogo.descricao}}</p>
             </div>
             <div  style="vertical-align: middle;padding-top: 10px" class="col"> 

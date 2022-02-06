@@ -13,6 +13,8 @@ import { Eventos } from 'src/app/Modelos/Eventos';
 import { JogoClassificacao } from 'src/app/Modelos/JogoClassificacao';
 import { ListaIdString } from 'src/app/Modelos/ListaIdString';
 import { RestObject } from 'src/app/Modelos/RestObject';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { ExluirJogoDialogComponent } from '../exluir-jogo-dialog/exluir-jogo-dialog.component';
 
 
 
@@ -40,7 +42,7 @@ export class DetalhesComponent implements OnInit {
    //avaliacao: number = 0;
 
   constructor(private catalogoApi: ApiManterCatalogo,private route: ActivatedRoute,private apiAprovar : ApiAprovarJogosService, private apiBiblioteca : ApiManterBiblioteca,
-    private sanitizer: DomSanitizer, private autenticacao : ApiAutenticacaoService,private  router : Router, private avaliarApi : ApiAvaliarJogosService) {
+    private sanitizer: DomSanitizer, private autenticacao : ApiAutenticacaoService,private  router : Router, private avaliarApi : ApiAvaliarJogosService,private dialog : MatDialog) {
 
     
   }
@@ -346,6 +348,30 @@ export class DetalhesComponent implements OnInit {
     this.apiBiblioteca.baixarArquivos({jogo_id:this.jogo.jogo_id},this.jogo.jogo_id,this.jogo.caminho_executavel);
   }
 
+  desinstalar(){
+    let dialogRef = this.dialog.open(ExluirJogoDialogComponent, {
+      height: '200px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`); // Pizza!
+      if(result == 'Y'){
+        Debug.logDetalhe('desinstalando..');
+        let eventos :Eventos[] =[];
+        if(sessionStorage.getItem('eventos')!=undefined){
+          eventos = JSON.parse(sessionStorage.getItem('eventos')!);
+        }   
+        eventos.push({evento_tipo: 'excluir' ,evento_corpo:{jogo_id:this.jogo.jogo_id}});
+        sessionStorage.setItem('eventos',JSON.stringify(eventos));
+        this.apiBiblioteca.resetDownload(this.jogo.jogo_id);
+        this.router.navigate(['/biblioteca']);
+      }
+    });
+    
+
+  }
+
   downloadProgresso(){
     if(!this.seDesktop()||this.downloadProgress==null||this.apiBiblioteca.getDownload(this.jogo.jogo_id)==null){
       return -1;
@@ -359,6 +385,9 @@ export class DetalhesComponent implements OnInit {
     if(!this.seDesktop()){
       return false;
     }
+    /*if(!this.seJogoBiblioteca){
+      this.adicionarBiblioteca();
+    }*/
     return this.apiBiblioteca.getDownload(this.jogo.jogo_id)!.seConcluido;
 
   }

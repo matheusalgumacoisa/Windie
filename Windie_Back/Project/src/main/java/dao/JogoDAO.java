@@ -65,6 +65,14 @@ public class JogoDAO {
 		psql.execute();
 	}
 	
+	public void excluir(int jogo_id) throws SQLException {
+		String sql = "delete from screenshot where jogo_id = ?;delete from jogo where jogo_id = ?";
+		PreparedStatement pst = ConexaoBanco.getInstance().getPreparedStatement(sql);
+		pst.setInt(1, jogo_id);
+		pst.setInt(2, jogo_id);
+		
+		pst.execute();
+	}
 	
 	public List<JogoModelo> getListaByDesenvolvedor(int desenvolvedor_id) throws SQLException{ //pega todos os jogos de um determinado desenvolvedor
 		String sql = "select jogo_id,titulo,descricao,caminho_executavel,detalhes,tags,visibilidade,imagem_capa,genero,desenvolvedor_id,arquivo_caminho from jogo where desenvolvedor_id = ?";

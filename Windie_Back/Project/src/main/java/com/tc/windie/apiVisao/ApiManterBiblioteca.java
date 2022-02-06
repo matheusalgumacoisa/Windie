@@ -3,21 +3,16 @@ package com.tc.windie.apiVisao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.SQLException;
 
 import javax.security.sasl.AuthenticationException;
-import javax.sql.rowset.serial.SerialBlob;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,6 +90,8 @@ public class ApiManterBiblioteca {
 		//return new ResponseEntity<byte[]>(ManterBiblioteca.getInstance().getFiles(jsonObj.getInt("jogo_id"),usuario_id), httpHeaders, HttpStatus.OK);
 
 	}
+	
+
 	
 	@PostMapping(path = "horas")
 	public  RestObject registrarHoras(@RequestBody String restInput) throws JsonProcessingException, JSONException, IOException, SQLException{

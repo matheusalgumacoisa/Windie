@@ -113,10 +113,38 @@ function concluirInstalacao(jogo_id,sucesso,mainWindow,arquivo_temp_path){ //esc
     mainWindow.webContents.executeJavaScript('sessionStorage.setItem(\'baixandoStatus_jogo_'+jogo_id+'\',\'completed\');');
     mainWindow.webContents.executeJavaScript('sessionStorage.setItem(\'caminhoInst_jogo_'+jogo_id+'\',\''+LibBin+'/'+jogo_id+'/\');');
   }else{
+    findInstalledGames(mainWindow);
     mainWindow.webContents.executeJavaScript('sessionStorage.setItem(\'baixandoStatus_jogo_'+jogo_id+'\',\'cancelled\');');
   }
   console.log('jogo extraido');
 }
+
+function excluirJogo(jogo_id,mainWindow){
+
+  var path = LibBin+'/'+jogo_id;
+  deleteFolder(path);
+
+  //mainWindow.webContents.executeJavaScript('sessionStorage.setItem(\'bytesRecebidos_jogo_'+jogo_id+'\',\''+0+'\');');
+  var remove_comand = 'sessionStorage.removeItem(\'caminhoInst_jogo_'+jogo_id+'\');';
+  console.log(remove_comand);
+  mainWindow.webContents.executeJavaScript(remove_comand ); //remove da lista de jogos baixados
+
+}
+
+function deleteFolder (path) { // remove jogo
+  const fs = require('fs');
+  if( fs.existsSync(path) ) {
+      fs.readdirSync(path).forEach(function(file) {
+        var curPath = path + "/" + file;
+          if(fs.lstatSync(curPath).isDirectory()) { // recurse
+              deleteFolder(curPath);
+          } else { // delete file
+              fs.unlinkSync(curPath);
+          }
+      });
+      fs.rmdirSync(path);
+    }
+};
 
 function updateDownloadStatus(jogo_id,received_bytes,state,mainWindow){ //atualiza o status de download na session storage
   mainWindow.webContents.executeJavaScript('sessionStorage.setItem(\'baixandoStatus_jogo_'+jogo_id+'\',\''+state+'\');');
@@ -195,7 +223,7 @@ async function listen(mainWindow){ //escuta "eventos" no session storage
     // }
       array.forEach(function(evento) {
         if(evento.evento_tipo == 'jogar'){
-          console.log('evento: '+evento);
+          console.log('evento: '+JSON.stringify(evento));
           var jogo_id = evento.evento_corpo.jogo_id;
           var path;
           mainWindow.webContents.executeJavaScript('sessionStorage.getItem(\'caminhoInst_jogo_'+jogo_id+'\');').then((result) =>{
@@ -205,6 +233,11 @@ async function listen(mainWindow){ //escuta "eventos" no session storage
           },(err)=>{});
           
           //console.log('abriu... ')
+        }
+        if(evento.evento_tipo == 'excluir'){
+          console.log('evento: '+JSON.stringify(evento));
+          var jogo_id = evento.evento_corpo.jogo_id;
+          excluirJogo(jogo_id,mainWindow);
         }
       });
       console.log('limpar eventos');

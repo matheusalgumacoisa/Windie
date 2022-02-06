@@ -6,7 +6,9 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
+		<item key="selection" value="static"/>
 		<list key="findhistory">
+			<item value="static"/>
 			<item value="d"/>
 			<item value="blindado"/>
 		</list>

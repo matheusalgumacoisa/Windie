@@ -1,4 +1,4 @@
-package com.tc.windie.apiPagSeguro;
+package com.tc.windie.apiStripe;
 
 import util.Config;
 

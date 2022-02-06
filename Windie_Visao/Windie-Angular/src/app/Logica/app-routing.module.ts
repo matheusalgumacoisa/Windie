@@ -5,6 +5,8 @@ import { AprovarDetalhesComponent } from '../Telas/Aprovar-Jogos/aprovar-detalhe
 import { ListarBibliotecaComponent } from '../Telas/Biblioteca/listar-biblioteca/listar-biblioteca.component';
 import { DetalhesComponent } from '../Telas/Exibir-Catalogo/catalogo-detalhes/detalhes.component';
 import { CatalogoListaComponent } from '../Telas/Exibir-Catalogo/catalogo-lista/catalogo-lista.component';
+import { PagamentoFracassadoComponent } from '../Telas/Manter-Assinatura/pagamento-fracassado/pagamento-fracassado.component';
+import { PagamentoSucedidoComponent } from '../Telas/Manter-Assinatura/pagamento-sucedido/pagamento-sucedido.component';
 import { CadastrarEditarComponent } from '../Telas/Manter-Jogos/cadastrar-editar/cadastrar-editar.component';
 import { PainelComponent } from '../Telas/Manter-Jogos/painel/painel.component';
 import { AutenticarUsuarioComponent } from '../Telas/Manter-Usuarios/autenticar-usuario/autenticar-usuario.component';
@@ -25,6 +27,8 @@ const routes: Routes = [
   {path:'greenLight', component: AprovaListaComponent},
   {path:'biblioteca', component: ListarBibliotecaComponent},
   {path:'greenLight/detalhes', component: AprovarDetalhesComponent},
+  {path: 'pgss', component : PagamentoSucedidoComponent},
+  {path: 'pgff', component : PagamentoFracassadoComponent},
   {path:'', component: CatalogoListaComponent}
 ];
 

@@ -22,6 +22,13 @@ import { AppRoutingModule } from './Logica/app-routing.module';
 import { AprovaListaComponent } from './Telas/Aprovar-Jogos/aprova-lista/aprova-lista.component';
 import { AprovarDetalhesComponent } from './Telas/Aprovar-Jogos/aprovar-detalhes/aprovar-detalhes.component';
 import { ListarBibliotecaComponent } from './Telas/Biblioteca/listar-biblioteca/listar-biblioteca.component';
+import { PagamentoSucedidoComponent } from './Telas/Manter-Assinatura/pagamento-sucedido/pagamento-sucedido.component';
+import { PagamentoFracassadoComponent } from './Telas/Manter-Assinatura/pagamento-fracassado/pagamento-fracassado.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ExluirJogoDialogComponent } from './Telas/Exibir-Catalogo/exluir-jogo-dialog/exluir-jogo-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { TrocarSenhaDialogComponent } from './Telas/Manter-Usuarios/trocar-senha-dialog/trocar-senha-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -37,7 +44,11 @@ import { ListarBibliotecaComponent } from './Telas/Biblioteca/listar-biblioteca/
     PainelComponent,
     AprovaListaComponent,
     AprovarDetalhesComponent,
-    ListarBibliotecaComponent
+    ListarBibliotecaComponent,
+    PagamentoSucedidoComponent,
+    PagamentoFracassadoComponent,
+    ExluirJogoDialogComponent,
+    TrocarSenhaDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +62,9 @@ import { ListarBibliotecaComponent } from './Telas/Biblioteca/listar-biblioteca/
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
-    JwPaginationModule
+    JwPaginationModule,
+    BrowserAnimationsModule,
+    MatDialogModule
   ],
   providers: [
     AuthGuardService,

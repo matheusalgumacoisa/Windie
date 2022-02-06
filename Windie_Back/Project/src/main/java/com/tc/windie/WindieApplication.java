@@ -16,7 +16,7 @@ public class WindieApplication {
 
 	public static void main(String[] args) throws SQLException{
 		SpringApplication.run(WindieApplication.class, args);
-		
+
 	}
 
 }

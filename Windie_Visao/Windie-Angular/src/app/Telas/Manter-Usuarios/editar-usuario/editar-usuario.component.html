@@ -30,13 +30,15 @@
                     <br>
                     <form [formGroup]="form_cadastrar" >
                         <div class="mb-3">
+                            <button (click)="mudarSenha()" type="submit" class="btn btn-dark btn-sm" style="font-size: 10px" >Mudar senha</button>
+                            <br><br>
                             <div class="form-floating">
                                 <input  type="text" class="form-control" id="apelido" aria-describedby="apelido" placeholder="Apelido" formControlName="apelido"> 
                                 <label for="apelido">Apelido</label>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <div class="form-floating">
+                            <div class="form-floating" *ngIf="(seDesenvolvedor())">
                                 <input *ngIf="(seDesenvolvedor())"  type="text" class="form-control" id="nomeDesenvolvedor" aria-describedby="nomeDesenvolvedor" placeholder="Nome de desenvolvedor" formControlName="nome_desenvolvedor">
                                 <label for="nomeDesenvolvedor">Nome de desenvolvedor</label>
                             </div>
@@ -57,14 +59,16 @@
                         </div> -->
                         <div class="row">
                             <div class="col">
-                                <div class="form-floating">
-                                    <input *ngIf="(seDesenvolvedor())" type="email" class="form-control" id="email_paypal" aria-describedby="email_paypal" placeholder="Paypal" formControlName="email_paypal" />
+                                <div class="form-floating" *ngIf="(seDesenvolvedor())">
+                                    <input  type="email" class="form-control" id="email_paypal" aria-describedby="email_paypal" placeholder="Paypal" formControlName="email_paypal" />
                                     <label for="agencia" style="font-size: 13px;">E-mail do paypal para receber fundos</label>
                                 </div>
                             </div>
                         </div>
                         <br>
-                        <p><button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!seValid()">Confirmar</button></p>
+                        <p>
+                            <button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!seValid()">Confirmar</button>
+                        </p>
                     </form> 
                     <div class="alert alert-danger" role="alert" *ngIf="erro!=''">
                         {{erro}}

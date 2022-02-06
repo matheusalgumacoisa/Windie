@@ -1,0 +1,38 @@
+<head>
+    <style>
+        h2 {text-align: center;}
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>  
+</head>
+<h1>Redefinir senha</h1>
+<div class="mb-3">
+    <form [formGroup]="form_senha" >
+        <div class="form-floating" >
+            <p >Senha antiga</p>
+            <input class="form-control"  type="password" id="antiga" formControlName="antiga">
+        </div>
+        <br>
+        <div class="form-floating" >
+            <p >Senha nova</p>
+            <input  class="form-control" type="password" id="nova" formControlName="nova">
+        </div>
+        <br>
+        <!-- " -->
+        <div class="form-floating" >
+            <p >Confirme a senha nova</p>
+            <input class="form-control"  type="password" id="confirmar" formControlName="confirmar">
+        </div>
+        <br>
+        <br>
+        <button (click)="onSubmit()" type="submit" class="btn btn-dark" [disabled]="!seValid()">Confirmar</button>
+        <div class="alert alert-danger" role="alert" *ngIf="erro!=''">
+            {{erro}}
+        </div>
+    </form>
+</div>

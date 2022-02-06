@@ -1,0 +1,17 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+
+.h1{
+    text-align: center;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+    background-color: aqua;
+}
+
+.h3{
+    text-align: center;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+    background-color: aqua;
+}

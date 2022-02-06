@@ -44,6 +44,12 @@
                     <br>
                     <div class="d-grid gap-2 col-7 ">
                         <input style="visibility: hidden;" (change)="onFilesSelected($event)" class="form-control" type="file" id="arquivos" accept=".zip">
+                        <div  *ngIf="(envioProgresso<0 && editando_arquivo != '' && jogo_id!=-1)">
+                            <li style="font-size: 11px;color: rgb(0, 117, 0);">{{editando_arquivo}}</li>
+                        </div>
+                        <div  *ngIf="(editando_arquivo == '' && jogo_id!=-1 && file == null)">
+                            <li style="font-size: 11px;color: rgb(117, 0, 0);">Nenhum arquivo carregado</li>
+                        </div>
                         <div  *ngIf="(envioProgresso>=0)">
                             <li style="font-size: 11px;">Jogo registrado, enviando agora os arquivos</li>
                             <div class="progress">
@@ -110,9 +116,10 @@
                 <button class="btn btn-dark" type="button" onclick="document.querySelector('#screenshot').click()">Carregar screenshot</button>
             </div>
             <div class="row">
-                <div class="col-7">
+                <div class="col-6">
                 </div>
                 <div class="col" >
+
                     <span>Salvar como:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <div class="form-check form-check-inline" >
                         <input   class="form-check-input" type="radio" value="PUBLICO" name="salvarTipo" id="salvarPublicacao" formControlName="salvarTipo" >
@@ -128,6 +135,7 @@
                     </div>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <button class="btn btn-dark" type="button" (click)="onSubimt()" [disabled]="!seFormValid()">Salvar</button>
+                    &nbsp;<button class="btn btn-dark" *ngIf="(jogoEditar!=null&& jogoEditar.visibilidade=='RASCUNHO')" type="button" (click)="onExcluir()" >Excluir rascunho</button>
                     &nbsp;<div *ngIf="(enviando)" class="spinner-border ms-auto" role="status" style="vertical-align: middle;" aria-hidden="true"></div>
 
                 </div>

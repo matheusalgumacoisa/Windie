@@ -137,14 +137,24 @@ export class ApiManterBiblioteca {
       //Debug.logDetalhe('download status scan...');
       if(sessionStorage.getItem('baixandoStatus_jogo_'+jogo_id) == undefined || sessionStorage.getItem('baixandoStatus_jogo_'+jogo_id)!='progressing'){
         if(sessionStorage.getItem('baixandoStatus_jogo_'+jogo_id)=='completed'){
-          this.catalogoApi.adicionarBiblioteca({jogo_id : jogo_id}).subscribe(
-            retorno => {
-              this.autentica.setToken(retorno.token!); 
-            },
-            erro => {
-      
-            }
-          );
+          this.catalogoApi.seNaBiblioteca({jogo_id : jogo_id}).subscribe(
+            success=>{ 
+              
+              if(!JSON.parse(success.body)){//se não estiver na biblioteca
+                this.catalogoApi.adicionarBiblioteca({jogo_id : jogo_id}).subscribe(
+                  retorno => {
+                    this.autentica.setToken(retorno.token!); 
+                  },
+                  erro => {
+            
+                  }
+                );
+              } 
+
+            },err=>{
+  
+            });
+
           this.registrarDownloadFim(jogo_id);
           sessionStorage.removeItem('baixandoStatus_jogo_'+jogo_id);
           sessionStorage.removeItem('bytesRecebidos_jogo_'+jogo_id);
@@ -182,6 +192,14 @@ export class ApiManterBiblioteca {
      this.downloads.find(x => x.jogo_id == this.downloadAux!.jogo_id)!.state =  state;
     }
  
+  }
+  public resetDownload(jogo_id:number){
+    this.downloadAux  = this.getDownload(jogo_id);
+    if(this.downloadAux == null){
+      return;
+    }else{
+      this.downloads.splice(this.downloads.indexOf(this.downloads.find(x => x.jogo_id == this.downloadAux!.jogo_id)!));
+    }
   }
 
   private registrarDownloadFim(jogo_id:number/*,writer: WritableStreamDefaultWriter<any>*/){

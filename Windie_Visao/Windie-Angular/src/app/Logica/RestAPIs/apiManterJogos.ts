@@ -56,6 +56,16 @@ export class ApiManterJogos {
       //finalize(() => this.reset()
     );
   }
+
+  public getFilesInfo(body:any):Observable<RestObject>{
+    let rest : RestObject  = new RestObject(this.autentica.getToken(),JSON.stringify(body));
+    return this.http.post<RestObject>(this.url+"/filesInfo",rest);
+  }
+
+  public excluirRascunho(body:any):Observable<RestObject>{
+    let rest : RestObject  = new RestObject(this.autentica.getToken(),JSON.stringify(body));
+    return this.http.post<RestObject>(this.url+'/excluir',rest);
+  }
  
 }
 

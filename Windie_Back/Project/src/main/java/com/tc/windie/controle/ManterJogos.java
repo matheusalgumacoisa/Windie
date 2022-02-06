@@ -103,6 +103,19 @@ public class ManterJogos {
 		}	
 	}
 	
+	public void excluirRascunho(int jogo_id,int desenvolvedor_id) throws SQLException, AuthenticationException, CustomException {
+		
+		if(!seDesenvolvedorDoJogo(jogo_id,desenvolvedor_id)){
+			throw new AuthenticationException("Não é desenvolvedor desse jogo");
+		}else
+		
+		if(!getJogo(jogo_id).getVisibilidade().equals("RASCUNHO")) {
+			throw new CustomException("Não é possível excluir um jogo publicado");
+		}else
+		
+		JogoDAO.getInstance().excluir(jogo_id);
+	}
+	
 	public List<byte[]> getScreenshots(int jogo_id) throws SQLException{ //retorna uma lista de screenshots para um dado jogo
 		
 		return ScreenshotDAO.getInstance().getListaByJogo(jogo_id);
@@ -144,11 +157,44 @@ public class ManterJogos {
 
 	public void salvarArquivos(int jogo_id, byte[] arquivo) throws SQLException, IOException {
 		
-		String arquivo_nome = "/arquivos_jogo_"+jogo_id;
+		String arquivo_nome = "/arquivos_jogo_"+jogo_id+".zip";
 		
 		ArquivoDAO.getInstance().criarArquivo(arquivo_nome, arquivo);
 		JogoDAO.getInstance().salvarCaminhoArquivo(jogo_id,ArquivoDAO.dbPath+arquivo_nome);
 
+	}
+	
+	public String getFileInfo(int jogo_id) throws SQLException, IOException { //retorna um texto com as informações do arquivo
+		JogoModelo jogo = ManterJogos.getInstance().getJogo(jogo_id);		String path = jogo.getArquivo_caminho();
+		Long tamanho = ArquivoDAO.getInstance().getArquivoTamanhoBytes(path);
+		String data_modificacao = ArquivoDAO.getInstance().getArquivoModData(path);
+		if(tamanho > 0) {
+			return "Arquivo atualizado pela última vez em "+data_modificacao+" com o tamanho de "+getTamanhoFormatado(tamanho);
+		}else {
+			return "";
+		}
+		
+	}
+	
+	
+	public String getTamanhoFormatado(Long tamanho_bytes) { //retorna uma string informando o tamanho do arquivo em uma escala compatível como KB ou GB
+		Long tamanhoI = tamanho_bytes;
+
+		if (tamanho_bytes>1073741824) { //GB
+			tamanhoI = tamanho_bytes / 1073741824;
+			return tamanhoI.toString() + "GBs";
+			
+		}else if(tamanho_bytes>1048576) { //MB
+			tamanhoI = tamanho_bytes / 1048576;
+			return tamanhoI.toString() + " MBs";
+			
+		}else if(tamanho_bytes>1024) { //KB
+			tamanhoI = tamanho_bytes / 1024;
+			return tamanhoI.toString() + " KBs";
+			
+		}else {
+			return tamanhoI.toString() + " bytes";
+		}
 	}
 	
 

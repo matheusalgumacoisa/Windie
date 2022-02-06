@@ -9,6 +9,7 @@ import java.util.List;
 import javax.security.sasl.AuthenticationException;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tc.windie.controle.ManterJogos;
+import com.tc.windie.controle.ManterUsuarios;
 
 import dao.DesenvolvedorDAO;
 import dao.UsuarioDAO;
@@ -148,6 +150,30 @@ public class ApiManterJogos {
 		}
 	}
 	
+	@PostMapping(path = "excluir")
+	public RestObject excluirRascunho(@RequestBody String restInput) throws JSONException, SQLException, JsonProcessingException {
+		
+		Debug.logRequest("excluir rascunho: "+restInput);
+		String inputBody = RestObject.Desserialize(restInput).body;
+		JSONObject jsonObj = new JSONObject(inputBody);
+		
+		String token = null;
+		try {
+			token = TokenManager.getInstance().autenticarToken(RestObject.Desserialize(restInput).token);
+			int usuario_id = ManterUsuarios.getInstance().GetIdByEmail(TokenManager.getInstance().getUser(token));
+			int desenvolvedor_id = ManterUsuarios.getInstance().devByUser(usuario_id).getDesenvolvedor_id();
+			ManterJogos.getInstance().excluirRascunho(jsonObj.getInt("jogo_id"), desenvolvedor_id);
+			return new RestObject(token,"");
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+			return new RestObject(null,"",ErrorCodes.autenticacao,e.getMessage(),"ApiManterJogos.excluirRascunho()");
+		} catch (CustomException e) {
+			e.printStackTrace();
+			return new RestObject(token,"",ErrorCodes.validacao,e.getMessage(),e.getStackTraceText());
+		}
+
+	}
+	
 	@PostMapping(path = "screenshots")
 	public RestObject getScreenshots(@RequestBody String restInput) throws Exception {
 		
@@ -217,6 +243,18 @@ public class ApiManterJogos {
 		
 		return new RestObject(null,ManterJogos.getInstance().getJogo(jsonObj.getInt("jogo_id")));
 	}
+	
+	@PostMapping(path = "filesInfo")
+	public RestObject  getFileInfo(@RequestBody String restInput) throws JSONException, SQLException, IOException {
+		String inputBody = RestObject.Desserialize(restInput).body;
+		JSONObject jsonObj = new JSONObject(inputBody);
+		Debug.logRequest("get file info: "+inputBody);
+		
+		String info = ManterJogos.getInstance().getFileInfo(jsonObj.getInt("jogo_id"));
+		
+		return new RestObject(RestObject.Desserialize(restInput).token, info);
+		
+	} 
 	
 	
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DataSharingService } from 'src/app/Logica/data-sharing.service';
 import { Debug } from 'src/app/Logica/Debug';
@@ -7,6 +8,7 @@ import { ApiAutenticacaoService } from 'src/app/Logica/RestAPIs/api-autenticacao
 import { ApiManterUsuario } from 'src/app/Logica/RestAPIs/apiManterUsuario';
 import { Desenvolvedor } from 'src/app/Modelos/Desenvolvedor';
 import { UsuarioSessao } from 'src/app/Modelos/UsuarioSessao';
+import { TrocarSenhaDialogComponent } from '../trocar-senha-dialog/trocar-senha-dialog.component';
  
 @Component({
   selector: 'app-editar-usuario',
@@ -21,7 +23,7 @@ export class EditarUsuarioComponent implements OnInit {
 
   form_cadastrar!: FormGroup;
 
-  constructor(private usuarioService: ApiManterUsuario,private router: Router,private autenticacao :ApiAutenticacaoService,private dataSharing: DataSharingService) {
+  constructor(private usuarioService: ApiManterUsuario,private router: Router,private autenticacao :ApiAutenticacaoService,private dataSharing: DataSharingService, private dialog : MatDialog) {
 
     this.form_cadastrar = new FormGroup({
 
@@ -118,6 +120,13 @@ export class EditarUsuarioComponent implements OnInit {
 
   seDesenvolvedor():boolean{
     return this.autenticacao.seUsuarioDesenvolvedor();
+  }
+
+  mudarSenha(){
+    let dialogRef = this.dialog.open(TrocarSenhaDialogComponent, {
+      height: '600px',
+      width: '600px',
+    });
   }
   
 }
