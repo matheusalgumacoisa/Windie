@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import util.Debug;
 
 public class ArquivoDAO {
-	public static final String dbPath = "F:/WindieServerFiles";//caminho no disco onde os arquivos são armazenados no servidor
+	public static final String dbPath = "C:/WindieServerFiles";//caminho no disco onde os arquivos são armazenados no servidor
 	private static ArquivoDAO instance;
 	
 	public static ArquivoDAO getInstance() {

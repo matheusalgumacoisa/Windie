@@ -1,11 +1,12 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow} = require('electron');
+const { async } = require('node-stream-zip');
 const path = require('path');
 const { listenerCount } = require('process');
-const windieLibW = 'F:\\WindieLibrary';
+const windieLibW = 'C:\\WindieLibrary';
 const LibTempW = windieLibW+ '\\temp';
 const LibBinW = windieLibW+ '\\bin';
-const windieLib = 'F:/WindieLibrary';
+const windieLib = 'C:/WindieLibrary';
 const LibTemp = windieLib+ '/temp';
 const LibBin = windieLib+ '/bin';
 const angularURL = 'http://localhost:4200';
@@ -117,6 +118,31 @@ function concluirInstalacao(jogo_id,sucesso,mainWindow,arquivo_temp_path){ //esc
     mainWindow.webContents.executeJavaScript('sessionStorage.setItem(\'baixandoStatus_jogo_'+jogo_id+'\',\'cancelled\');');
   }
   console.log('jogo extraido');
+
+  encryptExe(jogo_id,mainWindow).then(result => {
+    console.log(result);
+  });
+
+
+}
+
+async function encryptExe(jogo_id,mainWindow){
+  await sleep(2000);
+  const fs = require('fs');
+  mainWindow.webContents.executeJavaScript('sessionStorage.getItem(\'caminhoInst_jogo_'+jogo_id+'\');').then((resulth) =>{ //muda a extensão do executavel para não ser executado por fora do windie
+    var pathh = getReadyPath(resulth,'/')//JSON.stringify(result);
+    var caminho_enc = pathh.substr(0, pathh.indexOf('.'))+'.windie';
+    fs.rename(pathh, caminho_enc, function(err) {
+      if ( err ) console.log('ERROR: ' + err);
+    });
+    console.log('renomeando... '+getReadyPath(pathh,'/'))
+  },(err)=>{});
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 function excluirJogo(jogo_id,mainWindow){
@@ -187,17 +213,27 @@ function abrirJogo(caminho,jogo_id,mainWindow){
     jogo_aberto_id = jogo_id;
     console.log('jai: '+jogo_aberto_id+' jat: '+jogo_aberto_time+' tc: '+timer_counter);
     jogo_aberto_time = timer_counter;
-    exec(caminho, function(err, data) {  
-          //if(err){
-            console.log('fechou')
-            var tempoDecorrido = timer_counter -  jogo_aberto_time;
-            mainWindow.webContents.executeJavaScript('localStorage.setItem(\'horas_pendentes\',\'{"jogo_id": "'+ jogo_aberto_id+'" ,"tempo": "'+tempoDecorrido+'"}\');');
-            jogo_aberto_id = -1;
-            ogo_aberto_time = -1;
-            console.log(err)
-         // }
-          console.log(data.toString());                       
+    var fs = require('fs');
+    var caminho_enc = caminho.substr(0, caminho.indexOf('.'))+'.windie';
+    fs.rename(caminho_enc, caminho, function(err) { //a extensão do arquivo nunca permanece como exe para evitar a execução por fora do windie
+      exec(caminho, function(err, data) {  
+        //if(err){
+          console.log('fechou')
+          var tempoDecorrido = timer_counter -  jogo_aberto_time;
+          mainWindow.webContents.executeJavaScript('localStorage.setItem(\'horas_pendentes\',\'{"jogo_id": "'+ jogo_aberto_id+'" ,"tempo": "'+tempoDecorrido+'"}\');');
+          jogo_aberto_id = -1;
+          jogo_aberto_time = -1;
+          console.log(err)
+       // }
+
+        console.log(data.toString());                       
+      });
+      fs.rename(caminho, caminho_enc, function(err) {
+        if ( err ) console.log('ERROR: ' + err);
       });  
+      if ( err ) console.log('ERROR: ' + err);
+    });
+
   }
   fun();
 }
